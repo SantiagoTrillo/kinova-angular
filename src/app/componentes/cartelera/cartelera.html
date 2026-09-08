@@ -1,0 +1,7 @@
+<article>
+  @for (pelicula of peliculas(); track $index) {
+    @if (pelicula.principal) {
+     <app-tarjeta-pelicula [pelicula]="pelicula" (peliculaSeleccionada)="seleccionarPelicula($event)"/>
+    }
+  }
+</article>

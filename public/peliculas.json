@@ -1,0 +1,86 @@
+[
+  {
+    "titulo": "Dune: Parte Dos",
+    "sinopsis": "Paul Atreides se une a Chani y a los Fremen mientras busca venganza contra los conspiradores que destruyeron a su familia.",
+    "duracion": 166,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg"
+  },
+  {
+    "titulo": "Spider-Man: Across the Spider-Verse",
+    "sinopsis": "Miles Morales es catapultado a través del Multiverso, donde se encuentra con un equipo de Spider-People encargados de proteger su existencia.",
+    "duracion": 140,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg"
+  },
+  {
+    "titulo": "Oppenheimer",
+    "sinopsis": "La historia del científico estadounidense J. Robert Oppenheimer y su papel en el desarrollo de la bomba atómica.",
+    "duracion": 180,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg"
+  },
+  {
+    "titulo": "Intensamente 2",
+    "sinopsis": "Riley entra a la adolescencia y el cuartel general sufre una repentina demolición para hacer sitio a nuevas emociones.",
+    "duracion": 96,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg"
+  },
+  {
+    "titulo": "Deadpool & Wolverine",
+    "sinopsis": "Un apático Wade Wilson se afana en la vida civil tras dejar atrás sus días como Deadpool, pero debe volver a la acción cuando su mundo natal se enfrenta a una amenaza inminente.",
+    "duracion": 128,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"
+  },
+  {
+    "titulo": "The Batman",
+    "sinopsis": "En su segundo año luchando contra el crimen, Batman explora la corrupción existente en Gotham City y el vínculo de esta con su propia familia.",
+    "duracion": 176,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
+  },
+  {
+    "titulo": "Interstellar",
+    "sinopsis": "Un equipo de exploradores viaja a través de un agujero de gusano en el espacio en un intento por asegurar la supervivencia de la humanidad.",
+    "duracion": 169,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
+  },
+  {
+    "titulo": "Avatar: El Camino del Agua",
+    "sinopsis": "Ambientada más de una década después de los acontecimientos de la primera película, sigue a la familia Sully y los problemas que los persiguen.",
+    "duracion": 192,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg"
+  },
+  {
+    "titulo": "Barbie",
+    "sinopsis": "Barbie y Ken se lo están pasando en grande en el colorido y aparentemente perfecto mundo de Barbieland hasta que tienen una oportunidad de ir al mundo real.",
+    "duracion": 114,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/fNtqD4BTFoc1bcFTmRYM89UQrl1.jpg"
+  },
+  {
+    "titulo": "Gladiator II",
+    "sinopsis": "Años después de presenciar la muerte de Máximo a manos de su tío, Lucio debe entrar en el Coliseo tras ser conquistado su hogar por los tiránicos emperadores.",
+    "duracion": 148,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg"
+  },
+  {
+    "titulo": "Joker: Folie à Deux",
+    "sinopsis": "Arthur Fleck se encuentra institucionalizado en Arkham esperando juicio por sus crímenes como Joker, donde tropieza con el amor verdadero.",
+    "duracion": 138,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/if8QiqCI7WAGImKcJCfzp6VTyKA.jpg"
+  },
+  {
+    "titulo": "Kung Fu Panda 4",
+    "sinopsis": "Po es elegido para convertirse en el líder espiritual del Valle de la Paz, debiendo entrenar a un nuevo pupilo mientras enfrenta a una peligrosa hechicera.",
+    "duracion": 94,
+    "principal": true,
+    "imagen": "https://image.tmdb.org/t/p/w500/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg"
+  }
+]
