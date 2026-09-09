@@ -12,6 +12,10 @@ export class TarjetaPelicula {
   pelicula: InputSignal<PeliculaInterface> = input.required<PeliculaInterface>()
   peliculaSeleccionada: OutputEmitterRef<PeliculaInterface> = output<PeliculaInterface>()
 
+  formatearDuracion(minutos: number): string {
+    return `${Math.floor(minutos / 60)}h ${minutos % 60}m`
+  }
+
   // seleccionarPelicula(): void {
   //   this.peliculaSeleccionada.emit(this.pelicula())
   // }

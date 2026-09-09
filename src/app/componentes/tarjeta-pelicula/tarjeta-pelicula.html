@@ -1,2 +1,13 @@
-<div><img width="300" height="300" ngSrc="{{ pelicula().imagen }}" alt="Póster de una película"></div>
-<div><p>Título: {{ pelicula().titulo }} Duración: {{ pelicula().duracion }}</p></div>
+<div>
+  <img
+    width="270"
+    height="405"
+    ngSrc="{{ pelicula().imagen }}"
+    alt="Póster de una película"
+    (error)="pelicula().imagen = 'poster-no-encontrado.jpg'"
+  >
+  <div>
+    <h3>{{ pelicula().titulo }}</h3>
+    <span>{{ formatearDuracion(pelicula().duracion) }}</span>
+  </div>
+</div>

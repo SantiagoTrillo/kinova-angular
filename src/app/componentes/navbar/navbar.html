@@ -1,8 +1,12 @@
 <header>
   <nav>
     <div>
-      <h1>Kinova</h1>
-      <button><i class="fa-solid fa-user"></i></button>
+      <a routerLink=""><h1>Kinova</h1></a>
+      @if (sesionService.usuarioActual()) {
+        <a routerLink="/perfil"><i class="fa-solid fa-user"></i></a>
+      } @else {
+        <a routerLink="/registro"><i class="fa-solid fa-user"></i></a>
+      }
     </div>
   </nav>
 </header>

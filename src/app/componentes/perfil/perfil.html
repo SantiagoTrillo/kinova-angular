@@ -1,0 +1,5 @@
+<main>
+  @if (sesionService.usuarioActual(); as usuario) {
+    <div><h1>Hola, {{ usuario.nombre }}</h1></div>
+  }
+</main>
