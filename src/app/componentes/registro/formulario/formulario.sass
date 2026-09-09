@@ -1,0 +1,31 @@
+form
+  background-color: var(--gris-sombra)
+  border-radius: 10px
+  padding: 5px
+  width: 500px
+  display: flex
+  flex-direction: column
+  margin: 10px
+  label
+    display: flex
+    justify-content: space-between
+    align-items: baseline
+    margin: 7px
+    user-select: none
+    input, select
+      width: 180px
+      background-color: var(--negro-jet)
+      border: none
+      border-radius: 5px
+      padding: 5px
+      &.ng-invalid.ng-touched
+        outline: 2px solid var(--algodon-azucar)
+    input.fecha, select
+      cursor: pointer
+  button
+    background-color: var(--negro-jet)
+    border: none
+    border-radius: 5px
+    margin: 10px
+    padding: 5px
+    cursor: pointer

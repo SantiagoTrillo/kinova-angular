@@ -4,17 +4,12 @@ import { UsuarioInterface } from "../interfaces/usuario-interface"
 @Service()
 export class SesionService {
   usuarioActual: WritableSignal<UsuarioInterface | undefined> = signal<UsuarioInterface | undefined>(undefined)
-  usuarios: WritableSignal<UsuarioInterface[]> = signal<UsuarioInterface[]>([])
+  usuariosRegistrados: WritableSignal<UsuarioInterface[]> = signal<UsuarioInterface[]>([])
 
-  registrarse(
-    correoElectronico: string, nombre: string, apellido: string, fechaNacimiento: string, tipoSangre: string,
-    colorOjos: string, diasVacacionesAnuales: number
-  ): void {
-    const usuarioNuevo: UsuarioInterface = {
-      correoElectronico, nombre, apellido, fechaNacimiento, tipoSangre, colorOjos, diasVacacionesAnuales
-    }
+  registrarUsuario(usuarioNuevo: UsuarioInterface): void {
     this.usuarioActual.set(usuarioNuevo)
-    this.usuarios.update(usuarios => [...usuarios, usuarioNuevo])
+    this.usuariosRegistrados.update((usuariosRegistrados) =>
+      [...usuariosRegistrados, usuarioNuevo,])
   }
 
   cerrarSesion(): void {

@@ -8,4 +8,8 @@ import { SesionService } from "../../servicios/sesion-service"
 })
 export class Perfil {
   sesionService: SesionService = inject(SesionService)
+
+  cerrarSesion(): void {
+    this.sesionService.cerrarSesion()
+  }
 }

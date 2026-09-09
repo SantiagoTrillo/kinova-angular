@@ -1,7 +1,7 @@
 import {Component, inject, signal, WritableSignal} from "@angular/core"
-import { PeliculaService } from "../../servicios/pelicula-service"
-import {PeliculaInterface} from "../../interfaces/pelicula-interface";
-import {TarjetaPelicula} from "../tarjeta-pelicula/tarjeta-pelicula";
+import { PeliculaService } from "../../../servicios/pelicula-service"
+import {PeliculaInterface} from "../../../interfaces/pelicula-interface";
+import {TarjetaPelicula} from "../../tarjeta-pelicula/tarjeta-pelicula";
 
 @Component({
   selector: "app-cartelera",

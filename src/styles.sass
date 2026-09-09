@@ -4,11 +4,25 @@
   --negro-jet: #2D3543
   --blanco: #FFFFFF
   --azul-helado: #A0E6EE
+  --algodon-azucar: #ED9F9F
+
+*
+  color-scheme: dark
 
 body
   margin: 0
   background-color: var(--negro-tinta)
-  color: var(--blanco)
 
 main
   padding-top: 100px
+
+input, select
+  box-sizing: border-box
+
+.titulo
+  display: flex
+  justify-content: center
+  user-select: none
+
+::-webkit-inner-spin-button, ::-webkit-outer-spin-button
+  -webkit-appearance: none

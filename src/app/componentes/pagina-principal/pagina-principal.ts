@@ -1,5 +1,5 @@
 import { Component } from "@angular/core"
-import { Cartelera } from "../cartelera/cartelera"
+import { Cartelera } from "./cartelera/cartelera"
 
 @Component({
   selector: "app-pagina-principal",
