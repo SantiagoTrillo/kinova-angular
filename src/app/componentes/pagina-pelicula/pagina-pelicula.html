@@ -1,0 +1,17 @@
+@if (peliculaService.peliculaSeleccionada(); as peliculaActual) {
+  <main>
+    <div>
+      <div><h1>{{ peliculaActual.titulo }}</h1></div>
+      <div class="poster">
+        <img
+          width="210"
+          height="310"
+          ngSrc="{{ peliculaActual.imagen }}"
+          alt="Póster de una película"
+          (error)="peliculaActual.imagen = 'poster-no-encontrado.jpg'"
+        >
+      </div>
+    </div>
+    <div><app-funciones/></div>
+  </main>
+}

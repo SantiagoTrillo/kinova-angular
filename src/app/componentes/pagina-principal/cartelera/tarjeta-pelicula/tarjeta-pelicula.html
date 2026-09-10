@@ -4,6 +4,7 @@
     height="405"
     ngSrc="{{ pelicula().imagen }}"
     alt="Póster de una película"
+    (click)="seleccionarPelicula(pelicula())"
     (error)="pelicula().imagen = 'poster-no-encontrado.jpg'"
   >
   <div>

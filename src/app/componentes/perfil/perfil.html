@@ -1,6 +1,7 @@
 <main>
-  @if (sesionService.usuarioActual(); as usuario) {
-    <div class="titulo"><h1>Hola, {{ usuario.nombre }}</h1></div>
-    <button (click)="cerrarSesion()">Cerrar sesión</button>
+  @if (sesionService.usuarioActual(); as usuarioActual) {
+    <div class="titulo"><h1>Hola, {{ usuarioActual.nombre }}</h1></div>
+    <div class="detalles-personales"><app-detalles-personales [usuarioActual]="usuarioActual"/></div>
+    <div class="boton"><button (click)="cerrarSesion()">Cerrar sesión</button></div>
   }
 </main>

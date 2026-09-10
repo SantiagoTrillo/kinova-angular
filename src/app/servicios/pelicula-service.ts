@@ -1,13 +1,23 @@
-import { inject, Service } from "@angular/core"
-import { HttpClient } from "@angular/common/http"
+import { inject, Service, signal, WritableSignal } from "@angular/core"
 import { PeliculaInterface } from "../interfaces/pelicula-interface"
-import { Observable } from "rxjs"
+import { SupabaseService } from "./supabase-service"
 
 @Service()
 export class PeliculaService {
-  private http: HttpClient = inject(HttpClient)
+  private supabaseService: SupabaseService = inject(SupabaseService)
+  peliculaSeleccionada: WritableSignal<PeliculaInterface | null> = signal<PeliculaInterface | null>(null)
 
-  obtenerPeliculas(): Observable<PeliculaInterface[]> {
-    return this.http.get<PeliculaInterface[]>("peliculas.json")
+  async obtenerPeliculas(): Promise<PeliculaInterface[]> {
+    const respuesta = await this.supabaseService.cliente.from("peliculas").select("*")
+
+    if (respuesta.data) {
+      return respuesta.data as PeliculaInterface[]
+    }
+
+    return []
+  }
+
+  seleccionarPelicula(pelicula: PeliculaInterface): void {
+    this.peliculaSeleccionada.set(pelicula)
   }
 }

@@ -9,8 +9,8 @@ export const routes: Routes = [
   {
     path: "pelicula",
     loadComponent: () =>
-      import("./componentes/tarjeta-pelicula/detalle-pelicula/detalle-pelicula")
-        .then((m) => m.DetallePelicula)
+      import("./componentes/pagina-pelicula/pagina-pelicula")
+        .then((m) => m.PaginaPelicula)
   },
   {
     path: "registro",

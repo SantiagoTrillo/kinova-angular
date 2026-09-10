@@ -1,4 +1,5 @@
 export interface UsuarioInterface {
+  id: number
   correoElectronico: string
   nombre: string
   apellido: string

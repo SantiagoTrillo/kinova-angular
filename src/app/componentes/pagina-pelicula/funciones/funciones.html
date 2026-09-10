@@ -1,0 +1,24 @@
+<section>
+  <div>
+    <h3>Fechas</h3>
+    @for (dia of semanaActual(); track $index) {
+      <button [class.seleccionado]="fechaSeleccionada() === dia" (click)="seleccionarFecha(dia)">{{ dia }}</button>
+    }
+  </div>
+  <div>
+    <h3>Formato</h3>
+    @for (formato of formatosDisponibles(); track $index) {
+      <button [class.seleccionado]="formatoSeleccionado() == formato" (click)="seleccionarFormato(formato)">{{ formato }}</button>
+    }
+    <h3>Idioma</h3>
+    @for (idioma of idiomasDisponibles(); track $index) {
+      <button [class.seleccionado]="idiomaSeleccionado() == idioma" (click)="seleccionarIdioma(idioma)">{{ idioma }}</button>
+    }
+  </div>
+  <div>
+    <h3>Horarios</h3>
+    @for (horario of horariosDisponibles(); track $index) {
+      <button (click)="seleccionarHorario(horario)">{{ horario }}</button>
+    }
+  </div>
+</section>

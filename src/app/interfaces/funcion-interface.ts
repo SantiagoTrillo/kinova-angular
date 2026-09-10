@@ -1,6 +1,8 @@
 export interface FuncionInterface {
-  horario: string
+  id: number
+  sala: string
+  fechaHora: string
   formato: string
   idioma: string
-  sala: string
+  precio: number
 }

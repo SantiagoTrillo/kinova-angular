@@ -1,7 +1,7 @@
 import {Component, inject, signal, WritableSignal} from "@angular/core"
 import { PeliculaService } from "../../../servicios/pelicula-service"
 import {PeliculaInterface} from "../../../interfaces/pelicula-interface";
-import {TarjetaPelicula} from "../../tarjeta-pelicula/tarjeta-pelicula";
+import {TarjetaPelicula} from "./tarjeta-pelicula/tarjeta-pelicula";
 
 @Component({
   selector: "app-cartelera",
@@ -12,10 +12,10 @@ import {TarjetaPelicula} from "../../tarjeta-pelicula/tarjeta-pelicula";
 export class Cartelera {
   private peliculaService: PeliculaService = inject(PeliculaService)
   peliculas: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
-  peliculaSeleccionada: PeliculaInterface | undefined
+  peliculaSeleccionada: PeliculaInterface | null = null
 
   ngOnInit(): void {
-    this.peliculaService.obtenerPeliculas().subscribe(peliculas => {
+    this.peliculaService.obtenerPeliculas().then(peliculas => {
       this.peliculas.set(peliculas)
     })
   }
