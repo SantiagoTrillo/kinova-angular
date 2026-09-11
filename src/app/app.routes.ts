@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router'
 import { PaginaPrincipal } from "./componentes/pagina-principal/pagina-principal"
+import { PaginaPelicula } from "./componentes/pagina-pelicula/pagina-pelicula"
+import { sesionGuard } from "./guardias/sesion-guard"
+import { formularioGuard } from "./guardias/formulario-guard"
 
 export const routes: Routes = [
   {
@@ -8,21 +11,28 @@ export const routes: Routes = [
   },
   {
     path: "pelicula",
+    component: PaginaPelicula
+  },
+  {
+    path: "compra",
     loadComponent: () =>
-      import("./componentes/pagina-pelicula/pagina-pelicula")
-        .then((m) => m.PaginaPelicula)
+      import("./componentes/compra/compra")
+        .then((m) => m.Compra)
   },
   {
     path: "registro",
     loadComponent: () =>
       import("./componentes/registro/registro")
-        .then((m) => m.Registro)
+        .then((m) => m.Registro),
+    canActivate: [sesionGuard],
+    canDeactivate: [formularioGuard]
   },
   {
     path: "perfil",
     loadComponent: () =>
       import("./componentes/perfil/perfil")
-        .then((m) => m.Perfil)
+        .then((m) => m.Perfil),
+    canActivate: [sesionGuard]
   },
   {
     path: "**",

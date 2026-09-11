@@ -5,6 +5,7 @@ import { SupabaseService } from "./supabase-service"
 @Service()
 export class PeliculaService {
   private supabaseService: SupabaseService = inject(SupabaseService)
+
   peliculaSeleccionada: WritableSignal<PeliculaInterface | null> = signal<PeliculaInterface | null>(null)
 
   async obtenerPeliculas(): Promise<PeliculaInterface[]> {

@@ -11,16 +11,12 @@ import {TarjetaPelicula} from "./tarjeta-pelicula/tarjeta-pelicula";
 })
 export class Cartelera {
   private peliculaService: PeliculaService = inject(PeliculaService)
+
   peliculas: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
-  peliculaSeleccionada: PeliculaInterface | null = null
 
   ngOnInit(): void {
     this.peliculaService.obtenerPeliculas().then(peliculas => {
       this.peliculas.set(peliculas)
     })
-  }
-
-  seleccionarPelicula(pelicula: PeliculaInterface): void {
-    this.peliculaSeleccionada = pelicula
   }
 }

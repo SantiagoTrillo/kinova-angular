@@ -9,6 +9,6 @@
   >
   <div>
     <h3>{{ pelicula().titulo }}</h3>
-    <span>{{ formatearDuracion(pelicula().duracion) }}</span>
+    <span>{{ pelicula().duracion | duracion }}</span>
   </div>
 </div>

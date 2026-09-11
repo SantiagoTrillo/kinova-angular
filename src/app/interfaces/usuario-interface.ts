@@ -1,10 +1,11 @@
 export interface UsuarioInterface {
   id: number
-  correoElectronico: string
+  correo_electronico: string
   nombre: string
   apellido: string
-  fechaNacimiento: string
-  tipoSangre: string
-  colorOjos: string
-  diasVacacionesAnuales: number
+  fecha_nacimiento: string
+  tipo_sangre: string
+  color_ojos: string
+  dias_vacaciones_anuales: number
+  cupon_primera_compra: boolean
 }

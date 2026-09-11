@@ -1,11 +1,31 @@
+section
+  display: flex
+  align-items: end
+  width: 500px
+
+div.div-fechas
+  display: flex
+
+div.seccion-compra
+  display: flex
+  align-items: end
+  justify-content: space-between
+  width: 390px
+
 button
   background-color: var(--negro-jet)
   border: none
   border-radius: 5px
-  margin: 5px 5px 5px 0
+  margin: 0 5px 0 0
   padding: 15px
   cursor: pointer
-  text-transform: capitalize
+  &.boton-fechas
+    width: 58px
   &.seleccionado
     background-color: var(--azul-helado)
     color: var(--negro-tinta)
+  &.compra
+    margin: 0 0 0 45px
+    visibility: hidden
+  &.visible
+    visibility: visible

@@ -1,12 +1,12 @@
 <section>
   <h2>Detalles personales</h2>
   <ul>
-    <li>Correo electrónico: {{ usuarioActual().correoElectronico }}</li>
+    <li>Correo electrónico: {{ usuarioActual().correo_electronico }}</li>
     <li>Nombre: {{ usuarioActual().nombre }}</li>
     <li>Apellido: {{ usuarioActual().apellido }}</li>
-    <li>Fecha de nacimiento: {{ usuarioActual().fechaNacimiento }}</li>
-    <li>Tipo de sangre: {{ usuarioActual().tipoSangre }}</li>
-    <li>Color de ojos: {{ usuarioActual().colorOjos }}</li>
-    <li>Días de vacaciones por año: {{ usuarioActual().diasVacacionesAnuales }}</li>
+    <li>Fecha de nacimiento: {{ usuarioActual().fecha_nacimiento | date: "dd/M/yyyy" }}</li>
+    <li>Tipo de sangre: {{ usuarioActual().tipo_sangre }}</li>
+    <li>Color de ojos: {{ usuarioActual().color_ojos }}</li>
+    <li>Días de vacaciones por año: {{ usuarioActual().dias_vacaciones_anuales }}</li>
   </ul>
 </section>
