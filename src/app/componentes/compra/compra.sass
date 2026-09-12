@@ -1,0 +1,68 @@
+main
+  div.selector-butacas
+    display: flex
+    flex-direction: column
+    align-items: center
+
+div.butacas-y-boton-compra
+  display: flex
+  align-items: end
+  justify-content: end
+  button.compra
+    margin: 0 0 50px 30px
+    padding: 10px
+    background-color: var(--negro-jet)
+    color: var(--blanco)
+    position: absolute
+
+div.filas
+  display: flex
+  flex-direction: column
+  align-items: center
+  border-radius: 10px
+  background-color: var(--gris-sombra)
+  padding: 0 15px 15px 15px
+  margin-bottom: 50px
+  div.columnas
+    display: flex
+    align-items: baseline
+    gap: 20px
+    div.butacas
+      display: flex
+      margin: 7px 7px 0 0
+      div
+        display: flex
+        flex-direction: column
+        margin: 3px
+        button
+          cursor: pointer
+          background-color: var(--negro-jet)
+          border: none
+          color: var(--blanco)
+          border-radius: 5px
+          width: 25px
+          height: 25px
+          padding: 0
+          font-weight: bold
+          &.ocupada
+            background-color: var(--algodon-azucar)
+            color: var(--negro-tinta)
+            cursor: not-allowed
+          &.seleccionado
+            background-color: var(--azul-helado)
+            color: var(--negro-tinta)
+
+button.oculto
+  visibility: hidden
+  &.visible
+    visibility: visible
+    cursor: pointer
+    background-color: var(--blanco)
+    border: none
+    color: var(--negro-tinta)
+    border-radius: 5px
+
+span
+  width: 18px
+  text-align: center
+  font-weight: lighter

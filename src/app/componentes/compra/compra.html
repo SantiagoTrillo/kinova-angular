@@ -1,0 +1,29 @@
+<main>
+  <div class="selector-butacas">
+    <h1 class="titulo">Seleccioná tus butacas</h1>
+    <div class="butacas-y-boton-compra">
+      <div class="filas">
+        <h2>Pantalla</h2>
+        @for (fila of filas(); track fila) {
+          <div class="columnas">
+            <span>{{ fila }}</span>
+            @for (columna of columnas(); track $index) {
+              <div class="butacas">
+                @for (numero of columna; track numero) {
+                  <div>
+                    <button
+                      [class.ocupada]="butacasOcupadas().includes(fila + numero)"
+                      [class.seleccionado]="butacasSeleccionadas().includes(fila + numero)"
+                      (click)="seleccionarButaca(fila + numero)">{{ numero }}
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <button class="compra oculto" [class.visible]="butacasSeleccionadas().length > 0">Finalizar compra</button>
+    </div>
+  </div>
+</main>

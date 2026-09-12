@@ -4,6 +4,7 @@ import { PeliculaService } from "../../../servicios/pelicula-service"
 import { FuncionInterface } from "../../../interfaces/funcion-interface"
 import { DatePipe, TitleCasePipe } from "@angular/common"
 import { RouterLink } from "@angular/router"
+import { FuncionService } from "../../../servicios/funcion-service"
 
 @Component({
   selector: "app-funciones",
@@ -14,6 +15,7 @@ import { RouterLink } from "@angular/router"
 export class Funciones {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private peliculaService: PeliculaService = inject(PeliculaService)
+  private funcionService: FuncionService = inject(FuncionService)
 
   funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
   fechasDisponibles: WritableSignal<string[]> = signal<string[]>([])
@@ -110,6 +112,20 @@ export class Funciones {
 
   seleccionarHorario(horario: string): void {
     this.horarioSeleccionado.set(horario)
+  }
+
+  seleccionarFuncion(): void {
+    for (const funcion of this.funcionesDisponibles()) {
+      const coincideFecha = funcion.fecha_hora.startsWith(this.fechaSeleccionada())
+      const coincideFormato = funcion.formato === this.formatoSeleccionado()
+      const coincideIdioma = funcion.idioma === this.idiomaSeleccionado()
+      const coincideHorario = funcion.fecha_hora === this.horarioSeleccionado()
+
+      if (coincideFecha && coincideFormato && coincideIdioma && coincideHorario) {
+        this.funcionService.seleccionarFuncion(funcion)
+        break
+      }
+    }
   }
 
   limpiarSelecciones(): void {

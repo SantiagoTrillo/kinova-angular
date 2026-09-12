@@ -13,9 +13,9 @@ export class PeliculaService {
 
     if (respuesta.data) {
       return respuesta.data as PeliculaInterface[]
+    } else {
+      return []
     }
-
-    return []
   }
 
   seleccionarPelicula(pelicula: PeliculaInterface): void {
