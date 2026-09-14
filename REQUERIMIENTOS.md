@@ -8,10 +8,13 @@ Cada película registrada en el sistema debe contar obligatoriamente con:
 - **Póster.**
 - **Sinopsis.**
 - **Duración**.
+- **Puntuación promedio.**
 
 ### 1.2. Cartelera y Control de Proyecciones
 El sistema debe permitir a los administradores controlar y configurar:
 - **Películas en página principal:** seleccionar qué películas aparecen exhibidas al ingresar a la página.
+  - **Importante**: deberán mostrarse primero las **3 películas más vendidas**
+- **Búsqueda y filtrado:** el listado de películas debe incorporar una barra de búsqueda para filtrar la cartelera en tiempo real según el título ingresado.
 - **Horarios:** asignación de horarios para cada proyección.
   - **Importante**: no puede programarse ni comenzar una función en una misma sala antes de que hayan transcurrido **al menos 30 minutos** desde la finalización de la función anterior
 - **Formato de proyección:** configurar si la función es en 2D, 3D, 4D o 5D.
@@ -46,3 +49,10 @@ Datos obligatorios solicitados en el registro:
   - **Cantidad de días de vacaciones por año.**
 
 Cada usuario que se registre recibe un **cupón de 20% de descuento** para utilizar en su primera compra.
+
+### 1.6. Reseñas y Calificaciones
+Los clientes deben poder consultar y dejar valoraciones sobre las películas:
+- **Calificación:** asignación de puntuación mediante un sistema de estrellas (de 1 a 5).
+- **Comentarios:** reseña escrita corta.
+- **Visualización:** las opiniones deben poder verse antes de iniciar la compra de entradas.
+- **Puntuación promedio:** se debe calcular el promedio de estrellas de cada película en base a todas sus calificaciones recibidas.

@@ -1,4 +1,10 @@
 <main>
-  <div class="titulo"><h1>Te damos la bienvenida a Kinova</h1></div>
-  <section><app-cartelera/></section>
+  <h1 class="titulo">Te damos la bienvenida a Kinova</h1>
+  <h2 class="titulo">Éxitos taquilleros</h2>
+  <div class="exitos-taquilleros">
+    @for (pelicula of exitosTaquilleros(); track $index) {
+      <app-tarjeta-pelicula [pelicula]="pelicula"/>
+    }
+  </div>
+  <section><app-cartelera [peliculas]="peliculas()"/></section>
 </main>
