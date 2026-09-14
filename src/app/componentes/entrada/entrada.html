@@ -1,0 +1,22 @@
+<main>
+  <div class="pagina-entradas">
+    <div class="entradas">
+      @for (entrada of this.entradaService.entradasCompradas(); track $index) {
+        <div class="pdf">
+          <p>Sala {{ this.funcionService.funcionSeleccionada()?.sala_id }}</p>
+          <p>{{ this.peliculaService.peliculaSeleccionada()?.titulo }}</p>
+          <p>{{ this.funcionService.funcionSeleccionada()?.fecha_hora | date: "dd/M/yyyy" }}</p>
+          <p>Fila {{ entrada.butaca.slice(0, 1) }}, butaca {{ entrada.butaca.slice(1) }}</p>
+          <p>{{ entrada.precio | currency: 'ARS': '$ ': '1.0-0' }}</p>
+          <img
+            ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ entrada.codigo_qr }}"
+            height="150"
+            width="150"
+            alt="Código QR"
+          >
+        </div>
+      }
+    </div>
+    <button (click)="guardarPdf()">Descargar</button>
+  </div>
+</main>

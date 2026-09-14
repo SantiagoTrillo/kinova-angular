@@ -6,14 +6,45 @@ main
 
 div.butacas-y-boton-compra
   display: flex
-  align-items: end
-  justify-content: end
+  flex-direction: column
+  align-items: center
   button.compra
-    margin: 0 0 50px 30px
-    padding: 10px
+    padding: 10px 20px
+    border: none
+    border-radius: 5px
+    margin-bottom: 30px
     background-color: var(--negro-jet)
     color: var(--blanco)
-    position: absolute
+    font-weight: bold
+    visibility: hidden
+    &.visible
+      visibility: visible
+      cursor: pointer
+
+div.leyenda
+  display: flex
+  justify-content: center
+  gap: 30px
+  margin-bottom: 25px
+  div
+    display: flex
+    align-items: center
+    gap: 5px
+    span
+      font-size: 15px
+      color: var(--blanco)
+      font-weight: lighter
+      user-select: none
+    button
+      width: 22px
+      height: 22px
+      border: none
+      border-radius: 5px
+      background-color: var(--negro-jet)
+      &.ocupada
+        background-color: var(--algodon-azucar)
+      &.seleccionado
+        background-color: var(--azul-helado)
 
 div.filas
   display: flex
@@ -22,11 +53,15 @@ div.filas
   border-radius: 10px
   background-color: var(--gris-sombra)
   padding: 0 15px 15px 15px
-  margin-bottom: 50px
+  margin-bottom: 30px
   div.columnas
     display: flex
     align-items: baseline
     gap: 20px
+    span
+      width: 18px
+      text-align: center
+      font-weight: lighter
     div.butacas
       display: flex
       margin: 7px 7px 0 0
@@ -51,18 +86,3 @@ div.filas
           &.seleccionado
             background-color: var(--azul-helado)
             color: var(--negro-tinta)
-
-button.oculto
-  visibility: hidden
-  &.visible
-    visibility: visible
-    cursor: pointer
-    background-color: var(--blanco)
-    border: none
-    color: var(--negro-tinta)
-    border-radius: 5px
-
-span
-  width: 18px
-  text-align: center
-  font-weight: lighter

@@ -1,0 +1,43 @@
+main
+  display: flex
+  flex-direction: column
+  align-items: center
+
+div.pagina-entradas
+  display: flex
+  flex-direction: column
+  align-items: center
+
+div.entradas
+  display: flex
+  flex-wrap: wrap
+  margin: 30px 30px 0 30px
+  gap: 8px
+  justify-content: center
+
+div.pdf
+  width: 170px
+  display: flex
+  flex-direction: column
+  align-items: center
+  margin: 0 0 25px 0
+  padding: 15px
+  border-radius: 10px
+  background-color: var(--gris-sombra)
+  break-inside: avoid
+  page-break-inside: avoid
+  p, img
+    margin: 5px 0 5px 0
+
+button
+  padding: 10px 20px
+  border: none
+  border-radius: 5px
+  margin-bottom: 30px
+  background-color: var(--negro-jet)
+  color: var(--blanco)
+  cursor: pointer
+
+@media print
+  div.pdf
+    margin: 40px auto 25px auto

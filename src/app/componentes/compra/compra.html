@@ -23,7 +23,21 @@
           </div>
         }
       </div>
-      <button class="compra oculto" [class.visible]="butacasSeleccionadas().length > 0">Finalizar compra</button>
+      <div class="leyenda">
+        <div>
+          <button disabled></button>
+          <span>Libre</span>
+        </div>
+        <div>
+          <button disabled class="ocupada"></button>
+          <span>Ocupada</span>
+        </div>
+        <div>
+          <button disabled class="seleccionado"></button>
+          <span>Seleccionada</span>
+        </div>
+      </div>
+      <button class="compra oculto" [class.visible]="butacasSeleccionadas().length > 0" (click)="confirmarCompra()">Finalizar compra</button>
     </div>
   </div>
 </main>

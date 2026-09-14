@@ -8,21 +8,22 @@
         }
       </div>
     </div>
-    <div>
-      <h3>Formatos</h3>
+    <div class="opciones">
       <div>
-        @for (formato of formatosDisponibles(); track $index) {
-          <button [class.seleccionado]="formatoSeleccionado() == formato" (click)="seleccionarFormato(formato)">{{ formato }}</button>
-        }
+        <h3>Formatos</h3>
+        <div>
+          @for (formato of formatosDisponibles(); track $index) {
+            <button [class.seleccionado]="formatoSeleccionado() == formato" (click)="seleccionarFormato(formato)">{{ formato }}</button>
+          }
+        </div>
       </div>
-
-    </div>
-    <div>
-      <h3>Idiomas</h3>
       <div>
-        @for (idioma of idiomasDisponibles(); track $index) {
-          <button [class.seleccionado]="idiomaSeleccionado() == idioma" (click)="seleccionarIdioma(idioma)">{{ idioma }}</button>
-        }
+        <h3>Idiomas</h3>
+        <div>
+          @for (idioma of idiomasDisponibles(); track $index) {
+            <button [class.seleccionado]="idiomaSeleccionado() == idioma" (click)="seleccionarIdioma(idioma)">{{ idioma }}</button>
+          }
+        </div>
       </div>
     </div>
     <div class="seccion-compra">

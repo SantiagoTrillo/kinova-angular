@@ -30,3 +30,12 @@ input, select
 
 ::-webkit-inner-spin-button, ::-webkit-outer-spin-button
   -webkit-appearance: none
+
+@page
+  margin: 0
+@media print
+  *
+    -webkit-print-color-adjust: exact
+    print-color-adjust: exact
+  nav, button
+    display: none

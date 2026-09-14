@@ -5,7 +5,7 @@ import { FuncionInterface } from "../interfaces/funcion-interface"
 export class FuncionService {
   funcionSeleccionada: WritableSignal<FuncionInterface | null> = signal<FuncionInterface | null>(null)
 
-  seleccionarFuncion(funcion: FuncionInterface) {
+  seleccionarFuncion(funcion: FuncionInterface): void {
     this.funcionSeleccionada.set(funcion)
   }
 }

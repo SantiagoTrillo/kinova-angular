@@ -72,9 +72,9 @@ export class Funciones {
     const horarios: string[] = []
 
     for (const funcion of this.funcionesDisponibles()) {
-      const coincideFecha = funcion.fecha_hora.startsWith(this.fechaSeleccionada())
-      const coincideFormato = funcion.formato === this.formatoSeleccionado()
-      const coincideIdioma = funcion.idioma === this.idiomaSeleccionado()
+      const coincideFecha: boolean  = funcion.fecha_hora.startsWith(this.fechaSeleccionada())
+      const coincideFormato: boolean  = funcion.formato === this.formatoSeleccionado()
+      const coincideIdioma: boolean  = funcion.idioma === this.idiomaSeleccionado()
 
       if (coincideFecha && coincideFormato && coincideIdioma) {
         if (!horarios.includes(funcion.fecha_hora)) {
@@ -86,7 +86,7 @@ export class Funciones {
     this.horariosDisponibles.set(horarios)
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.obtenerFunciones().then(_ => {
       this.fechaSeleccionada.set(this.funcionesDisponibles()[0].fecha_hora.slice(0, 10))
 
@@ -102,11 +102,13 @@ export class Funciones {
 
   seleccionarFormato(formato: string): void {
     this.formatoSeleccionado.set(formato)
+    this.limpiarHorarios()
     this.obtenerHorarios()
   }
 
   seleccionarIdioma(idioma: string): void {
     this.idiomaSeleccionado.set(idioma)
+    this.limpiarHorarios()
     this.obtenerHorarios()
   }
 
@@ -116,10 +118,10 @@ export class Funciones {
 
   seleccionarFuncion(): void {
     for (const funcion of this.funcionesDisponibles()) {
-      const coincideFecha = funcion.fecha_hora.startsWith(this.fechaSeleccionada())
-      const coincideFormato = funcion.formato === this.formatoSeleccionado()
-      const coincideIdioma = funcion.idioma === this.idiomaSeleccionado()
-      const coincideHorario = funcion.fecha_hora === this.horarioSeleccionado()
+      const coincideFecha: boolean = funcion.fecha_hora.startsWith(this.fechaSeleccionada())
+      const coincideFormato: boolean  = funcion.formato === this.formatoSeleccionado()
+      const coincideIdioma: boolean  = funcion.idioma === this.idiomaSeleccionado()
+      const coincideHorario: boolean  = funcion.fecha_hora === this.horarioSeleccionado()
 
       if (coincideFecha && coincideFormato && coincideIdioma && coincideHorario) {
         this.funcionService.seleccionarFuncion(funcion)
@@ -131,6 +133,10 @@ export class Funciones {
   limpiarSelecciones(): void {
     this.formatoSeleccionado.set("")
     this.idiomaSeleccionado.set("")
+    this.horarioSeleccionado.set("")
+  }
+
+  limpiarHorarios(): void {
     this.horarioSeleccionado.set("")
   }
 }
