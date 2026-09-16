@@ -45,6 +45,13 @@ export const routes: Routes = [
     canActivate: [sesionGuard]
   },
   {
+    path: "reseña",
+    loadComponent: () =>
+      import("./componentes/resenia/resenia")
+        .then(m => m.Resenia),
+    canActivate: [redireccionGuard]
+  },
+  {
     path: "**",
     redirectTo: ""
   }

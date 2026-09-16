@@ -1,0 +1,21 @@
+<main>
+  @if (resenias().length > 0) {
+    <h1>Reseñas de {{ peliculaService.peliculaSeleccionada()?.titulo }}</h1>
+    <div class="contenedor-resenias">
+      @for (resenia of resenias(); track $index) {
+        <div class="resenia">
+          <h3>Calificación: @for (estrella of estrellas(); track $index) {
+            @if (estrella <= resenia.calificacion) {
+              <i class="fa-solid fa-star"></i>
+            } @else {
+              <i class="fa-regular fa-star"></i>
+            }
+          }</h3>
+          <div>{{ resenia.comentarios }}</div>
+        </div>
+      }
+    </div>
+  } @else {
+    <h1>Todavía no hay reseñas para {{ peliculaService.peliculaSeleccionada()?.titulo }}</h1>
+  }
+</main>

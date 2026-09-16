@@ -5,4 +5,5 @@ export interface PeliculaInterface {
   duracion: number
   principal: boolean
   imagen: string
+  puntuacion_promedio?: number
 }

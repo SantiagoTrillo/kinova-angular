@@ -12,9 +12,28 @@
             (error)="peliculaActual.imagen = 'poster-no-encontrado.jpg'"
           >
         </div>
-        <div class="sinopsis">
-          <h2>Sinopsis</h2>
-          {{ peliculaActual.sinopsis }}
+        <div>
+          <div class="elemento-detalle-pelicula">
+            <h2>Calificación promedio</h2>
+            <div class="resenia">
+              @if (peliculaActual.puntuacion_promedio) {
+                @for (estrella of estrellas(); track $index) {
+                  @if (estrella <= peliculaActual.puntuacion_promedio) {
+                    <i class="fa-solid fa-star"></i>
+                  } @else {
+                    <i class="fa-regular fa-star"></i>
+                  }
+                }
+              } @else {
+                <span>Sin reseñas</span>
+              }
+              <button routerLink="/reseña">Ver reseñas</button>
+            </div>
+          </div>
+          <div class="elemento-detalle-pelicula">
+            <h2>Sinopsis</h2>
+            {{ peliculaActual.sinopsis }}
+          </div>
         </div>
       </div>
     </div>

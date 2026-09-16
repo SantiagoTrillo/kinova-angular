@@ -1,4 +1,4 @@
-import {Component , input, InputSignal } from "@angular/core"
+import { Component, computed, input, InputSignal, Signal, signal, WritableSignal } from "@angular/core"
 import { PeliculaInterface } from "../../../interfaces/pelicula-interface"
 import { TarjetaPelicula } from "./tarjeta-pelicula/tarjeta-pelicula"
 
@@ -9,5 +9,15 @@ import { TarjetaPelicula } from "./tarjeta-pelicula/tarjeta-pelicula"
   imports: [TarjetaPelicula]
 })
 export class Cartelera {
-  peliculas: InputSignal<PeliculaInterface[]> = input.required<PeliculaInterface[]>()
+  peliculasTotales: InputSignal<PeliculaInterface[]> = input.required<PeliculaInterface[]>()
+  busqueda: WritableSignal<string> = signal<string>("")
+  peliculasMostradas: Signal<PeliculaInterface[]> = computed((): PeliculaInterface[] => {
+    const textoBuscado: string = this.busqueda().toLowerCase()
+
+    return this.peliculasTotales().filter(pelicula => pelicula.titulo.toLowerCase().includes(textoBuscado))
+  })
+
+  filtrarPeliculas(texto: string): void {
+    this.busqueda.set(texto)
+  }
 }

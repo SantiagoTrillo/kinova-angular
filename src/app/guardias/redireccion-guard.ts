@@ -28,6 +28,12 @@ export const redireccionGuard: CanActivateFn = (_route: ActivatedRouteSnapshot, 
     } else {
       return router.createUrlTree([""])
     }
+  } else if (decodeURI(state.url) === "/reseña") {
+    if (peliculaService.peliculaSeleccionada()) {
+      return true
+    } else {
+      return router.createUrlTree([""])
+    }
   } else {
     return true
   }

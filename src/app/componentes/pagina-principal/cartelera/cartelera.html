@@ -1,7 +1,16 @@
-<article>
-  @for (pelicula of peliculas(); track $index) {
+<div class="cabecera-cartelera">
+  <h2>Cartelera</h2>
+  <input
+    #buscador
+    type="search"
+    placeholder="Buscar una película"
+    (input)="filtrarPeliculas(buscador.value)"
+  >
+</div>
+<div class="cartelera">
+  @for (pelicula of peliculasMostradas(); track $index) {
     @if (pelicula.principal) {
      <app-tarjeta-pelicula [pelicula]="pelicula"/>
     }
   }
-</article>
+</div>
