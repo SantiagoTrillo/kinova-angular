@@ -1,4 +1,4 @@
-import { inject, Service } from "@angular/core"
+import { inject, Service, Signal, signal } from "@angular/core"
 import { SupabaseService } from "./supabase-service"
 import { ReseniaInterface } from "../interfaces/resenia-interface"
 import { PeliculaService } from "./pelicula-service"
@@ -7,6 +7,8 @@ import { PeliculaService } from "./pelicula-service"
 export class ReseniaService {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private peliculaService: PeliculaService = inject(PeliculaService)
+
+  estrellas: Signal<number[]> = signal<number[]>([1, 2, 3, 4, 5])
 
   async obtenerResenias(): Promise<ReseniaInterface[]> {
     const respuesta = await this.supabaseService.cliente.from("resenias")

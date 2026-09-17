@@ -1,8 +1,9 @@
-import { Component, inject, Signal, signal } from "@angular/core"
+import { Component, inject } from "@angular/core"
 import { PeliculaService } from "../../servicios/pelicula-service"
 import { NgOptimizedImage } from "@angular/common"
 import { Funciones } from "./funciones/funciones"
 import { RouterLink } from "@angular/router"
+import { ReseniaService } from "../../servicios/resenia-service"
 
 @Component({
   selector: "app-pagina-pelicula",
@@ -11,11 +12,10 @@ import { RouterLink } from "@angular/router"
   imports: [NgOptimizedImage, Funciones, RouterLink]
 })
 export class PaginaPelicula {
-  estrellas: Signal<number[]> = signal<number[]>([1, 2, 3, 4, 5])
-
   peliculaService: PeliculaService = inject(PeliculaService)
+  reseniaService: ReseniaService = inject(ReseniaService)
 
-  ngOnInit() {
+  ngOnInit(): void {
     console.log(this.peliculaService.peliculaSeleccionada())
   }
 }

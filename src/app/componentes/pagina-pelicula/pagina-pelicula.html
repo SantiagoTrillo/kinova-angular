@@ -17,7 +17,7 @@
             <h2>Calificación promedio</h2>
             <div class="resenia">
               @if (peliculaActual.puntuacion_promedio) {
-                @for (estrella of estrellas(); track $index) {
+                @for (estrella of this.reseniaService.estrellas(); track $index) {
                   @if (estrella <= peliculaActual.puntuacion_promedio) {
                     <i class="fa-solid fa-star"></i>
                   } @else {

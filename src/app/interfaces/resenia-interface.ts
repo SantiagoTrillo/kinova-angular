@@ -1,5 +1,5 @@
 export interface ReseniaInterface {
-  id: number
+  id?: number
   pelicula_id: number
   calificacion: number
   comentarios?: string

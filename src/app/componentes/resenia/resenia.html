@@ -1,10 +1,26 @@
 <main>
   @if (resenias().length > 0) {
     <h1>Reseñas de {{ peliculaService.peliculaSeleccionada()?.titulo }}</h1>
+    <div class="caja-resenia">
+      <div class="selector-estrellas">
+        <h3>
+          Calificación:
+          @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
+            @if (estrella <= calificacionSeleccionada()) {
+              <i class="fa-solid fa-star" (click)="seleccionarEstrella(estrella)"></i>
+            } @else {
+              <i class="fa-regular fa-star" (click)="seleccionarEstrella(estrella)"></i>
+            }
+          }
+        </h3>
+      </div>
+      <textarea #comentarios type="text" placeholder="Escribí acá tu reseña..."></textarea>
+      <button (click)="publicarResenia(comentarios.value)">Publicar reseña</button>
+    </div>
     <div class="contenedor-resenias">
       @for (resenia of resenias(); track $index) {
         <div class="resenia">
-          <h3>Calificación: @for (estrella of estrellas(); track $index) {
+          <h3>Calificación: @for (estrella of this.reseniaService.estrellas(); track $index) {
             @if (estrella <= resenia.calificacion) {
               <i class="fa-solid fa-star"></i>
             } @else {
