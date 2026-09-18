@@ -3,8 +3,22 @@ main
   flex-direction: column
   align-items: center
 
-h1
-  margin: 21.44px 0 8px 0
+div.contenedor-titulo
+  display: flex
+  align-items: center
+  gap: 30px
+  button
+    background-color: var(--negro-jet)
+    border: none
+    border-radius: 5px
+    padding: 15px
+    cursor: pointer
+    width: 40px
+    height: 40px
+    line-height: 0
+    margin-top: 10px
+  h1
+    margin: 21.44px 50px 8px 0
 
 div.selector-estrellas
   i.fa-solid
@@ -17,7 +31,7 @@ div.caja-resenia
   flex-direction: column
   textarea
     border: none
-    width: 725px
+    width: 710px
     height: 80px
     background-color: var(--gris-sombra)
     border-radius: 10px 10px 0 0
@@ -36,6 +50,7 @@ div.contenedor-resenias
   margin-bottom: 25px
 
 div.resenia
+  width: 715px
   i.fa-solid
     color: var(--naranja)
   i.fa-regular

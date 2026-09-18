@@ -13,6 +13,7 @@ export class ReseniaService {
   async obtenerResenias(): Promise<ReseniaInterface[]> {
     const respuesta = await this.supabaseService.cliente.from("resenias")
       .select("*").eq("pelicula_id", this.peliculaService.peliculaSeleccionada()?.id)
+      .order("id", { ascending: false})
 
     if (respuesta.data) {
       return respuesta.data as ReseniaInterface[]

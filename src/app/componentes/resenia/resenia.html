@@ -1,37 +1,44 @@
 <main>
-  @if (resenias().length > 0) {
-    <h1>Reseñas de {{ peliculaService.peliculaSeleccionada()?.titulo }}</h1>
-    <div class="caja-resenia">
-      <div class="selector-estrellas">
-        <h3>
-          Calificación:
-          @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
-            @if (estrella <= calificacionSeleccionada()) {
-              <i class="fa-solid fa-star" (click)="seleccionarEstrella(estrella)"></i>
-            } @else {
-              <i class="fa-regular fa-star" (click)="seleccionarEstrella(estrella)"></i>
-            }
+  <div class="contenedor-titulo">
+    <button appVolver><i class="fa-solid fa-arrow-left"></i></button>
+    @if (resenias().length > 0) {
+      <h1>Reseñas de {{ peliculaService.peliculaSeleccionada()?.titulo }}</h1>
+    } @else {
+      <h1>Todavía no hay reseñas para {{ peliculaService.peliculaSeleccionada()?.titulo }}</h1>
+    }
+  </div>
+  <div class="caja-resenia">
+    <div class="selector-estrellas">
+      <h3>
+        Calificación:
+        @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
+          @if (estrella <= calificacionSeleccionada()) {
+            <i class="fa-solid fa-star" (click)="seleccionarEstrella(estrella)"></i>
+          } @else {
+            <i class="fa-regular fa-star" (click)="seleccionarEstrella(estrella)"></i>
           }
-        </h3>
-      </div>
-      <textarea #comentarios type="text" placeholder="Escribí acá tu reseña..."></textarea>
-      <button (click)="publicarResenia(comentarios.value)">Publicar reseña</button>
+        }
+      </h3>
     </div>
+    <textarea #cajaComentarios type="text" placeholder="Escribí acá tu reseña..."></textarea>
+    <button (click)="publicarResenia(cajaComentarios)">Publicar reseña</button>
+  </div>
+  @if (resenias().length > 0) {
     <div class="contenedor-resenias">
       @for (resenia of resenias(); track $index) {
         <div class="resenia">
-          <h3>Calificación: @for (estrella of this.reseniaService.estrellas(); track $index) {
-            @if (estrella <= resenia.calificacion) {
-              <i class="fa-solid fa-star"></i>
-            } @else {
-              <i class="fa-regular fa-star"></i>
+          <h3>Calificación:
+            @for (estrella of this.reseniaService.estrellas(); track $index) {
+              @if (estrella <= resenia.calificacion) {
+                <i class="fa-solid fa-star"></i>
+              } @else {
+                <i class="fa-regular fa-star"></i>
+              }
             }
-          }</h3>
+          </h3>
           <div>{{ resenia.comentarios }}</div>
         </div>
       }
     </div>
-  } @else {
-    <h1>Todavía no hay reseñas para {{ peliculaService.peliculaSeleccionada()?.titulo }}</h1>
   }
 </main>
