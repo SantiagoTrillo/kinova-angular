@@ -4,8 +4,14 @@
     #buscador
     type="search"
     placeholder="Buscar una película"
-    (input)="filtrarPeliculas(buscador.value)"
+    (input)="filtrarPeliculasTexto(buscador.value)"
   >
+  <select #selectorGenero (change)="filtrarPeliculasGenero(selectorGenero.value)">
+    <option selected value="">Todos</option>
+    @for (generoDisponible of generosDisponibles(); track $index) {
+      <option>{{ generoDisponible }}</option>
+    }
+  </select>
 </div>
 <div class="cartelera">
   @for (pelicula of peliculasMostradas(); track $index) {

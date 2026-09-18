@@ -6,4 +6,5 @@ export interface PeliculaInterface {
   principal: boolean
   imagen: string
   puntuacion_promedio?: number
+  generos: string[]
 }

@@ -9,7 +9,8 @@ export class PeliculaService {
   peliculaSeleccionada: WritableSignal<PeliculaInterface | null> = signal<PeliculaInterface | null>(null)
 
   async obtenerPeliculas(): Promise<PeliculaInterface[]> {
-    const respuesta = await this.supabaseService.cliente.from("peliculas").select("*")
+    const respuesta = await this.supabaseService.cliente.from("peliculas")
+      .select("*").order("id", { ascending: true })
 
     if (respuesta.data) {
       return respuesta.data as PeliculaInterface[]

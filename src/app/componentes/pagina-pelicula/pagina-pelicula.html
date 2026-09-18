@@ -14,7 +14,7 @@
         </div>
         <div>
           <div class="elemento-detalle-pelicula">
-            <h2>Calificación promedio</h2>
+            <h3>Calificación promedio</h3>
             <div class="resenia">
               @if (peliculaActual.puntuacion_promedio) {
                 @for (estrella of this.reseniaService.estrellas(); track $index) {
@@ -31,8 +31,14 @@
             </div>
           </div>
           <div class="elemento-detalle-pelicula">
-            <h2>Sinopsis</h2>
+            <h3>Sinopsis</h3>
             {{ peliculaActual.sinopsis }}
+          </div>
+          <div class="elemento-detalle-pelicula">
+            <h3>Géneros</h3>
+            @for (genero of peliculaActual.generos; track $index) {
+              {{ genero }} @if ($last) {.} @else {, }
+            }
           </div>
         </div>
       </div>

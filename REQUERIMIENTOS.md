@@ -9,12 +9,13 @@ Cada película registrada en el sistema debe contar obligatoriamente con:
 - **Sinopsis.**
 - **Duración**.
 - **Puntuación promedio.**
+- **Géneros.**
 
 ### 1.2. Cartelera y Control de Proyecciones
 El sistema debe permitir a los administradores controlar y configurar:
 - **Películas en página principal:** seleccionar qué películas aparecen exhibidas al ingresar a la página.
   - **Importante**: deberán mostrarse primero las **3 películas más vendidas**
-- **Búsqueda y filtrado:** el listado de películas debe incorporar una barra de búsqueda para filtrar la cartelera en tiempo real según el título ingresado.
+- **Búsqueda y filtrado:** el listado de películas debe incorporar una barra de búsqueda para filtrar la cartelera en tiempo real según el título ingresado y/o el género seleccionado.
 - **Horarios:** asignación de horarios para cada proyección.
   - **Importante**: no puede programarse ni comenzar una función en una misma sala antes de que hayan transcurrido **al menos 30 minutos** desde la finalización de la función anterior
 - **Formato de proyección:** configurar si la función es en 2D, 3D, 4D o 5D.
