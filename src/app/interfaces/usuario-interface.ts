@@ -7,5 +7,4 @@ export interface UsuarioInterface {
   tipo_sangre: string
   color_ojos: string
   dias_vacaciones_anuales: number
-  cupon_primera_compra: boolean
 }

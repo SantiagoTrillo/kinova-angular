@@ -4,7 +4,7 @@ import { ReseniaInterface } from "../../interfaces/resenia-interface"
 import { ReseniaService } from "../../servicios/resenia-service"
 import { SupabaseService } from "../../servicios/supabase-service"
 import { PeliculaInterface } from "../../interfaces/pelicula-interface"
-import {Volver} from "../../directivas/volver";
+import { Volver } from "../../directivas/volver"
 
 @Component({
   selector: "app-resenia",

@@ -31,7 +31,7 @@ Todas las salas comparten la misma distribución física fija:
   - Total por fila: 28 butacas (560 butacas por sala).
 
 ### 1.4. Venta y Emisión de Entradas
-Los clientes deben poder seleccionar película, función y butacas para sacar sus entradas.
+Los clientes deben poder seleccionar película, función, butacas y productos del candybar para sacar sus entradas.
 
 Al concretar la compra, el sistema debe generar automáticamente un comprobante en PDF con los datos de la entrada y un **código QR** que el cliente presentará para acceder a la sala.
 
@@ -49,7 +49,7 @@ Datos obligatorios solicitados en el registro:
   - **Color de ojos.**
   - **Cantidad de días de vacaciones por año.**
 
-Cada usuario que se registre recibe un **cupón de 20% de descuento** para utilizar en su primera compra.
+Cada usuario que se registre recibe un **cupón de descuento** para utilizar en su primera compra. Los usuarios **mayores de 50 años** tienen cupones exclusivos.
 
 ### 1.6. Reseñas y Calificaciones
 Los clientes deben poder consultar y dejar valoraciones sobre las películas:
@@ -57,3 +57,13 @@ Los clientes deben poder consultar y dejar valoraciones sobre las películas:
 - **Comentarios:** reseña escrita corta.
 - **Visualización:** las opiniones deben poder verse antes de iniciar la compra de entradas.
 - **Puntuación promedio:** se debe calcular el promedio de estrellas de cada película en base a todas sus calificaciones recibidas.
+
+### 1.7. Candybar
+Los clientes deben poder comprar comida y bebida junto con sus entradas:
+- Cada producto debe contar con un nombre, imagen, precio y categoría.
+- Deben poder retirarse con el código QR.
+
+## 2. Requerimientos Fuera del Alcance
+
+### 2.1. Mapa del Cine
+Luego de comprar las entradas, el usuario debe poder acceder al mapa del cine en donde se le indique la sala en la que se proyectará su función.
