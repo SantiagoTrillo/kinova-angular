@@ -12,12 +12,10 @@ export class CuponService {
   async obtenerMejorCupon(): Promise<CuponInterface | null> {
     const cupones: CuponInterface[] = await this.obtenerCupones()
 
-    if (cupones.length === 0) {
-      return null
-    } else {
-      return cupones.reduce((mejorCupon: CuponInterface, cuponActual: CuponInterface): CuponInterface =>
-        cuponActual.descuento > mejorCupon.descuento ? cuponActual : mejorCupon)
-    }
+    if (cupones.length === 0) return null
+
+    return cupones.reduce((mejorCupon: CuponInterface, cuponActual: CuponInterface): CuponInterface =>
+      cuponActual.descuento > mejorCupon.descuento ? cuponActual : mejorCupon)
   }
 
   async obtenerCupones(): Promise<CuponInterface[]> {
@@ -34,6 +32,15 @@ export class CuponService {
     } else {
       return []
     }
+  }
+
+  async canjearCupon(cuponId: number): Promise<void> {
+    const usuarioActual: UsuarioInterface | null = this.sesionService.usuarioActual()
+
+    if (!usuarioActual) return
+
+    await this.supabaseService.cliente.from("cupones_usuarios").update({ utilizado: true })
+      .eq("usuario_id", usuarioActual.id).eq("cupon_id", cuponId)
   }
 
   async actualizarDescuentoCupon(nombreCupon: string, nuevoDescuento: number): Promise<void> {

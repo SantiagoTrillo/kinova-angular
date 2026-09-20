@@ -23,6 +23,13 @@ export const routes: Routes = [
     canActivate: [redireccionGuard]
   },
   {
+    path: "candybar",
+    loadComponent: () =>
+      import("./componentes/candybar/candybar")
+        .then(m => m.Candybar),
+    canActivate: []
+  },
+  {
     path: "entrada",
     loadComponent: () =>
       import("./componentes/entrada/entrada")

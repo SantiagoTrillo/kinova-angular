@@ -8,12 +8,17 @@ export class SesionService {
 
   usuarioActual: WritableSignal<UsuarioInterface | null> = signal<UsuarioInterface | null>(null)
 
-  async registrarUsuario(usuarioNuevo: UsuarioInterface): Promise<void> {
-    const respuesta = await this.supabaseService.cliente.from("usuarios").insert(usuarioNuevo)
+  async registrarUsuario(usuarioNuevo: UsuarioInterface): Promise<UsuarioInterface | null> {
+    const respuesta = await this.supabaseService.cliente.from("usuarios")
+      .insert(usuarioNuevo).select().single()
 
-    if (!respuesta.error) {
-      this.usuarioActual.set(usuarioNuevo)
-    }
+    if (!respuesta.data) return null
+
+    const usuarioRegistrado = respuesta.data as UsuarioInterface
+
+    this.usuarioActual.set(usuarioRegistrado)
+
+    return usuarioRegistrado
   }
 
   cerrarSesion(): void {

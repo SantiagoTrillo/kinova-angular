@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
 import { Router } from "@angular/router"
 import { SesionService } from "../../servicios/sesion-service"
 import { UsuarioInterface } from "../../interfaces/usuario-interface"
+import { SupabaseService } from "../../servicios/supabase-service"
 
 @Component({
   selector: "app-registro",
@@ -11,6 +12,7 @@ import { UsuarioInterface } from "../../interfaces/usuario-interface"
   imports: [ReactiveFormsModule]
 })
 export class Registro {
+  private supabaseService: SupabaseService = inject(SupabaseService)
   private formBuilder: FormBuilder = inject(FormBuilder)
   private sesionService: SesionService = inject(SesionService)
   private router: Router = inject(Router)
@@ -27,15 +29,26 @@ export class Registro {
     dias_vacaciones_anuales: [null as number | null, [Validators.required, Validators.min(0)]]
   })
 
-  registrarUsuario(): void {
+  async registrarUsuario(): Promise<void> {
     if (this.formularioRegistro.valid) {
-      const usuarioNuevo = this.formularioRegistro.getRawValue() as UsuarioInterface
+      const datosFormulario = this.formularioRegistro.getRawValue() as UsuarioInterface
+      const usuarioRegistrado: UsuarioInterface | null = await this.sesionService.registrarUsuario(datosFormulario)
 
-      this.sesionService.registrarUsuario(usuarioNuevo).then(_ => {
+      if (usuarioRegistrado) {
         this.registroExitoso.set(true)
-
+        await this.otorgarCuponRegistro(usuarioRegistrado)
         this.router.navigate(["/perfil"])
-      })
+      }
+    }
+  }
+
+  async otorgarCuponRegistro(usuario: UsuarioInterface): Promise<void> {
+    const cuponRegistro = {usuario_id: usuario.id, cupon_id: 1, utilizado: false}
+
+    const respuesta = await this.supabaseService.cliente.from("cupones_usuarios").insert(cuponRegistro)
+
+    if (respuesta.error) {
+      console.error(respuesta.error)
     }
   }
 }

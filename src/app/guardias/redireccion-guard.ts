@@ -10,7 +10,7 @@ export const redireccionGuard: CanActivateFn = (_route: ActivatedRouteSnapshot, 
   const entradaService: EntradaService = inject(EntradaService)
   const router: Router = inject(Router)
 
-  if (state.url === "/pelicula") {
+  if (state.url === "/pelicula" || decodeURI(state.url) === "/reseña") {
     if (peliculaService.peliculaSeleccionada()) {
       return true
     } else {
@@ -22,14 +22,8 @@ export const redireccionGuard: CanActivateFn = (_route: ActivatedRouteSnapshot, 
     } else {
       return router.createUrlTree([""])
     }
-  } else if (state.url === "/entrada") {
+  } else if (state.url === "/candybar" || state.url === "/entrada") {
     if (entradaService.entradasCompradas()) {
-      return true
-    } else {
-      return router.createUrlTree([""])
-    }
-  } else if (decodeURI(state.url) === "/reseña") {
-    if (peliculaService.peliculaSeleccionada()) {
       return true
     } else {
       return router.createUrlTree([""])

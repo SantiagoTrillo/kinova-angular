@@ -8,6 +8,7 @@ import { FuncionInterface } from "../../interfaces/funcion-interface"
 import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { EntradaService } from "../../servicios/entrada-service"
 import { CuponService } from "../../servicios/cupon-service"
+import { CuponInterface } from "../../interfaces/cupon-interface"
 
 @Component({
   selector: "app-compra",
@@ -32,6 +33,10 @@ export class Compra {
   butacasOcupadas: WritableSignal<string[]> = signal<string[]>([])
   butacasSeleccionadas: WritableSignal<string[]> = signal<string[]>([])
 
+  ngOnInit(): void {
+    this.obtenerButacasOcupadas()
+  }
+
   async obtenerButacasOcupadas(): Promise<void> {
     const respuesta = await this.supabaseService.cliente.from("entradas")
       .select("butaca").eq("funcion_id", this.funcionService.funcionSeleccionada()?.id)
@@ -41,69 +46,49 @@ export class Compra {
     }
   }
 
-  ngOnInit(): void {
-    this.obtenerButacasOcupadas()
+  async confirmarCompra(): Promise<void> {
+    const mejorCupon: CuponInterface | null = await this.cuponService.obtenerMejorCupon()
+    const descuento: number = mejorCupon ? mejorCupon.descuento : 0
+    const entradas: EntradaInterface[] = this.armarEntradas(descuento)
+    const totalCompra: number = this.calcularTotalEntrada(entradas)
+    const butacasSeleccionadas: string = this.butacasSeleccionadas().join(", ")
+    const confirmacion: boolean = confirm(mejorCupon ? `Butacas seleccionadas: ${butacasSeleccionadas}\nDescuento aplicado (${mejorCupon.nombre}): ${descuento * 100}%\nTotal: $${totalCompra.toLocaleString("es-AR")}\n¿Deseás confirmar la compra?` : `Butacas seleccionadas: ${butacasSeleccionadas}\nTotal: $${totalCompra}\n¿Deseás confirmar la compra?`)
+
+    if (confirmacion) {
+      const respuesta = await this.supabaseService.cliente.from("entradas")
+        .insert(entradas)
+
+      if (!respuesta.error) {
+        this.entradaService.comprarEntradas(entradas)
+
+        if (mejorCupon) {
+          await this.cuponService.canjearCupon(mejorCupon.id)
+        }
+
+        this.router.navigate(["/candybar"])
+      }
+    }
   }
 
   armarEntradas(descuento: number = 0): EntradaInterface[] {
     const funcionComprada: FuncionInterface | null = this.funcionService.funcionSeleccionada()
     const comprador: UsuarioInterface | null = this.sesionService.usuarioActual()
 
-    if (funcionComprada) {
-      const entradasNuevas: EntradaInterface[] = []
+    if (!funcionComprada) return []
 
-      const precioFuncion: number = funcionComprada.precio
-      const cupon: boolean | undefined = comprador?.cupon_primera_compra
-      const precioFinal: number = cupon ? precioFuncion * 0.8 : precioFuncion
+    const precioUnitario: number = funcionComprada.precio * (1 - descuento)
 
-      for (const butaca of this.butacasSeleccionadas()) {
-        const entradaNueva: EntradaInterface = {
-          funcion_id: funcionComprada.id,
-          butaca: butaca,
-          usuario_id: this.sesionService.usuarioActual()?.id,
-          precio: precioFinal,
-          codigo_qr: crypto.randomUUID()
-        }
-
-        entradasNuevas.push(entradaNueva)
-      }
-
-      this.entradaService.comprarEntradas(entradasNuevas)
-
-      return entradasNuevas
-    } else {
-      return []
-    }
+    return this.butacasSeleccionadas().map(butaca => ({
+      funcion_id: funcionComprada.id,
+      butaca: butaca,
+      usuario_id: comprador?.id,
+      precio: precioUnitario,
+      codigo_qr: crypto.randomUUID()
+    }))
   }
 
   calcularTotalEntrada(entradas: EntradaInterface[]): number {
-    const entradasCompradas: EntradaInterface[] | null = this.entradasCompradas()
-    const usuarioActual: UsuarioInterface | null  = this.sesionService.usuarioActual()
-
-    if (entradasCompradas) {
-      const sumaPreciosEntradas: number[] = entradasCompradas.map(entrada => entrada.precio)
-      const subtotalEntradas: number = sumaPreciosEntradas.reduce((acumulador: number, precioEntrada: number): number =>
-        acumulador + precioEntrada, 0
-      )
-      const descuentoCupon: number = usuarioActual?.cupon_primera_compra ? this.cuponService.descuentoVigente() : 0
-      return subtotalEntradas - (subtotalEntradas * descuentoCupon)
-    } else {
-      return 0
-    }
-  }
-
-  async confirmarCompra(): Promise<void> {
-    const butacasSeleccionadas: string = this.butacasSeleccionadas().join(', ')
-    const confirmacion: boolean = confirm(`Seleccionaste las butacas ${butacasSeleccionadas}. ¿Deseás confirmar la compra?`)
-
-    if (confirmacion) {
-      const entradas: EntradaInterface[] = this.armarEntradas()
-      const respuesta = await this.supabaseService.cliente.from("entradas").insert(entradas)
-
-      if (!respuesta.error) {
-        this.router.navigate(["/entrada"])
-      }
-    }
+    return entradas.reduce((total: number, entrada: EntradaInterface): number => total + entrada.precio, 0)
   }
 
   seleccionarButaca(butacaSeleccionada: string): void {

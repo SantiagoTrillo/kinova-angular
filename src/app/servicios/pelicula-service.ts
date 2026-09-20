@@ -12,11 +12,9 @@ export class PeliculaService {
     const respuesta = await this.supabaseService.cliente.from("peliculas")
       .select("*").order("id", { ascending: true })
 
-    if (respuesta.data) {
-      return respuesta.data as PeliculaInterface[]
-    } else {
-      return []
-    }
+    if (!respuesta.data) return []
+
+    return respuesta.data as PeliculaInterface[]
   }
 
   seleccionarPelicula(pelicula: PeliculaInterface): void {

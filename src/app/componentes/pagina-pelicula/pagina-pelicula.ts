@@ -14,8 +14,4 @@ import { ReseniaService } from "../../servicios/resenia-service"
 export class PaginaPelicula {
   peliculaService: PeliculaService = inject(PeliculaService)
   reseniaService: ReseniaService = inject(ReseniaService)
-
-  ngOnInit(): void {
-    console.log(this.peliculaService.peliculaSeleccionada())
-  }
 }
