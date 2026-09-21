@@ -6,7 +6,7 @@ export const sesionGuard: CanActivateFn = (_route: ActivatedRouteSnapshot, state
   const sesionService: SesionService = inject(SesionService)
   const router: Router = inject(Router)
 
-  if (state.url === "/registro") {
+  if (state.url === "/registro" || state.url === "/inicio-sesion") {
     if (!sesionService.usuarioActual()) {
       return true
     } else {

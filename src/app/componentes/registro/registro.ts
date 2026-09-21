@@ -1,6 +1,6 @@
 import { Component, inject, signal, WritableSignal } from "@angular/core"
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
-import { Router } from "@angular/router"
+import { Router, RouterLink } from "@angular/router"
 import { SesionService } from "../../servicios/sesion-service"
 import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { SupabaseService } from "../../servicios/supabase-service"
@@ -9,7 +9,7 @@ import { SupabaseService } from "../../servicios/supabase-service"
   selector: "app-registro",
   templateUrl: "./registro.html",
   styleUrl: "./registro.sass",
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule, RouterLink]
 })
 export class Registro {
   private supabaseService: SupabaseService = inject(SupabaseService)
@@ -21,6 +21,7 @@ export class Registro {
 
   formularioRegistro = this.formBuilder.nonNullable.group({
     correo_electronico: ["", [Validators.required, Validators.email]],
+    contrasenia: ["", [Validators.required, Validators.minLength(4)]],
     nombre: ["", [Validators.required, Validators.minLength(2)]],
     apellido: ["", [Validators.required, Validators.minLength(2)]],
     fecha_nacimiento: ["", [Validators.required]],

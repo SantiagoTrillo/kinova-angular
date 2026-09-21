@@ -27,7 +27,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import("./componentes/candybar/candybar")
         .then(m => m.Candybar),
-    canActivate: []
+    canActivate: [redireccionGuard]
   },
   {
     path: "entrada",
@@ -49,6 +49,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import("./componentes/perfil/perfil")
         .then(m => m.Perfil),
+    canActivate: [sesionGuard]
+  },
+  {
+    path: "inicio-sesion",
+    loadComponent: () =>
+      import("./componentes/inicio-sesion/inicio-sesion")
+        .then(m => m.InicioSesion),
     canActivate: [sesionGuard]
   },
   {

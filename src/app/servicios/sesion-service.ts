@@ -21,6 +21,20 @@ export class SesionService {
     return usuarioRegistrado
   }
 
+  async iniciarSesion(correoElectronico: string, contrasenia: string): Promise<UsuarioInterface | null> {
+    const respuesta = await this.supabaseService.cliente.from("usuarios")
+      .select("*").eq("correo_electronico", correoElectronico).eq("contrasenia", contrasenia)
+      .single()
+
+    if (!respuesta.data) return null
+
+    const usuarioAutenticado = respuesta.data as UsuarioInterface
+
+    this.usuarioActual.set(usuarioAutenticado)
+
+    return usuarioAutenticado
+  }
+
   cerrarSesion(): void {
     this.usuarioActual.set(null)
   }

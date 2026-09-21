@@ -3,6 +3,7 @@
   <section class="registro">
     <form [formGroup]="formularioRegistro" (ngSubmit)="registrarUsuario()">
       <label>Correo electrónico: <input type="email" formControlName="correo_electronico"></label>
+      <label>Contraseña: <input type="password" formControlName="contrasenia"></label>
       <label>Nombre: <input type="text" formControlName="nombre"></label>
       <label>Apellido: <input type="text" formControlName="apellido"></label>
       <label>Fecha de nacimiento: <input type="date" class="fecha" formControlName="fecha_nacimiento"></label>
@@ -32,7 +33,10 @@
         </select>
       </label>
       <label>Días de vacaciones por año: <input type="number" formControlName="dias_vacaciones_anuales"></label>
-      <button type="submit">Registrarse</button>
+      <div class="botones">
+        <button type="submit">Registrarse</button>
+        <button type="button" routerLink="/inicio-sesion">Iniciar sesión</button>
+      </div>
     </form>
   </section>
 </main>

@@ -1,6 +1,6 @@
 <main>
   <h1 class="titulo">Date un gustito antes de entrar a la sala</h1>
-  <button class="compra oculto" [class.visible]="productoSeleccionado()">Confirmar compra</button>
+  <button class="compra" [class.omitir]="!productoSeleccionado()" (click)="comprarProductos()">{{productoSeleccionado() ? "Confirmar compra" : "Omitir" }}</button>
   @for (categoria of categorias(); track categoria) {
     <h2>{{ categoria }}</h2>
     <div class="categoria">
@@ -16,9 +16,9 @@
             <h3>{{ producto.nombre}}</h3>
             <span>{{ producto.precio | currency: 'ARS': '$ ': '1.0-0' }}</span>
             <div class="seleccion-productos">
-              <button (click)="decrementarProducto(producto)">-</button>
+              <button class="operador" (click)="decrementarProducto(producto)">-</button>
               <span>{{ producto.cantidad }}</span>
-              <button (click)="aumentarProducto(producto)">+</button>
+              <button class="operador" (click)="aumentarProducto(producto)">+</button>
             </div>
           </div>
         }

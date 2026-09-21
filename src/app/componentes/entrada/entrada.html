@@ -16,6 +16,24 @@
           >
         </div>
       }
+      <div class="pdf">
+        <p>Productos del Candybar</p>
+        @for (producto of candybarService.productosComprados(); track $index) {
+          <p>
+            {{ producto.nombre }}
+            @if(producto.cantidad > 1) {
+              X{{ producto.cantidad }}
+            }
+          </p>
+        }
+        <p>{{ totalProductos() | currency: 'ARS': '$ ': '1.0-0' }}</p>
+        <img
+          ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ codigoQr }}"
+          height="150"
+          width="150"
+          alt="Código QR"
+        >
+      </div>
     </div>
     <button (click)="guardarPdf()">Descargar</button>
   </div>

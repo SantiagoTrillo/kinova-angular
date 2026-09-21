@@ -1,4 +1,4 @@
-import {Component, computed, inject, Signal, signal, WritableSignal} from "@angular/core"
+import { Component, computed, inject, Signal, signal, WritableSignal } from "@angular/core"
 import { CurrencyPipe, NgOptimizedImage } from "@angular/common"
 import { ProductoInterface } from "../../interfaces/producto-interface"
 import { CandybarService } from "../../servicios/candybar-service"
@@ -47,17 +47,24 @@ export class Candybar {
 
   comprarProductos(): void {
     const productosComprados: ProductoInterface[] = this.productos().filter(producto => producto.cantidad > 0)
-    const totalCompra: number = this.calcularTotalProductos(productosComprados)
-    const nombreProductos: string = productosComprados.map(producto => producto.nombre).join(", ")
-    const confirmacion: boolean = confirm(`Productos seleccionados: ${nombreProductos}\nTotal: $${totalCompra.toLocaleString("es-AR")}\n¿Deseás confirmar la compra?`)
 
-    if (confirmacion) {
-      this.candybarService.comprarProductos(productosComprados)
-      this.router.navigate(["/entrada"])
+    if (productosComprados.length === 0) this.router.navigate(["/entrada"])
+    else {
+      const totalCompra: number = this.calcularTotalProductos(productosComprados)
+      const nombreProductos: string = productosComprados.map(producto => {
+        if (producto.cantidad > 1) return `${producto.nombre} X${producto.cantidad}`
+        else return producto.nombre
+      }).join(", ")
+      const confirmacion: boolean = confirm(`Productos seleccionados: ${nombreProductos}\nTotal: $${totalCompra.toLocaleString("es-AR")}\n¿Deseás confirmar la compra?`)
+
+      if (confirmacion) {
+        this.candybarService.comprarProductos(productosComprados)
+        this.router.navigate(["/entrada"])
+      }
     }
   }
 
   calcularTotalProductos(productos: ProductoInterface[]): number {
-    return productos.reduce((total: number, producto: ProductoInterface): number => total + producto.precio, 0)
+    return productos.reduce((total: number, producto: ProductoInterface): number => total + (producto.precio * producto.cantidad), 0)
   }
 }
