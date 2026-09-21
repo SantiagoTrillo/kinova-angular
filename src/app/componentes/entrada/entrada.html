@@ -3,36 +3,38 @@
     <div class="entradas">
       @for (entrada of this.entradaService.entradasCompradas(); track $index) {
         <div class="pdf">
-          <p>Sala {{ this.funcionService.funcionSeleccionada()?.sala_id }}</p>
-          <p>{{ this.peliculaService.peliculaSeleccionada()?.titulo }}</p>
-          <p>{{ this.funcionService.funcionSeleccionada()?.fecha_hora | date: "dd/M/yyyy" }}</p>
-          <p>Fila {{ entrada.butaca.slice(0, 1) }}, butaca {{ entrada.butaca.slice(1) }}</p>
-          <p>{{ entrada.precio | currency: 'ARS': '$ ': '1.0-0' }}</p>
+          <span>Sala {{ this.funcionService.funcionSeleccionada()?.sala_id }}</span>
+          <span>{{ this.peliculaService.peliculaSeleccionada()?.titulo }}</span>
+          <span>{{ this.funcionService.funcionSeleccionada()?.fecha_hora | date: "dd/M/yyyy" }}</span>
+          <span>Fila {{ entrada.butaca.slice(0, 1) }}, butaca {{ entrada.butaca.slice(1) }}</span>
+          <span>{{ entrada.precio | currency: 'ARS': '$ ': '1.0-0' }}</span>
           <img
             ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ entrada.codigo_qr }}"
             height="150"
             width="150"
             alt="Código QR"
           >
+          <span class="qr">{{ entrada.codigo_qr }}</span>
         </div>
       }
       <div class="pdf">
-        <p>Productos del Candybar</p>
+        <span>Productos del Candybar</span>
         @for (producto of candybarService.productosComprados(); track $index) {
-          <p>
+          <span>
             {{ producto.nombre }}
             @if(producto.cantidad > 1) {
               X{{ producto.cantidad }}
             }
-          </p>
+          </span>
         }
-        <p>{{ totalProductos() | currency: 'ARS': '$ ': '1.0-0' }}</p>
+        <span>{{ totalProductos() | currency: 'ARS': '$ ': '1.0-0' }}</span>
         <img
-          ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ codigoQr }}"
+          ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ codigoQr() }}"
           height="150"
           width="150"
           alt="Código QR"
         >
+        <span class="qr">{{ codigoQr() }}</span>
       </div>
     </div>
     <button (click)="guardarPdf()">Descargar</button>

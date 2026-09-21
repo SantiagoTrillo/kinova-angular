@@ -19,6 +19,6 @@ export class TarjetaPelicula {
 
   seleccionarPelicula(pelicula: PeliculaInterface): void {
     this.peliculaService.seleccionarPelicula(pelicula)
-    this.router.navigate(["/pelicula"])
+    this.router.navigate(["/película"])
   }
 }

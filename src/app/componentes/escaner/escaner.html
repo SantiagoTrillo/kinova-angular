@@ -1,0 +1,15 @@
+<main>
+  <div class="titulo"><h2>Escáner de Códigos QR</h2></div>
+  <section>
+    <form [formGroup]="formularioEscaner" (ngSubmit)="escanearCodigo()">
+      <label>Código QR: <input type="text" formControlName="codigo_qr"></label>
+      <label>Tipo de código QR:
+        <select class="tipo-codigo-qr" formControlName="tipo_codigo_qr">
+          <option value="Entrada">Entrada</option>
+          <option value="Candybar">Candybar</option>
+        </select>
+      </label>
+      <button type="submit">Escanear código</button>
+    </form>
+  </section>
+</main>

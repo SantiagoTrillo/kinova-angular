@@ -10,7 +10,7 @@ export const redireccionGuard: CanActivateFn = (_route: ActivatedRouteSnapshot, 
   const entradaService: EntradaService = inject(EntradaService)
   const router: Router = inject(Router)
 
-  if (state.url === "/pelicula" || decodeURI(state.url) === "/reseña") {
+  if (decodeURI(state.url) === "/película" || decodeURI(state.url) === "/reseña") {
     if (peliculaService.peliculaSeleccionada()) {
       return true
     } else {

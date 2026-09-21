@@ -1,0 +1,36 @@
+main
+  section
+    display: flex
+    justify-content: center
+    form
+      background-color: var(--gris-sombra)
+      border-radius: 10px
+      padding: 5px
+      width: 470px
+      display: flex
+      flex-direction: column
+      margin: 10px
+      label
+        display: flex
+        justify-content: space-between
+        align-items: baseline
+        margin: 5px
+        user-select: none
+        input, select
+          width: 295px
+          background-color: var(--negro-jet)
+          border: none
+          border-radius: 5px
+          padding: 5px
+          &.ng-invalid.ng-touched
+            outline: 2px solid var(--algodon-azucar)
+      button
+        background-color: var(--negro-jet)
+        border: none
+        border-radius: 5px
+        margin: 5px
+        padding: 5px
+        cursor: pointer
+
+select.tipo-codigo-qr
+  cursor: pointer

@@ -11,15 +11,10 @@ Cada película registrada en el sistema debe contar obligatoriamente con:
 - **Puntuación promedio.**
 - **Géneros.**
 
-### 1.2. Cartelera y Control de Proyecciones
-El sistema debe permitir a los administradores controlar y configurar:
-- **Películas en página principal:** seleccionar qué películas aparecen exhibidas al ingresar a la página.
-  - **Importante**: deberán mostrarse primero las **3 películas más vendidas**
+### 1.2. Cartelera
+La página principal del cine debe contar con:
+- **Éxitos taquilleros**: sección donde se muestran las **3 películas más vendidas**.
 - **Búsqueda y filtrado:** el listado de películas debe incorporar una barra de búsqueda para filtrar la cartelera en tiempo real según el título ingresado y/o el género seleccionado.
-- **Horarios:** asignación de horarios para cada proyección.
-  - **Importante**: no puede programarse ni comenzar una función en una misma sala antes de que hayan transcurrido **al menos 30 minutos** desde la finalización de la función anterior
-- **Formato de proyección:** configurar si la función es en 2D, 3D, 4D o 5D.
-- **Idioma:** configurar si la función se proyecta en Castellano o Subtitulada.
 
 ### 1.3. Estructura de Salas
 Todas las salas comparten la misma distribución física fija:
@@ -51,6 +46,8 @@ Datos obligatorios solicitados en el registro:
 
 Cada usuario que se registre recibe un **cupón de descuento** para utilizar en su primera compra. Los usuarios **mayores de 50 años** tienen cupones exclusivos.
 
+Además, cada usuario contará con un **rol**, el cual la administración podrá cambiar según sea necesario.
+
 ### 1.6. Reseñas y Calificaciones
 Los clientes deben poder consultar y dejar valoraciones sobre las películas:
 - **Calificación:** asignación de puntuación mediante un sistema de estrellas (de 1 a 5).
@@ -62,6 +59,18 @@ Los clientes deben poder consultar y dejar valoraciones sobre las películas:
 Los clientes deben poder comprar comida y bebida junto con sus entradas:
 - Cada producto debe contar con un nombre, imagen, precio y categoría.
 - Deben poder retirarse con el código QR.
+  - **Importante**: los números del código QR deben de estar presentes por si el lector llega a fallar.
+  - **Importante**: una vez escaneado, el código QR debe dejar de ser válido.
+
+### 1.8. Administración
+El sistema debe permitir al administrador controlar y configurar:
+- **Películas en página principal:** seleccionar qué películas aparecen exhibidas al ingresar a la página.
+- **Horarios:** asignación de horarios para cada proyección.
+  - **Importante**: no puede programarse ni comenzar una función en una misma sala antes de que hayan transcurrido **al menos 30 minutos** desde la finalización de la función anterior
+- **Formato de proyección:** configurar si la función es en 2D, 3D, 4D o 5D.
+- **Idioma:** configurar si la función se proyecta en Castellano o Subtitulada.
+- **Distribución**: salas, funciones, butacas, productos.
+  - **Importante**: la distribución de salas debe de ser automática, asegurándose de que dos funciones no se proyecten al mismo tiempo y en la misma sala.
 
 ## 2. Requerimientos Fuera del Alcance
 

@@ -5,4 +5,5 @@ export interface EntradaInterface {
   usuario_id?: number
   precio: number
   codigo_qr: string
+  valida: boolean
 }

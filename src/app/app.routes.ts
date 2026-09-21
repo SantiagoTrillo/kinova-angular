@@ -11,7 +11,7 @@ export const routes: Routes = [
     component: PaginaPrincipal
   },
   {
-    path: "pelicula",
+    path: "película",
     component: PaginaPelicula,
     canActivate: [redireccionGuard]
   },
@@ -52,7 +52,7 @@ export const routes: Routes = [
     canActivate: [sesionGuard]
   },
   {
-    path: "inicio-sesion",
+    path: "inicio-sesión",
     loadComponent: () =>
       import("./componentes/inicio-sesion/inicio-sesion")
         .then(m => m.InicioSesion),
@@ -64,6 +64,20 @@ export const routes: Routes = [
       import("./componentes/resenia/resenia")
         .then(m => m.Resenia),
     canActivate: [redireccionGuard]
+  },
+  {
+    path: "escáner",
+    loadComponent: () =>
+      import("./componentes/escaner/escaner")
+        .then(m => m.Escaner),
+    canActivate: [sesionGuard]
+  },
+  {
+    path: "administración",
+    loadComponent: () =>
+      import("./componentes/administracion/administracion")
+        .then(m => m.Administracion),
+    canActivate: [sesionGuard]
   },
   {
     path: "**",

@@ -14,9 +14,7 @@ export class CandybarService {
 
     if (!respuesta.data) return []
 
-    const productosConCantidad: ProductoInterface[] = respuesta.data.map(producto => ({...producto, cantidad: 0}))
-
-    return productosConCantidad as ProductoInterface[]
+    return respuesta.data.map(producto => ({...producto, cantidad: 0}))
   }
 
   comprarProductos(productos: ProductoInterface[]): void {

@@ -8,4 +8,5 @@ export interface UsuarioInterface {
   color_ojos: string
   dias_vacaciones_anuales: number
   contrasenia: string
+  rol: string
 }

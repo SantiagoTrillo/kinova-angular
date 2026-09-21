@@ -20,7 +20,7 @@ export class InicioSesion {
     contrasenia: ["", [Validators.required, Validators.minLength(4)]]
   })
 
-  async iniciarSesion() {
+  async iniciarSesion(): Promise<void> {
     if (this.formularioInicioSesion.valid) {
       const datosFormulario = this.formularioInicioSesion.getRawValue()
       const usuarioAutenticado: UsuarioInterface | null = await this.sesionService.iniciarSesion(

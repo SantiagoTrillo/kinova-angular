@@ -83,7 +83,8 @@ export class Compra {
       butaca: butaca,
       usuario_id: comprador?.id,
       precio: precioUnitario,
-      codigo_qr: crypto.randomUUID()
+      codigo_qr: crypto.randomUUID(),
+      valida: true
     }))
   }
 
