@@ -1,3 +1,59 @@
+<ng-template #plantillaPeliculas>
+  <div class="plantilla-peliculas">
+    @for (pelicula of peliculasDisponibles(); track pelicula.id) {
+      <div class="pelicula">
+        <img width="140" height="195" ngSrc="{{ pelicula.imagen }}" alt="Póster de una película">
+        <span>Título: {{  pelicula.titulo }}</span>
+        <span class="duracion">Duración: {{ pelicula.duracion | duracion }}</span>
+        <button (click)="cambiarEstadoPelicula(!pelicula.principal, pelicula.id)">
+          ¿Principal?
+          @if (pelicula.principal) {<i class="fa-solid fa-check"></i>}
+          @else {<i class="fa-solid fa-xmark"></i>}
+        </button>
+      </div>
+    }
+  </div>
+</ng-template>
+<ng-template #plantillaFunciones>
+  <div class="plantilla-funciones">
+    @for (pelicula of peliculasDisponibles(); track pelicula.id) {
+      <div class="funcion">
+        <div class="poster">
+          <span>{{ pelicula.titulo }}</span>
+          <img width="140" height="195" ngSrc="{{ pelicula.imagen }}" alt="Póster de una película">
+        </div>
+        <div class="contenedor-horarios">
+          <div class="cabecera-horarios">
+            @if (obtenerFuncionesPelicula(pelicula.id).length === 0) {<span>No hay funciones programadas aún</span>}
+            @else {<span>Fechas y Horarios</span>}
+            <button (click)="seleccionarPlantilla(plantillaCrearFuncion); seleccionarPelicula(pelicula)"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <div class="horarios-funcion">
+            @for (funcion of obtenerFuncionesPelicula(pelicula.id); track funcion.id) {
+              <div class="detalles-funcion">
+                <span>{{ funcion.fecha_hora | date: 'EEE d' }} {{ funcion.fecha_hora | date: 'shortTime' }}</span>
+                <span>{{ funcion.formato }} - {{ funcion.idioma }}</span>
+                <span>Sala {{ funcion.sala_id }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</ng-template>
+<ng-template #plantillaCrearFuncion>
+  <div>
+    <div><span>Registrar una nueva función</span></div>
+    <form></form>
+  </div>
+</ng-template>
 <main>
-
+  <div class="solapas">
+    <button (click)="seleccionarPlantilla(plantillaPeliculas)">Películas</button>
+    <button (click)="seleccionarPlantilla(plantillaFunciones)">Funciones</button>
+  </div>
+  <div class="panel">
+    <ng-container [ngTemplateOutlet]="plantillaSeleccionada()"/>
+  </div>
 </main>

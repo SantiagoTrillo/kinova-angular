@@ -1,0 +1,95 @@
+div.solapas
+  display: flex
+  flex-direction: column
+  button
+    background-color: var(--negro-jet)
+    border: none
+    cursor: pointer
+    padding: 3px
+
+div.panel
+  border: 10px solid var(--negro-jet)
+
+div.plantilla-peliculas
+  display: flex
+  flex-wrap: wrap
+  gap: 14.9px
+  padding: 10px
+
+div.pelicula
+  width: 140px
+  height: 325px
+  display: flex
+  flex-direction: column
+  align-items: center
+  background-color: var(--gris-sombra)
+  gap: 5px
+  button
+    background-color: var(--negro-jet)
+    border: none
+    cursor: pointer
+    margin: 5px 10px 10px 10px
+  span
+    font-size: 12px
+    text-align: center
+    &.duracion
+      margin-top: auto
+
+i.fa-check
+  color: greenyellow
+i.fa-xmark
+  color: red
+
+div.plantilla-funciones
+  display: flex
+  flex-direction: column
+
+div.funcion
+  display: flex
+  border-bottom: 2px solid var(--negro-jet)
+
+div.poster
+  width: 140px
+  margin: 10px
+  display: flex
+  flex-direction: column
+  gap: 5px
+
+div.contenedor-horarios
+  display: flex
+  flex-direction: column
+  border-left: 2px solid var(--negro-jet)
+  padding: 10px
+  gap: 10px
+  flex: 1
+
+div.cabecera-horarios
+  display: flex
+  gap: 10px
+  button
+    background-color: transparent
+    border: 2px dotted var(--azul-helado)
+    border-radius: 10px
+    cursor: pointer
+    flex: 1
+
+div.horarios-funcion
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  gap: 10px
+
+div.detalles-funcion
+  display: flex
+  gap: 7.9px
+  background-color: var(--gris-sombra)
+  border-radius: 10px
+  padding: 10px
+  justify-content: space-between
+
+button.sin-funciones
+  background-color: transparent
+  border: 2px dotted var(--azul-helado)
+  border-radius: 10px
+  padding: 10px
+  cursor: pointer
+  flex: 1

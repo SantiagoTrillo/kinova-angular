@@ -1,6 +1,4 @@
 import { Component, inject, signal, WritableSignal } from "@angular/core"
-import { SupabaseService } from "../../../servicios/supabase-service"
-import { PeliculaService } from "../../../servicios/pelicula-service"
 import { FuncionInterface } from "../../../interfaces/funcion-interface"
 import { DatePipe, TitleCasePipe } from "@angular/common"
 import { RouterLink } from "@angular/router"
@@ -13,8 +11,6 @@ import { FuncionService } from "../../../servicios/funcion-service"
   imports: [DatePipe, RouterLink, TitleCasePipe]
 })
 export class Funciones {
-  private supabaseService: SupabaseService = inject(SupabaseService)
-  private peliculaService: PeliculaService = inject(PeliculaService)
   private funcionService: FuncionService = inject(FuncionService)
 
   funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
@@ -28,13 +24,12 @@ export class Funciones {
   idiomaSeleccionado: WritableSignal<string> = signal<string>("")
   horarioSeleccionado: WritableSignal<string> = signal<string>("")
 
-  async obtenerFunciones(): Promise<void> {
-    const respuesta = await this.supabaseService.cliente.from("funciones")
-      .select("*").eq("pelicula_id", this.peliculaService.peliculaSeleccionada()?.id).order("fecha_hora")
+  ngOnInit(): void {
+    this.funcionService.obtenerFunciones().then(_ => {
+      this.fechaSeleccionada.set(this.funcionesDisponibles()[0].fecha_hora.slice(0, 10))
 
-    if (respuesta.data) {
-      this.funcionesDisponibles.set(respuesta.data)
-    }
+      this.obtenerDetallesFunciones()
+    })
   }
 
   obtenerDetallesFunciones(): void {
@@ -84,14 +79,6 @@ export class Funciones {
     }
 
     this.horariosDisponibles.set(horarios)
-  }
-
-  ngOnInit(): void {
-    this.obtenerFunciones().then(_ => {
-      this.fechaSeleccionada.set(this.funcionesDisponibles()[0].fecha_hora.slice(0, 10))
-
-      this.obtenerDetallesFunciones()
-    })
   }
 
   seleccionarFecha(fecha: string): void {

@@ -17,6 +17,13 @@ export class PeliculaService {
     return respuesta.data as PeliculaInterface[]
   }
 
+  async cambiarEstadoPelicula(estado: boolean, idPelicula: number): Promise<void> {
+    const respuesta = await this.supabaseService.cliente.from("peliculas")
+      .update({principal: estado}).eq("id", idPelicula)
+
+    if (respuesta.error) alert(`Error al procesar la solicitud: ${respuesta.error}`)
+  }
+
   seleccionarPelicula(pelicula: PeliculaInterface): void {
     this.peliculaSeleccionada.set(pelicula)
   }
