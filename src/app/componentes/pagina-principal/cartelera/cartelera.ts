@@ -10,7 +10,7 @@ import { TarjetaPelicula } from "./tarjeta-pelicula/tarjeta-pelicula"
 })
 export class Cartelera {
   generosDisponibles: Signal<string[]> = signal<string[]>([
-    "Drama", "Fantasía", "Comedia", "Acción", "Romance", "Suspenso", "Teror", "Ciencia Ficción", "Histórico", "Musical",
+    "Drama", "Fantasía", "Comedia", "Acción", "Romance", "Suspenso", "Terror", "Ciencia Ficción", "Histórico", "Musical",
     "Aventura", "Animación"
   ])
   peliculasTotales: InputSignal<PeliculaInterface[]> = input.required<PeliculaInterface[]>()

@@ -1,8 +1,9 @@
-import { Component, inject, signal, WritableSignal } from "@angular/core"
+import { Component, inject, input, InputSignal, signal, WritableSignal } from "@angular/core"
 import { FuncionInterface } from "../../../interfaces/funcion-interface"
 import { DatePipe, TitleCasePipe } from "@angular/common"
 import { RouterLink } from "@angular/router"
 import { FuncionService } from "../../../servicios/funcion-service"
+import { PeliculaInterface } from "../../../interfaces/pelicula-interface"
 
 @Component({
   selector: "app-funciones",
@@ -13,23 +14,26 @@ import { FuncionService } from "../../../servicios/funcion-service"
 export class Funciones {
   private funcionService: FuncionService = inject(FuncionService)
 
+  peliculaActual: InputSignal<PeliculaInterface> = input.required<PeliculaInterface>()
+
   funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
   fechasDisponibles: WritableSignal<string[]> = signal<string[]>([])
   formatosDisponibles: WritableSignal<string[]> = signal<string[]>([])
   idiomasDisponibles: WritableSignal<string[]> = signal<string[]>([])
   horariosDisponibles: WritableSignal<string[]> = signal<string[]>([])
-
   fechaSeleccionada: WritableSignal<string> = signal<string>("")
   formatoSeleccionado: WritableSignal<string> = signal<string>("")
   idiomaSeleccionado: WritableSignal<string> = signal<string>("")
   horarioSeleccionado: WritableSignal<string> = signal<string>("")
 
-  ngOnInit(): void {
-    this.funcionService.obtenerFunciones().then(_ => {
-      this.fechaSeleccionada.set(this.funcionesDisponibles()[0].fecha_hora.slice(0, 10))
+  async ngOnInit(): Promise<void> {
+    const funcionesDisponibles: FuncionInterface[] = await this.funcionService.obtenerFunciones()
+    const funcionesPelicula: FuncionInterface[] = funcionesDisponibles
+      .filter(funcion => funcion.pelicula_id === this.peliculaActual().id)
 
-      this.obtenerDetallesFunciones()
-    })
+    this.funcionesDisponibles.set(funcionesPelicula)
+    this.fechaSeleccionada.set(this.funcionesDisponibles()[0].fecha_hora.slice(0, 10))
+    this.obtenerDetallesFunciones()
   }
 
   obtenerDetallesFunciones(): void {
@@ -67,9 +71,9 @@ export class Funciones {
     const horarios: string[] = []
 
     for (const funcion of this.funcionesDisponibles()) {
-      const coincideFecha: boolean  = funcion.fecha_hora.startsWith(this.fechaSeleccionada())
-      const coincideFormato: boolean  = funcion.formato === this.formatoSeleccionado()
-      const coincideIdioma: boolean  = funcion.idioma === this.idiomaSeleccionado()
+      const coincideFecha: boolean = funcion.fecha_hora.startsWith(this.fechaSeleccionada())
+      const coincideFormato: boolean = funcion.formato === this.formatoSeleccionado()
+      const coincideIdioma: boolean = funcion.idioma === this.idiomaSeleccionado()
 
       if (coincideFecha && coincideFormato && coincideIdioma) {
         if (!horarios.includes(funcion.fecha_hora)) {
@@ -106,9 +110,9 @@ export class Funciones {
   seleccionarFuncion(): void {
     for (const funcion of this.funcionesDisponibles()) {
       const coincideFecha: boolean = funcion.fecha_hora.startsWith(this.fechaSeleccionada())
-      const coincideFormato: boolean  = funcion.formato === this.formatoSeleccionado()
-      const coincideIdioma: boolean  = funcion.idioma === this.idiomaSeleccionado()
-      const coincideHorario: boolean  = funcion.fecha_hora === this.horarioSeleccionado()
+      const coincideFormato: boolean = funcion.formato === this.formatoSeleccionado()
+      const coincideIdioma: boolean = funcion.idioma === this.idiomaSeleccionado()
+      const coincideHorario: boolean = funcion.fecha_hora === this.horarioSeleccionado()
 
       if (coincideFecha && coincideFormato && coincideIdioma && coincideHorario) {
         this.funcionService.seleccionarFuncion(funcion)

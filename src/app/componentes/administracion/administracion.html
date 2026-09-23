@@ -1,4 +1,4 @@
-<ng-template #plantillaPeliculas>
+  <ng-template #plantillaPeliculas>
   <div class="plantilla-peliculas">
     @for (pelicula of peliculasDisponibles(); track pelicula.id) {
       <div class="pelicula">
@@ -31,7 +31,7 @@
           <div class="horarios-funcion">
             @for (funcion of obtenerFuncionesPelicula(pelicula.id); track funcion.id) {
               <div class="detalles-funcion">
-                <span>{{ funcion.fecha_hora | date: 'EEE d' }} {{ funcion.fecha_hora | date: 'shortTime' }}</span>
+                <span>{{ funcion.fecha_hora | date: 'EEE d' | titlecase }} {{ funcion.fecha_hora | date: 'shortTime' }}</span>
                 <span>{{ funcion.formato }} - {{ funcion.idioma }}</span>
                 <span>Sala {{ funcion.sala_id }}</span>
               </div>
@@ -43,9 +43,30 @@
   </div>
 </ng-template>
 <ng-template #plantillaCrearFuncion>
-  <div>
-    <div><span>Registrar una nueva función</span></div>
-    <form></form>
+  <div class="plantilla-crear-funcion">
+    <div class="titulo">Registrar una nueva función para {{  peliculaSeleccionada()?.titulo }}</div>
+    <form [formGroup]="formularioCreacionFuncion" (ngSubmit)="crearFuncion()">
+      <label>Fecha: <input class="seleccionable" type="date" formControlName="fecha"></label>
+      <label>
+        Formato:
+        <select formControlName="formato">
+          <option value="2D">2D</option>
+          <option value="3D">3D</option>
+          <option value="4D">4D</option>
+          <option value="5D">5D</option>
+        </select>
+      </label>
+      <label>
+        Idioma:
+        <select formControlName="idioma">
+          <option value="Español">Español</option>
+          <option value="Subtitulada">Subtitulada</option>
+        </select>
+      </label>
+      <label>Hora: <input class="seleccionable" type="time" formControlName="hora"></label>
+      <label>Precio: <input type="number" formControlName="precio"></label>
+      <button type="submit">Crear función</button>
+    </form>
   </div>
 </ng-template>
 <main>
