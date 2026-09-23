@@ -6,6 +6,8 @@ import { PeliculaInterface } from "../../interfaces/pelicula-interface"
 import { FuncionService } from "../../servicios/funcion-service"
 import { FuncionInterface } from "../../interfaces/funcion-interface"
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
+import {CuponService} from "../../servicios/cupon-service";
+import {CuponInterface} from "../../interfaces/cupon-interface";
 
 @Component({
   selector: "app-administracion",
@@ -22,7 +24,9 @@ export class Administracion {
   peliculasDisponibles: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
   peliculaSeleccionada: WritableSignal<PeliculaInterface | null> = signal<PeliculaInterface | null>(null)
   funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
+  cuponesDisponibles: WritableSignal<CuponInterface[]> = signal<CuponInterface[]>([])
 
+  cuponService: CuponService = inject(CuponService)
   formularioCreacionFuncion = this.formBuilder.nonNullable.group({
     fecha: ["", Validators.required],
     formato: ["", Validators.required],
@@ -34,6 +38,7 @@ export class Administracion {
   async ngOnInit(): Promise<void> {
     this.peliculasDisponibles.set(await this.peliculaService.obtenerPeliculas())
     this.funcionesDisponibles.set(await this.funcionService.obtenerFunciones())
+    this.cuponesDisponibles.set(await this.cuponService.obtenerCupones())
   }
 
   seleccionarPlantilla(plantillaSeleccionada: TemplateRef<any>): void {
@@ -64,6 +69,12 @@ export class Administracion {
         this.funcionesDisponibles.set(await this.funcionService.obtenerFunciones())
       }
     }
+  }
+
+  actualizarDescuentoCupon(nombreCupon: string, nuevoDescuento: number): void {
+    this.cuponService.actualizarDescuentoCupon(nombreCupon, nuevoDescuento).then(_ =>
+      this.cuponesDisponibles.update(cupones => cupones.map(cupon =>
+        cupon.nombre === nombreCupon ? {...cupon, descuento: nuevoDescuento} : cupon)))
   }
 
   seleccionarPelicula(peliculaSeleccionada: PeliculaInterface): void {

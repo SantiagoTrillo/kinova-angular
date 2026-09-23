@@ -69,7 +69,6 @@ div.cabecera-horarios
   button
     background-color: transparent
     border: 2px dotted var(--azul-helado)
-    border-radius: 10px
     cursor: pointer
     flex: 1
 
@@ -82,14 +81,12 @@ div.detalles-funcion
   display: flex
   gap: 7.9px
   background-color: var(--gris-sombra)
-  border-radius: 10px
   padding: 10px
   justify-content: space-between
 
 button.sin-funciones
   background-color: transparent
   border: 2px dotted var(--azul-helado)
-  border-radius: 10px
   padding: 10px
   cursor: pointer
   flex: 1
@@ -119,4 +116,28 @@ label
   input.seleccionable
     cursor: text
   select
+    cursor: pointer
+
+div.plantilla-cupones
+  display: flex
+  flex-direction: column
+
+div.cupon
+  display: flex
+  align-items: baseline
+  justify-content: center
+  margin: 10px
+  gap: 5px
+  span
+    padding: 5px
+    color: var(--azul-helado)
+    &.nombre
+      width: 148px
+  label
+    input
+      width: 30px
+  button
+    background-color: var(--negro-jet)
+    border: none
+    padding: 5px
     cursor: pointer

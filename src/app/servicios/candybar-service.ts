@@ -9,9 +9,9 @@ export class CandybarService {
   productosComprados: WritableSignal<ProductoInterface[]> = signal<ProductoInterface[]>([])
 
   async obtenerProductos(): Promise<ProductoInterface[]> {
-    const respuesta = await this.supabaseService.cliente.from("candybar")
-      .select("*")
+    const respuesta = await this.supabaseService.cliente.from("candybar").select("*")
 
+    if (respuesta.error) alert("Error al procesar la solicitud: " + respuesta.error.message)
     if (!respuesta.data) return []
 
     return respuesta.data.map(producto => ({...producto, cantidad: 0}))

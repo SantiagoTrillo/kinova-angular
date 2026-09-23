@@ -1,4 +1,4 @@
-  <ng-template #plantillaPeliculas>
+<ng-template #plantillaPeliculas>
   <div class="plantilla-peliculas">
     @for (pelicula of peliculasDisponibles(); track pelicula.id) {
       <div class="pelicula">
@@ -69,10 +69,23 @@
     </form>
   </div>
 </ng-template>
+<ng-template #plantillaCupones>
+  <div class="plantilla-cupones">
+    @for (cupon of cuponesDisponibles(); track cupon.id) {
+      <div class="cupon">
+        Nombre: <span class="nombre">{{  cupon.nombre }}</span>
+        Descuento: <span class="descuento">{{ cupon.descuento }}</span>
+        <label>Nuevo descuento: <input #nuevoDescuento type="number"></label>
+        <button (click)="actualizarDescuentoCupon(cupon.nombre, nuevoDescuento.valueAsNumber)">Actualizar descuento</button>
+      </div>
+    } @if (cuponesDisponibles().length === 0) {<span>ayuda</span>}
+  </div>
+</ng-template>
 <main>
   <div class="solapas">
     <button (click)="seleccionarPlantilla(plantillaPeliculas)">Películas</button>
     <button (click)="seleccionarPlantilla(plantillaFunciones)">Funciones</button>
+    <button (click)="seleccionarPlantilla(plantillaCupones)">Cupones</button>
   </div>
   <div class="panel">
     <ng-container [ngTemplateOutlet]="plantillaSeleccionada()"/>
