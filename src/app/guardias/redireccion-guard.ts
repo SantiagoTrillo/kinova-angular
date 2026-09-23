@@ -11,24 +11,13 @@ export const redireccionGuard: CanActivateFn = (_route: ActivatedRouteSnapshot, 
   const router: Router = inject(Router)
 
   if (decodeURI(state.url) === "/película" || decodeURI(state.url) === "/reseña") {
-    if (peliculaService.peliculaSeleccionada()) {
-      return true
-    } else {
-      return router.createUrlTree([""])
-    }
+    if (peliculaService.peliculaSeleccionada()) return true
+    else return router.createUrlTree([""])
   } else if (state.url === "/compra") {
-    if (funcionService.funcionSeleccionada()) {
-      return true
-    } else {
-      return router.createUrlTree([""])
-    }
+    if (funcionService.funcionSeleccionada()) return true
+    else return router.createUrlTree([""])
   } else if (state.url === "/candybar" || state.url === "/entrada") {
-    if (entradaService.entradasCompradas()) {
-      return true
-    } else {
-      return router.createUrlTree([""])
-    }
-  } else {
-    return true
-  }
+    if (entradaService.entradasCompradas()) return true
+    else return router.createUrlTree([""])
+  } else return true
 }
