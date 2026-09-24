@@ -16,43 +16,36 @@ export class Candybar {
 
   categorias: Signal<string[]> = signal<string[]>(["Combos", "Pochoclos", "Bebidas", "Snacks Salados", "Snacks Dulces"])
 
-  productos: WritableSignal<ProductoInterface[]> = signal<ProductoInterface[]>([])
+  productosDisponibles: WritableSignal<ProductoInterface[]> = signal<ProductoInterface[]>([])
   productoSeleccionado: Signal<boolean> = computed((): boolean => {
-    for (const producto of this.productos()) {
-      if (producto.cantidad > 0) {
-        return true
-      }
+    for (const producto of this.productosDisponibles()) {
+      if (producto.cantidad > 0) return true
     }
-
     return false
   })
 
-  ngOnInit(): void {
-    this.candybarService.obtenerProductos().then(productos => this.productos.set(productos))
-  }
+  ngOnInit(): void { this.candybarService.obtenerProductos().then(productos => this.productosDisponibles.set(productos)) }
 
   aumentarProducto(productoSeleccionado: ProductoInterface): void {
     productoSeleccionado.cantidad++
 
-    this.productos.set([...this.productos()])
+    this.productosDisponibles.set([...this.productosDisponibles()])
   }
 
   decrementarProducto(productoSeleccionado: ProductoInterface): void {
-    if (productoSeleccionado.cantidad > 0) {
-      productoSeleccionado.cantidad--
+    if (productoSeleccionado.cantidad > 0) productoSeleccionado.cantidad--
 
-      this.productos.set([...this.productos()])
-    }
+    this.productosDisponibles.set([...this.productosDisponibles()])
   }
 
   comprarProductos(): void {
-    const productosComprados: ProductoInterface[] = this.productos().filter(producto => producto.cantidad > 0)
+    const productosComprados: ProductoInterface[] = this.productosDisponibles().filter(producto => producto.cantidad > 0)
 
     if (productosComprados.length === 0) this.router.navigate(["/entrada"])
     else {
       const totalCompra: number = this.calcularTotalProductos(productosComprados)
       const nombreProductos: string = productosComprados.map(producto => {
-        if (producto.cantidad > 1) return `${producto.nombre} X${producto.cantidad}`
+        if (producto.cantidad > 1) return `${ producto.nombre } X${ producto.cantidad }`
         else return producto.nombre
       }).join(", ")
       const confirmacion: boolean = confirm(`Productos seleccionados: ${nombreProductos}\nTotal: $${totalCompra.toLocaleString("es-AR")}\n¿Deseás confirmar la compra?`)

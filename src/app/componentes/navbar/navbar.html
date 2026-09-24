@@ -2,17 +2,10 @@
   <nav>
     <div>
       <a routerLink=""><h2>Kinova</h2></a>
-      @if (sesionService.usuarioActual()?.rol === "Empleado") {
-        <a routerLink="/escáner"><h2>Escáner de Códigos QR</h2></a>
-      }
-      @if (sesionService.usuarioActual()?.rol === "Administrador") {
-        <a routerLink="/administración"><h2>Administración</h2></a>
-      }
-      @if (sesionService.usuarioActual()) {
-        <a class="escaner" routerLink="/perfil"><i class="fa-solid fa-user"></i></a>
-      } @else {
-        <a routerLink="/registro"><i class="fa-solid fa-user"></i></a>
-      }
+      @if (sesionService.usuarioActual()?.rol === "Empleado") { <a routerLink="/escáner"><h2>Escáner de Códigos QR</h2></a> }
+      @if (sesionService.usuarioActual()?.rol === "Administrador") { <a routerLink="/administración"><h2>Administración</h2></a> }
+      @if (sesionService.usuarioActual()) { <a class="escaner" routerLink="/perfil"><i class="fa-solid fa-user"></i></a> }
+      @else { <a routerLink="/registro"><i class="fa-solid fa-user"></i></a> }
     </div>
   </nav>
 </header>

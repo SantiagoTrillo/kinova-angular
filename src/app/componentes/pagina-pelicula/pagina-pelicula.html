@@ -3,30 +3,17 @@
     <div>
       <div><h1>{{ peliculaActual.titulo }}</h1></div>
       <div class="detalle-pelicula">
-        <div class="poster">
-          <img
-            width="210"
-            height="310"
-            ngSrc="{{ peliculaActual.imagen }}"
-            alt="Póster de una película"
-            (error)="peliculaActual.imagen = 'poster-no-encontrado.jpg'"
-          >
-        </div>
+        <div class="poster"><img width="210" height="310" ngSrc="{{ peliculaActual.imagen }}" alt="Póster de una película"></div>
         <div>
           <div class="elemento-detalle-pelicula">
             <h3>Calificación promedio</h3>
             <div class="resenia">
               @if (peliculaActual.puntuacion_promedio) {
                 @for (estrella of this.reseniaService.estrellas(); track $index) {
-                  @if (estrella <= peliculaActual.puntuacion_promedio) {
-                    <i class="fa-solid fa-star"></i>
-                  } @else {
-                    <i class="fa-regular fa-star"></i>
-                  }
+                  @if (estrella <= peliculaActual.puntuacion_promedio) { <i class="fa-solid fa-star"></i> }
+                  @else { <i class="fa-regular fa-star"></i> }
                 }
-              } @else {
-                <span>Sin reseñas</span>
-              }
+              } @else { <span>Sin reseñas</span> }
               <button routerLink="/reseña">Ver reseñas</button>
             </div>
           </div>

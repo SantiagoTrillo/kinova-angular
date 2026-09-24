@@ -7,10 +7,12 @@ export class SalaService {
   private supabaseService: SupabaseService = inject(SupabaseService)
 
   async obtenerSalas(): Promise<SalaInterface[]> {
-    const respuesta = await this.supabaseService.cliente
-      .from("salas").select("*")
+    const respuesta = await this.supabaseService.cliente.from("salas").select("*")
 
-    if (respuesta.error) alert(respuesta.error)
+    if (respuesta.error) {
+      alert("Error al procesar la solicitud: " + respuesta.error.message)
+      return []
+    }
     if (!respuesta.data) return []
 
     return respuesta.data as SalaInterface[]

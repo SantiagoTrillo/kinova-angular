@@ -1,22 +1,11 @@
 <div class="cabecera-cartelera">
   <h2>Cartelera</h2>
-  <input
-    #buscador
-    type="search"
-    placeholder="Buscar una película"
-    (input)="filtrarPeliculasTexto(buscador.value)"
-  >
+  <input #buscador type="search" placeholder="Buscar una película" (input)="filtrarPeliculasTexto(buscador.value)">
   <select #selectorGenero (change)="filtrarPeliculasGenero(selectorGenero.value)">
     <option selected value="">Todos</option>
-    @for (generoDisponible of generosDisponibles(); track $index) {
-      <option>{{ generoDisponible }}</option>
-    }
+    @for (generoDisponible of generosDisponibles(); track $index) { <option>{{ generoDisponible }}</option> }
   </select>
 </div>
 <div class="cartelera">
-  @for (pelicula of peliculasMostradas(); track $index) {
-    @if (pelicula.principal) {
-     <app-tarjeta-pelicula [pelicula]="pelicula"/>
-    }
-  }
+  @for (pelicula of peliculasMostradas(); track $index) { @if (pelicula.principal) { <app-tarjeta-pelicula [pelicula]="pelicula"/> } }
 </div>

@@ -76,7 +76,8 @@ export const routes: Routes = [
     path: "administración",
     loadComponent: () =>
       import("./componentes/administracion/administracion")
-        .then(m => m.Administracion)
+        .then(m => m.Administracion),
+    canActivate: [sesionGuard]
   },
   {
     path: "**",

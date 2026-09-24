@@ -5,7 +5,5 @@ import { EntradaInterface } from "../interfaces/entrada-interface"
 export class EntradaService {
   entradasCompradas: WritableSignal<EntradaInterface[] | null> = signal<EntradaInterface[] | null>(null)
 
-  comprarEntradas(entradas: EntradaInterface[]): void {
-    this.entradasCompradas.set(entradas)
-  }
+  comprarEntradas(entradas: EntradaInterface[]): void { this.entradasCompradas.set(entradas) }
 }

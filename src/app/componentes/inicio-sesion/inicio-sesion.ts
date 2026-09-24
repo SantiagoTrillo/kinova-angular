@@ -11,8 +11,8 @@ import { UsuarioInterface } from "../../interfaces/usuario-interface"
   imports: [ReactiveFormsModule]
 })
 export class InicioSesion {
-  private formBuilder: FormBuilder = inject(FormBuilder)
   private sesionService: SesionService = inject(SesionService)
+  private formBuilder: FormBuilder = inject(FormBuilder)
   private router: Router = inject(Router)
 
   formularioInicioSesion = this.formBuilder.nonNullable.group({

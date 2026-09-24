@@ -10,16 +10,15 @@ export class EscanerService {
     const respuesta = await this.supabaseService.cliente.from(tabla)
       .select("valida").eq("codigo_qr", codigo).single()
 
+    if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
     if (!respuesta.data) return alert("El código ingresado no existe")
     else if (respuesta.data.valida) {
       await this.invalidarCompra(tabla, codigo)
       return alert("Código escaneado con éxito")
-    } else {
-      return alert("El código ingresado ya fue escaneado")
-    }
+    } else return alert("El código ingresado ya fue escaneado")
   }
 
   async invalidarCompra(tabla: string, codigo: string): Promise<void> {
-    await this.supabaseService.cliente.from(tabla).update({valida: false}).eq("codigo_qr", codigo)
+    await this.supabaseService.cliente.from(tabla).update({ valida: false }).eq("codigo_qr", codigo)
   }
 }

@@ -8,6 +8,4 @@ import { DatePipe } from "@angular/common"
   styleUrl: "./detalles-personales.sass",
   imports: [DatePipe]
 })
-export class DetallesPersonales {
-  usuarioActual: InputSignal<UsuarioInterface> = input.required<UsuarioInterface>()
-}
+export class DetallesPersonales { usuarioActual: InputSignal<UsuarioInterface> = input.required<UsuarioInterface>() }

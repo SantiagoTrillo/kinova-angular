@@ -44,12 +44,9 @@ export class Registro {
   }
 
   async otorgarCuponRegistro(usuario: UsuarioInterface): Promise<void> {
-    const cuponRegistro = {usuario_id: usuario.id, cupon_id: 1, utilizado: false}
-
+    const cuponRegistro = { usuario_id: usuario.id, cupon_id: 1, utilizado: false }
     const respuesta = await this.supabaseService.cliente.from("cupones_usuarios").insert(cuponRegistro)
 
-    if (respuesta.error) {
-      console.error(respuesta.error)
-    }
+    if (respuesta.error) return alert(respuesta.error.message)
   }
 }

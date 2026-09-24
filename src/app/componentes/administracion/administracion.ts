@@ -6,8 +6,8 @@ import { PeliculaInterface } from "../../interfaces/pelicula-interface"
 import { FuncionService } from "../../servicios/funcion-service"
 import { FuncionInterface } from "../../interfaces/funcion-interface"
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
-import {CuponService} from "../../servicios/cupon-service";
-import {CuponInterface} from "../../interfaces/cupon-interface";
+import { CuponService } from "../../servicios/cupon-service"
+import { CuponInterface}  from "../../interfaces/cupon-interface"
 
 @Component({
   selector: "app-administracion",
@@ -19,6 +19,7 @@ export class Administracion {
   private peliculaService: PeliculaService = inject(PeliculaService)
   private funcionService: FuncionService = inject(FuncionService)
   private formBuilder: FormBuilder = inject(FormBuilder)
+  private cuponService: CuponService = inject(CuponService)
 
   plantillaSeleccionada: WritableSignal<TemplateRef<any> | null> = signal<TemplateRef<any> | null>(null)
   peliculasDisponibles: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
@@ -26,7 +27,6 @@ export class Administracion {
   funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
   cuponesDisponibles: WritableSignal<CuponInterface[]> = signal<CuponInterface[]>([])
 
-  cuponService: CuponService = inject(CuponService)
   formularioCreacionFuncion = this.formBuilder.nonNullable.group({
     fecha: ["", Validators.required],
     formato: ["", Validators.required],
@@ -41,14 +41,15 @@ export class Administracion {
     this.cuponesDisponibles.set(await this.cuponService.obtenerCupones())
   }
 
-  seleccionarPlantilla(plantillaSeleccionada: TemplateRef<any>): void {
-    this.plantillaSeleccionada.set(plantillaSeleccionada)
-  }
+  seleccionarPlantilla(plantillaSeleccionada: TemplateRef<any>): void { this.plantillaSeleccionada.set(plantillaSeleccionada) }
 
   cambiarEstadoPelicula(estado: boolean, idPelicula: number): void {
-    this.peliculaService.cambiarEstadoPelicula(estado, idPelicula).then(_ =>
-      this.peliculasDisponibles.update(peliculas => peliculas.map(pelicula =>
-        pelicula.id === idPelicula ? {...pelicula, principal: estado} : pelicula)))
+    this.peliculaService.cambiarEstadoPelicula(estado, idPelicula).then(_ => this.actualizarSenialPeliculas(idPelicula, estado))
+  }
+
+  private actualizarSenialPeliculas(idPelicula: number, estado: boolean): void {
+    this.peliculasDisponibles.update(peliculas =>
+      peliculas.map(pelicula => pelicula.id === idPelicula ? { ...pelicula, principal: estado } : pelicula))
   }
 
   obtenerFuncionesPelicula(idPelicula: number): FuncionInterface[] {
@@ -62,7 +63,7 @@ export class Administracion {
 
       if (!peliculaSeleccionada) return
 
-      const funcionCreada: FuncionInterface | null = await this.funcionService.crearFuncion(datosFormulario, peliculaSeleccionada)
+      const funcionCreada: boolean = await this.funcionService.crearFuncion(datosFormulario, peliculaSeleccionada)
 
       if (funcionCreada) {
         alert("Función creada con éxito")
@@ -73,11 +74,13 @@ export class Administracion {
 
   actualizarDescuentoCupon(nombreCupon: string, nuevoDescuento: number): void {
     this.cuponService.actualizarDescuentoCupon(nombreCupon, nuevoDescuento).then(_ =>
-      this.cuponesDisponibles.update(cupones => cupones.map(cupon =>
-        cupon.nombre === nombreCupon ? {...cupon, descuento: nuevoDescuento} : cupon)))
+      this.actualizarSenialCupones(nombreCupon, nuevoDescuento))
   }
 
-  seleccionarPelicula(peliculaSeleccionada: PeliculaInterface): void {
-    this.peliculaSeleccionada.set(peliculaSeleccionada)
+  private actualizarSenialCupones(nombreCupon: string, nuevoDescuento: number): void {
+    this.cuponesDisponibles.update(cupones => cupones.map(cupon =>
+      cupon.nombre === nombreCupon ? { ...cupon, descuento: nuevoDescuento } : cupon))
   }
+
+  seleccionarPelicula(peliculaSeleccionada: PeliculaInterface): void { this.peliculaSeleccionada.set(peliculaSeleccionada) }
 }

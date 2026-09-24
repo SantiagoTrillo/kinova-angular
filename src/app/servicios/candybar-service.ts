@@ -11,13 +11,14 @@ export class CandybarService {
   async obtenerProductos(): Promise<ProductoInterface[]> {
     const respuesta = await this.supabaseService.cliente.from("candybar").select("*")
 
-    if (respuesta.error) alert("Error al procesar la solicitud: " + respuesta.error.message)
+    if (respuesta.error) {
+      alert("Error al procesar la solicitud: " + respuesta.error.message)
+      return []
+    }
     if (!respuesta.data) return []
 
     return respuesta.data.map(producto => ({...producto, cantidad: 0}))
   }
 
-  comprarProductos(productos: ProductoInterface[]): void {
-    this.productosComprados.set(productos)
-  }
+  comprarProductos(productos: ProductoInterface[]): void { this.productosComprados.set(productos) }
 }

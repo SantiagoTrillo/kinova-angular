@@ -15,7 +15,6 @@ export class Funciones {
   private funcionService: FuncionService = inject(FuncionService)
 
   peliculaActual: InputSignal<PeliculaInterface> = input.required<PeliculaInterface>()
-
   funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
   fechasDisponibles: WritableSignal<string[]> = signal<string[]>([])
   formatosDisponibles: WritableSignal<string[]> = signal<string[]>([])
@@ -42,21 +41,12 @@ export class Funciones {
     const idiomas: string[] = []
 
     for (const funcion of this.funcionesDisponibles()) {
-      const fechaActual: string = funcion.fecha_hora
-      const dia: string = fechaActual.slice(0, 10)
+      const dia: string = funcion.fecha_hora.slice(0, 10)
 
-      if (!fechas.includes(dia)) {
-        fechas.push(dia)
-      }
-
-      if (fechaActual.startsWith(this.fechaSeleccionada())) {
-        if (!formatos.includes(funcion.formato)) {
-          formatos.push(funcion.formato)
-        }
-
-        if (!idiomas.includes(funcion.idioma)) {
-          idiomas.push(funcion.idioma)
-        }
+      if (!fechas.includes(dia)) fechas.push(dia)
+      if (funcion.fecha_hora.startsWith(this.fechaSeleccionada())) {
+        if (!formatos.includes(funcion.formato)) formatos.push(funcion.formato)
+        if (!idiomas.includes(funcion.idioma)) idiomas.push(funcion.idioma)
       }
     }
 
@@ -68,57 +58,45 @@ export class Funciones {
   }
 
   obtenerHorarios(): void {
-    const horarios: string[] = []
-
-    for (const funcion of this.funcionesDisponibles()) {
-      const coincideFecha: boolean = funcion.fecha_hora.startsWith(this.fechaSeleccionada())
-      const coincideFormato: boolean = funcion.formato === this.formatoSeleccionado()
-      const coincideIdioma: boolean = funcion.idioma === this.idiomaSeleccionado()
-
-      if (coincideFecha && coincideFormato && coincideIdioma) {
-        if (!horarios.includes(funcion.fecha_hora)) {
-          horarios.push(funcion.fecha_hora)
-        }
-      }
-    }
+    const horarios: string[] = this.funcionesDisponibles().filter(funcion =>
+      funcion.fecha_hora.startsWith(this.fechaSeleccionada()) && funcion.formato === this.formatoSeleccionado() &&
+      funcion.idioma === this.idiomaSeleccionado()).map(funcion => funcion.fecha_hora)
 
     this.horariosDisponibles.set(horarios)
   }
 
   seleccionarFecha(fecha: string): void {
+    if (this.fechaSeleccionada() === fecha) return
+
     this.fechaSeleccionada.set(fecha)
     this.limpiarSelecciones()
     this.obtenerDetallesFunciones()
   }
 
   seleccionarFormato(formato: string): void {
+    if (this.formatoSeleccionado() === formato) return
+
     this.formatoSeleccionado.set(formato)
     this.limpiarHorarios()
     this.obtenerHorarios()
   }
 
   seleccionarIdioma(idioma: string): void {
+    if (this.idiomaSeleccionado() === idioma) return
+
     this.idiomaSeleccionado.set(idioma)
     this.limpiarHorarios()
     this.obtenerHorarios()
   }
 
-  seleccionarHorario(horario: string): void {
-    this.horarioSeleccionado.set(horario)
-  }
+  seleccionarHorario(horario: string): void { this.horarioSeleccionado.set(horario) }
 
   seleccionarFuncion(): void {
-    for (const funcion of this.funcionesDisponibles()) {
-      const coincideFecha: boolean = funcion.fecha_hora.startsWith(this.fechaSeleccionada())
-      const coincideFormato: boolean = funcion.formato === this.formatoSeleccionado()
-      const coincideIdioma: boolean = funcion.idioma === this.idiomaSeleccionado()
-      const coincideHorario: boolean = funcion.fecha_hora === this.horarioSeleccionado()
+    const funcionSeleccionada: FuncionInterface | undefined = this.funcionesDisponibles().find(funcion =>
+      funcion.fecha_hora === this.horarioSeleccionado() && funcion.formato === this.formatoSeleccionado() &&
+      funcion.idioma === this.idiomaSeleccionado())
 
-      if (coincideFecha && coincideFormato && coincideIdioma && coincideHorario) {
-        this.funcionService.seleccionarFuncion(funcion)
-        break
-      }
-    }
+    if (funcionSeleccionada) this.funcionService.seleccionarFuncion(funcionSeleccionada)
   }
 
   limpiarSelecciones(): void {
@@ -127,7 +105,5 @@ export class Funciones {
     this.horarioSeleccionado.set("")
   }
 
-  limpiarHorarios(): void {
-    this.horarioSeleccionado.set("")
-  }
+  limpiarHorarios(): void { this.horarioSeleccionado.set("") }
 }

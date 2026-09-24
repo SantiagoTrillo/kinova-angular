@@ -21,14 +21,12 @@ export class Entrada {
   peliculaService: PeliculaService = inject(PeliculaService)
   candybarService: CandybarService = inject(CandybarService)
 
-  ngOnInit(): void {
-    this.calcularTotalProductos()
-  }
+  ngOnInit(): void { this.calcularTotalProductos() }
 
   calcularTotalProductos(): void {
     this.totalProductos.set(this.candybarService.productosComprados()
       .reduce((total: number, producto: ProductoInterface): number => total + producto.precio, 0))
   }
 
-  guardarPdf(): void {window.print()}
+  guardarPdf(): void { window.print() }
 }

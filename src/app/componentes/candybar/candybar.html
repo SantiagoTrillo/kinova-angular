@@ -1,18 +1,13 @@
 <main>
   <h1 class="titulo">Date un gustito antes de entrar a la sala</h1>
-  <button class="compra" [class.omitir]="!productoSeleccionado()" (click)="comprarProductos()">{{productoSeleccionado() ? "Confirmar compra" : "Omitir" }}</button>
+  <button class="compra" (click)="comprarProductos()">{{ productoSeleccionado() ? "Confirmar compra" : "Omitir" }}</button>
   @for (categoria of categorias(); track categoria) {
     <h2>{{ categoria }}</h2>
     <div class="categoria">
-      @for (producto of productos(); track producto.id) {
+      @for (producto of productosDisponibles(); track producto.id) {
         @if (producto.categoria === categoria) {
           <div class="producto">
-            <img
-              width="500"
-              height="333"
-              ngSrc="{{ producto.imagen }}"
-              alt="Imagen de un producto del candybar"
-            >
+            <img width="500" height="333" ngSrc="{{ producto.imagen }}" alt="Imagen de un producto del candybar">
             <h3>{{ producto.nombre}}</h3>
             <span>{{ producto.precio | currency: 'ARS': '$ ': '1.0-0' }}</span>
             <div class="seleccion-productos">

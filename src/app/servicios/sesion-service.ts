@@ -9,9 +9,13 @@ export class SesionService {
   usuarioActual: WritableSignal<UsuarioInterface | null> = signal<UsuarioInterface | null>(null)
 
   async registrarUsuario(usuarioNuevo: UsuarioInterface): Promise<UsuarioInterface | null> {
-    const respuesta = await this.supabaseService.cliente.from("usuarios")
-      .insert(usuarioNuevo).select().single()
+    const respuesta = await this.supabaseService.cliente.from("usuarios").insert(usuarioNuevo)
+      .select().single()
 
+    if (respuesta.error) {
+      alert("Error al procesar la solicitud: " + respuesta.error.message)
+      return null
+    }
     if (!respuesta.data) return null
 
     const usuarioRegistrado = respuesta.data as UsuarioInterface
@@ -22,10 +26,13 @@ export class SesionService {
   }
 
   async iniciarSesion(correoElectronico: string, contrasenia: string): Promise<UsuarioInterface | null> {
-    const respuesta = await this.supabaseService.cliente.from("usuarios")
-      .select("*").eq("correo_electronico", correoElectronico).eq("contrasenia", contrasenia)
-      .single()
+    const respuesta = await this.supabaseService.cliente.from("usuarios").select("*")
+      .eq("correo_electronico", correoElectronico).eq("contrasenia", contrasenia).single()
 
+    if (respuesta.error) {
+      alert("Error al procesar la solicitud: " + respuesta.error.message)
+      return null
+    }
     if (!respuesta.data) return null
 
     const usuarioAutenticado = respuesta.data as UsuarioInterface
@@ -35,7 +42,5 @@ export class SesionService {
     return usuarioAutenticado
   }
 
-  cerrarSesion(): void {
-    this.usuarioActual.set(null)
-  }
+  cerrarSesion(): void { this.usuarioActual.set(null) }
 }

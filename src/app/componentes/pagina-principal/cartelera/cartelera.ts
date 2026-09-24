@@ -10,8 +10,8 @@ import { TarjetaPelicula } from "./tarjeta-pelicula/tarjeta-pelicula"
 })
 export class Cartelera {
   generosDisponibles: Signal<string[]> = signal<string[]>([
-    "Drama", "Fantasía", "Comedia", "Acción", "Romance", "Suspenso", "Terror", "Ciencia Ficción", "Histórico", "Musical",
-    "Aventura", "Animación"
+    "Drama", "Fantasía", "Comedia", "Acción", "Romance", "Suspenso", "Terror", "Ciencia Ficción", "Histórico", "Musical", "Aventura",
+    "Animación"
   ])
   peliculasTotales: InputSignal<PeliculaInterface[]> = input.required<PeliculaInterface[]>()
   busqueda: WritableSignal<string> = signal<string>("")
@@ -19,17 +19,13 @@ export class Cartelera {
   peliculasMostradas: Signal<PeliculaInterface[]> = computed((): PeliculaInterface[] => {
     const textoBuscado: string = this.busqueda().toLowerCase()
 
-    return this.peliculasTotales().filter(pelicula => (
-      pelicula.titulo.toLowerCase().includes(textoBuscado)) && (pelicula.generos.includes(this.generoSeleccionado()) ||
-      this.generoSeleccionado() === "")
+    return this.peliculasTotales().filter(pelicula =>
+      (pelicula.titulo.toLowerCase().includes(textoBuscado)) && (pelicula.generos.includes(this.generoSeleccionado()) ||
+        this.generoSeleccionado() === "")
     )
   })
 
-  filtrarPeliculasTexto(texto: string): void {
-    this.busqueda.set(texto)
-  }
+  filtrarPeliculasTexto(texto: string): void { this.busqueda.set(texto) }
 
-  filtrarPeliculasGenero(genero: string): void {
-    this.generoSeleccionado.set(genero)
-  }
+  filtrarPeliculasGenero(genero: string): void { this.generoSeleccionado.set(genero) }
 }

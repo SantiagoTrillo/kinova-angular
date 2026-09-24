@@ -4,7 +4,11 @@
       <h3>Fechas</h3>
       <div class="div-fechas">
         @for (fecha of fechasDisponibles(); track $index) {
-          <button class="boton-fechas" [class.seleccionado]="fechaSeleccionada() === fecha" (click)="seleccionarFecha(fecha)">{{ fecha | date: "EEE d" | titlecase }}</button>
+          <button
+            class="boton-fechas"
+            [class.seleccionado]="fechaSeleccionada() === fecha"
+            (click)="seleccionarFecha(fecha)"
+          >{{ fecha | date: "EEE d" | titlecase }}</button>
         }
       </div>
     </div>
@@ -31,7 +35,10 @@
         <h3>Horarios</h3>
         <div>
           @for (horario of horariosDisponibles(); track $index) {
-            <button [class.seleccionado]="horarioSeleccionado() == horario" (click)="seleccionarHorario(horario)">{{ horario | date: "shortTime" }}</button>
+            <button
+              [class.seleccionado]="horarioSeleccionado() == horario"
+              (click)="seleccionarHorario(horario)"
+            >{{ horario | date: "shortTime" }}</button>
           }
         </div>
       </div>
@@ -41,8 +48,7 @@
           [class.visible]="fechaSeleccionada() && formatoSeleccionado() && idiomaSeleccionado() && horarioSeleccionado()"
           (click)="seleccionarFuncion()"
           routerLink="/compra"
-        >Comprar entradas
-        </button>
+        >Comprar entradas</button>
       </div>
     </div>
   </div>

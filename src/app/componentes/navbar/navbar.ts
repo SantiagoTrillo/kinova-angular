@@ -8,6 +8,4 @@ import { SesionService } from "../../servicios/sesion-service"
   styleUrl: "./navbar.sass",
   imports: [RouterLink]
 })
-export class Navbar {
-  sesionService: SesionService = inject(SesionService)
-}
+export class Navbar { sesionService: SesionService = inject(SesionService) }

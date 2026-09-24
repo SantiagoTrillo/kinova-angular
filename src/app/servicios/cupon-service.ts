@@ -11,8 +11,12 @@ export class CuponService {
 
   async obtenerCupones(): Promise<CuponInterface[]> {
     const respuesta = await this.supabaseService.cliente.from("cupones").select("*")
+      .order("id", { ascending: true })
 
-    if (respuesta.error) alert("Error al procesar la solicitud: " + respuesta.error.message)
+    if (respuesta.error) {
+      alert("Error al procesar la solicitud: " + respuesta.error.message)
+      return []
+    }
     if (!respuesta.data) return []
 
     return respuesta.data as CuponInterface[]
@@ -26,9 +30,13 @@ export class CuponService {
     const respuesta = await this.supabaseService.cliente.from("cupones_usuarios")
       .select("cupones(*)").eq("usuario_id", usuarioActual.id).eq("utilizado", false)
 
-    if (respuesta.error) alert("Error al procesar la solicitud: " + respuesta.error.message)
-    if (respuesta.data) return respuesta.data.map((fila: any): CuponInterface => fila.cupones as CuponInterface)
-    else return []
+    if (respuesta.error) {
+      alert("Error al procesar la solicitud: " + respuesta.error.message)
+      return []
+    }
+    if (!respuesta.data) return []
+
+    return respuesta.data.map((fila: any): CuponInterface => fila.cupones as CuponInterface)
   }
 
   async obtenerMejorCupon(): Promise<CuponInterface | null> {
@@ -43,18 +51,18 @@ export class CuponService {
   async canjearCupon(cuponId: number): Promise<void> {
     const usuarioActual: UsuarioInterface | null = this.sesionService.usuarioActual()
 
-    if (!usuarioActual) return
+    if (!usuarioActual) return alert ("No hay una sesión activa")
 
     const respuesta = await this.supabaseService.cliente.from("cupones_usuarios")
       .update({ utilizado: true }).eq("usuario_id", usuarioActual.id).eq("cupon_id", cuponId)
 
-    if (respuesta.error) alert("Error al procesar la solicitud: " + respuesta.error.message)
+    if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
   }
 
   async actualizarDescuentoCupon(nombreCupon: string, nuevoDescuento: number): Promise<void> {
     const respuesta = await this.supabaseService.cliente.from("cupones")
-      .update({descuento: nuevoDescuento}).eq("nombre", nombreCupon)
+      .update({ descuento: nuevoDescuento }).eq("nombre", nombreCupon)
 
-    if (respuesta.error) alert("Error al procesar la solicitud: " + respuesta.error.message)
+    if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
   }
 }

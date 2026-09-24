@@ -23,9 +23,7 @@ export class Compra {
   private cuponService: CuponService = inject(CuponService)
   private router: Router = inject(Router)
 
-  filas: Signal<string[]> = signal([
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'
-  ])
+  filas: Signal<string[]> = signal(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'])
   columnas: Signal<number[][]> = signal([
     [1, 2, 3, 4], [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], [25, 26, 27, 28]
   ])
@@ -33,17 +31,14 @@ export class Compra {
   butacasOcupadas: WritableSignal<string[]> = signal<string[]>([])
   butacasSeleccionadas: WritableSignal<string[]> = signal<string[]>([])
 
-  ngOnInit(): void {
-    this.obtenerButacasOcupadas()
-  }
+  ngOnInit(): void { this.obtenerButacasOcupadas() }
 
   async obtenerButacasOcupadas(): Promise<void> {
     const respuesta = await this.supabaseService.cliente.from("entradas")
       .select("butaca").eq("funcion_id", this.funcionService.funcionSeleccionada()?.id)
 
-    if (respuesta.data) {
-      this.butacasOcupadas.set(respuesta.data.map(entrada => entrada.butaca))
-    }
+    if (respuesta.error) return alert("Error al procesar la colicitud: " + respuesta.error.message)
+    if (respuesta.data) { this.butacasOcupadas.set(respuesta.data.map(entrada => entrada.butaca)) }
   }
 
   async confirmarCompra(): Promise<void> {
@@ -55,15 +50,13 @@ export class Compra {
     const confirmacion: boolean = confirm(mejorCupon ? `Butacas seleccionadas: ${butacasSeleccionadas}\nDescuento aplicado (${mejorCupon.nombre}): ${descuento * 100}%\nTotal: $${totalCompra.toLocaleString("es-AR")}\n¿Deseás confirmar la compra?` : `Butacas seleccionadas: ${butacasSeleccionadas}\nTotal: $${totalCompra}\n¿Deseás confirmar la compra?`)
 
     if (confirmacion) {
-      const respuesta = await this.supabaseService.cliente.from("entradas")
-        .insert(entradas)
+      const respuesta = await this.supabaseService.cliente.from("entradas").insert(entradas)
 
-      if (!respuesta.error) {
+      if (respuesta.error) return alert(respuesta.error.message)
+      else {
         this.entradaService.comprarEntradas(entradas)
 
-        if (mejorCupon) {
-          await this.cuponService.canjearCupon(mejorCupon.id)
-        }
+        if (mejorCupon) await this.cuponService.canjearCupon(mejorCupon.id)
 
         this.router.navigate(["/candybar"])
       }
@@ -93,26 +86,9 @@ export class Compra {
   }
 
   seleccionarButaca(butacaSeleccionada: string): void {
-    if (!this.butacasOcupadas().includes(butacaSeleccionada)) {
-      const butacasSeleccionadas: string[] = [...this.butacasSeleccionadas()]
-
-      let butacaEncontrada: boolean = false
-
-      for (let i: number = 0; i < butacasSeleccionadas.length; i++) {
-        if (butacasSeleccionadas[i] === butacaSeleccionada) {
-          butacasSeleccionadas.splice(i, 1)
-
-          butacaEncontrada = true
-
-          break
-        }
-      }
-
-      if (!butacaEncontrada) {
-        butacasSeleccionadas.push(butacaSeleccionada)
-      }
-
-      this.butacasSeleccionadas.set(butacasSeleccionadas)
-    }
+    if (this.butacasOcupadas().includes(butacaSeleccionada)) return
+    if (this.butacasSeleccionadas().includes(butacaSeleccionada)) this.butacasSeleccionadas.update(butacas =>
+      butacas.filter(butaca => butaca !== butacaSeleccionada))
+    else this.butacasSeleccionadas.update(butacas => [...butacas, butacaSeleccionada])
   }
 }
