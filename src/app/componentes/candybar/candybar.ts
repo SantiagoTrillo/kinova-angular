@@ -50,14 +50,12 @@ export class Candybar {
       }).join(", ")
       const confirmacion: boolean = confirm(`Productos seleccionados: ${nombreProductos}\nTotal: $${totalCompra.toLocaleString("es-AR")}\n¿Deseás confirmar la compra?`)
 
-      if (confirmacion) {
-        this.candybarService.comprarProductos(productosComprados)
-        this.router.navigate(["/entrada"])
-      }
+      if (confirmacion) { this.candybarService.crearCompra(productosComprados).then(_ => this.router.navigate(["/entrada"])) }
     }
   }
 
   calcularTotalProductos(productos: ProductoInterface[]): number {
-    return productos.reduce((total: number, producto: ProductoInterface): number => total + (producto.precio * producto.cantidad), 0)
+    return productos.reduce((total: number, producto: ProductoInterface): number =>
+      total + (producto.precio * producto.cantidad), 0)
   }
 }

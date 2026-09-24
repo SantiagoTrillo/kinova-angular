@@ -58,9 +58,12 @@ export class Funciones {
   }
 
   obtenerHorarios(): void {
-    const horarios: string[] = this.funcionesDisponibles().filter(funcion =>
+    const horarios: string[] = []
+    const funciones: FuncionInterface[] = this.funcionesDisponibles().filter(funcion =>
       funcion.fecha_hora.startsWith(this.fechaSeleccionada()) && funcion.formato === this.formatoSeleccionado() &&
-      funcion.idioma === this.idiomaSeleccionado()).map(funcion => funcion.fecha_hora)
+      funcion.idioma === this.idiomaSeleccionado())
+
+    for (const funcion of funciones) if (!horarios.includes(funcion.fecha_hora)) horarios.push(funcion.fecha_hora)
 
     this.horariosDisponibles.set(horarios)
   }
