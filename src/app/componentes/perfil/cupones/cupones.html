@@ -1,0 +1,10 @@
+@if (cuponesDisponibles().length > 0) {
+  <section>
+    <h2>Cupones disponibles</h2>
+    <ul>
+      @for (cupon of cuponesDisponibles(); track cupon.id) {
+        <li>{{ cupon.nombre }} ({{ cupon.descuento * 100 }}% de descuento)</li>
+      }
+    </ul>
+  </section>
+}

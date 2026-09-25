@@ -31,7 +31,10 @@ export class Compra {
   butacasOcupadas: WritableSignal<string[]> = signal<string[]>([])
   butacasSeleccionadas: WritableSignal<string[]> = signal<string[]>([])
 
-  ngOnInit(): void { this.obtenerButacasOcupadas() }
+  ngOnInit(): void {
+    this.obtenerButacasOcupadas()
+    setInterval(() => this.obtenerButacasOcupadas(), 1000)
+  }
 
   async obtenerButacasOcupadas(): Promise<void> {
     const respuesta = await this.supabaseService.cliente.from("entradas")

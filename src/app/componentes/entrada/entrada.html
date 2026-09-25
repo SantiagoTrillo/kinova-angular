@@ -17,18 +17,20 @@
           <span class="qr">{{ entrada.codigo_qr }}</span>
         </div>
       }
-      <div class="pdf">
-        <span>Productos del Candybar</span>
-        <span>{{ candybarService.compraCandybar()?.descripcion }}</span>
-        <span>{{ candybarService.compraCandybar()?.total | currency: 'ARS': '$ ': '1.0-0' }}</span>
-        <img
-          ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ candybarService.compraCandybar()?.codigo_qr }}"
-          height="150"
-          width="150"
-          alt="Código QR"
-        >
-        <span class="qr">{{ candybarService.compraCandybar()?.codigo_qr }}</span>
-      </div>
+      @if (candybarService.compraCandybar(); as compraActual) {
+        <div class="pdf">
+          <span>Productos del Candybar</span>
+          <span>{{ compraActual.descripcion }}</span>
+          <span>{{ compraActual.total | currency: 'ARS': '$ ': '1.0-0' }}</span>
+          <img
+            ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ compraActual.codigo_qr }}"
+            height="150"
+            width="150"
+            alt="Código QR"
+          >
+          <span class="qr">{{ compraActual.codigo_qr }}</span>
+        </div>
+      }
     </div>
     <button (click)="guardarPdf()">Descargar</button>
   </div>
