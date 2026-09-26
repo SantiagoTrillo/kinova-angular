@@ -57,22 +57,24 @@ export class Administracion {
   }
 
   async crearFuncion(): Promise<void> {
-    if (this.formularioCreacionFuncion.valid) {
-      const datosFormulario = this.formularioCreacionFuncion.getRawValue()
-      const peliculaSeleccionada: PeliculaInterface | null = this.peliculaSeleccionada()
+    if (!this.formularioCreacionFuncion.valid) return alert("El formulario tiene campos inválidos")
 
-      if (!peliculaSeleccionada) return
+    const datosFormulario = this.formularioCreacionFuncion.getRawValue()
+    const peliculaSeleccionada: PeliculaInterface | null = this.peliculaSeleccionada()
 
-      const funcionCreada: boolean = await this.funcionService.crearFuncion(datosFormulario, peliculaSeleccionada)
+    if (!peliculaSeleccionada) return
 
-      if (funcionCreada) {
-        alert("Función creada con éxito")
-        this.funcionesDisponibles.set(await this.funcionService.obtenerFunciones())
-      }
+    const funcionCreada: boolean = await this.funcionService.crearFuncion(datosFormulario, peliculaSeleccionada)
+
+    if (funcionCreada) {
+      alert("Función creada con éxito")
+      this.funcionesDisponibles.set(await this.funcionService.obtenerFunciones())
     }
   }
 
   actualizarDescuentoCupon(nombreCupon: string, nuevoDescuento: number): void {
+    if (!nuevoDescuento || nuevoDescuento < 0.1 || nuevoDescuento > 1) return alert("El descuento debe ser mayor que 0 y menor que 1")
+
     this.cuponService.actualizarDescuentoCupon(nombreCupon, nuevoDescuento).then(_ =>
       this.actualizarSenialCupones(nombreCupon, nuevoDescuento))
   }

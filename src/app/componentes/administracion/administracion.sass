@@ -1,14 +1,17 @@
 div.solapas
-  display: flex
-  flex-direction: column
+  margin-top: 5px
+  margin-left: 18px
   button
     background-color: var(--negro-jet)
-    border: none
     cursor: pointer
-    padding: 3px
+    padding: 5px
+    border-radius: 10px 10px 0 0
+    border: 1px solid var(--azul-helado)
 
 div.panel
-  border: 10px solid var(--negro-jet)
+  border: 1px solid var(--azul-helado)
+  border-radius: 20px
+  margin-bottom: 5px
 
 div.plantilla-peliculas
   display: flex
@@ -24,11 +27,15 @@ div.pelicula
   align-items: center
   background-color: var(--gris-sombra)
   gap: 5px
+  overflow: hidden
+  border-radius: 10px
+  border: 1px solid var(--azul-helado)
   button
     background-color: var(--negro-jet)
     border: none
     cursor: pointer
     margin: 5px 10px 10px 10px
+    border-radius: 10px
   span
     font-size: 12px
     text-align: center
@@ -46,7 +53,9 @@ div.plantilla-funciones
 
 div.funcion
   display: flex
-  border-bottom: 2px solid var(--negro-jet)
+  span
+    font-size: 12px
+    text-align: center
 
 div.poster
   width: 140px
@@ -54,11 +63,16 @@ div.poster
   display: flex
   flex-direction: column
   gap: 5px
+  background-color: var(--gris-sombra)
+  border-radius: 10px
+  overflow: hidden
+  border: 1px solid var(--azul-helado)
+  span
+    padding: 2.5px
 
 div.contenedor-horarios
   display: flex
   flex-direction: column
-  border-left: 2px solid var(--negro-jet)
   padding: 10px
   gap: 10px
   flex: 1
@@ -71,6 +85,7 @@ div.cabecera-horarios
     border: 2px dotted var(--azul-helado)
     cursor: pointer
     flex: 1
+    border-radius: 10px
 
 div.horarios-funcion
   display: grid
@@ -83,13 +98,13 @@ div.detalles-funcion
   background-color: var(--gris-sombra)
   padding: 10px
   justify-content: space-between
-
-button.sin-funciones
-  background-color: transparent
-  border: 2px dotted var(--azul-helado)
-  padding: 10px
-  cursor: pointer
-  flex: 1
+  border-radius: 10px
+  border: 1px solid var(--azul-helado)
+  span
+    background-color: var(--negro-jet)
+    padding: 5px 10px
+    border-radius: 10px
+    font-size: 12px
 
 div.plantilla-crear-funcion
   display: flex
@@ -101,18 +116,30 @@ div.plantilla-crear-funcion
 form
   display: flex
   gap: 10px
+  font-size: 14px
   button
     background-color: var(--negro-jet)
-    border: none
+    border: 1px solid var(--azul-helado)
     padding: 5px
     cursor: pointer
+    border-radius: 10px
 
 label
+  background-color: var(--gris-sombra)
+  padding: 6px 5px 5px 5px
+  border: 1px solid var(--azul-helado)
+  border-radius: 10px
+  display: flex
+  align-items: baseline
+  gap: 10px
   input, select
     background-color: var(--negro-jet)
     border: none
     padding: 5px
     text-align: center
+    border-radius: 10px
+    &.ng-invalid.ng-touched
+      outline: 1px solid var(--algodon-azucar)
   input.seleccionable
     cursor: text
   select
@@ -127,17 +154,26 @@ div.cupon
   align-items: baseline
   justify-content: center
   margin: 10px
-  gap: 5px
-  span
-    padding: 5px
-    color: var(--azul-helado)
-    &.nombre
-      width: 148px
+  gap: 10px
+  font-size: 14px
   label
+    padding: 5px
+    background-color: var(--gris-sombra)
+    span
+      padding: 5px
+      background-color: var(--negro-jet)
+      border-radius: 10px
+      &.nombre
+        width: 222px
+      &.descuento
+        text-align: center
     input
+      border-radius: 10px
+      padding: 5px
       width: 30px
   button
     background-color: var(--negro-jet)
-    border: none
-    padding: 5px
+    padding: 10px
     cursor: pointer
+    border-radius: 10px
+    border: 1px solid var(--azul-helado)

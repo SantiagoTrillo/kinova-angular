@@ -5,6 +5,7 @@ import { SalaInterface } from "../interfaces/sala-interface"
 import { SalaService } from "./sala-service"
 import { PeliculaService } from "./pelicula-service"
 import { PeliculaInterface } from "../interfaces/pelicula-interface"
+import { formatDate } from "@angular/common"
 
 @Service()
 export class FuncionService {
@@ -28,14 +29,11 @@ export class FuncionService {
   }
 
   async crearFuncion(datosFormulario: any, pelicula: PeliculaInterface): Promise<boolean> {
-    const inicioFuncion: number = new Date(`${datosFormulario.fecha}T${datosFormulario.hora}`).getTime()
+    const inicioFuncion: number = new Date(`${ datosFormulario.fecha }T${ datosFormulario.hora }`).getTime()
     const finFuncion: number = inicioFuncion + (pelicula.duracion + 30) * 60 * 1000
     const idSala: number | null = await this.buscarSalaLibre(inicioFuncion, finFuncion)
 
-    if (!idSala) {
-      alert("No hay salas disponibles en el horario solicitado")
-      return false
-    }
+    if (!idSala) return false
 
     const respuesta = await this.supabaseService.cliente.from("funciones").insert({
       pelicula_id: pelicula.id,
@@ -58,32 +56,46 @@ export class FuncionService {
     const salasDisponibles: SalaInterface[] = await this.salaService.obtenerSalas()
     const funcionesDisponibles: FuncionInterface[] = await this.obtenerFunciones()
     const peliculasDisponibles: PeliculaInterface[] = await this.peliculaService.obtenerPeliculas()
+    const conflictos: string[] = []
 
     for (const sala of salasDisponibles) {
-      if (!this.verificarConflictoHorarios(sala.id, inicioFuncionNueva, finFuncionNueva, funcionesDisponibles, peliculasDisponibles))
-        return sala.id
+      const conflicto : string | null = this.verificarConflictoHorarios(
+        sala.id, inicioFuncionNueva, finFuncionNueva, funcionesDisponibles, peliculasDisponibles
+      )
+
+      if (!conflicto) return sala.id
+
+      conflictos.push(conflicto)
     }
+
+    alert("El horario solicitado no está disponible:\n" + conflictos.join("\n"))
     return null
   }
 
   private verificarConflictoHorarios(
     idSala: number, inicioFuncionNueva: number, finFuncionNueva: number, funcionesDisponibles: FuncionInterface[],
     peliculasDisponibles: PeliculaInterface[]
-  ): boolean {
+  ): string | null {
     for (const funcion of funcionesDisponibles) {
       if (funcion.sala_id === idSala) {
         const pelicula: PeliculaInterface | undefined = peliculasDisponibles.find(pelicula =>
           pelicula.id === funcion.pelicula_id)
 
-        if (!pelicula) return false
+        if (!pelicula) return null
 
         const inicioFuncionExistente: number = new Date(funcion.fecha_hora).getTime()
         const finFuncionExistente: number = inicioFuncionExistente + (pelicula.duracion + 30) * 60 * 1000
 
-        if (inicioFuncionNueva < finFuncionExistente && finFuncionNueva > inicioFuncionExistente) return true
+        if (inicioFuncionNueva < finFuncionExistente && finFuncionNueva > inicioFuncionExistente) {
+          const fechaConflicto: string = formatDate(inicioFuncionExistente, "EEEE d", "es-AR")
+          const inicioConflicto: string = formatDate(inicioFuncionExistente, "shortTime", "es-AR")
+          const finConflicto: string = formatDate(finFuncionExistente, "shortTime", "es-AR")
+
+          return `Sala ${ idSala } ocupada por ${ pelicula.titulo } en ${ funcion.formato } y ${ funcion.idioma } el ${ fechaConflicto } de ${ inicioConflicto } a ${ finConflicto }`
+        }
       }
     }
-    return false
+    return null
   }
 
   seleccionarFuncion(funcion: FuncionInterface): void { this.funcionSeleccionada.set(funcion) }

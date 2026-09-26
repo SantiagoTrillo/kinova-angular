@@ -73,8 +73,8 @@
   <div class="plantilla-cupones">
     @for (cupon of cuponesDisponibles(); track cupon.id) {
       <div class="cupon">
-        Nombre: <span class="nombre">{{  cupon.nombre }}</span>
-        Descuento: <span class="descuento">{{ cupon.descuento }}</span>
+        <label>Nombre: <span class="nombre">{{ cupon.nombre }}</span></label>
+        <label>Descuento: <span class="descuento">{{ cupon.descuento }}</span></label>
         <label>Nuevo descuento: <input #nuevoDescuento type="number"></label>
         <button (click)="actualizarDescuentoCupon(cupon.nombre, nuevoDescuento.valueAsNumber)">Actualizar descuento</button>
       </div>

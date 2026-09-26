@@ -3,11 +3,13 @@ import { SupabaseService } from "./supabase-service"
 import { ProductoInterface } from "../interfaces/producto-interface"
 import { SesionService } from "./sesion-service"
 import { CompraCandybar } from "../interfaces/compra-candybar"
+import { EntradaService } from "./entrada-service"
 
 @Service()
 export class CandybarService {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private sesionService: SesionService = inject(SesionService)
+  private entradaService: EntradaService = inject(EntradaService)
 
   compraCandybar: WritableSignal<CompraCandybar | null> = signal<CompraCandybar | null>(null)
 
@@ -32,11 +34,12 @@ export class CandybarService {
       descripcion: descripcion,
       usuario_id: this.sesionService.usuarioActual()?.id,
       total: total,
-      codigo_qr: crypto.randomUUID(),
+      codigo_qr: this.entradaService.codigoQrGenerado(),
       valida: true
     }).select().single()
 
     if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
+    if (!respuesta.data) return
 
     this.compraCandybar.set(respuesta.data)
   }

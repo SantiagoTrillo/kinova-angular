@@ -40,7 +40,7 @@ export class Compra {
     const respuesta = await this.supabaseService.cliente.from("entradas")
       .select("butaca").eq("funcion_id", this.funcionService.funcionSeleccionada()?.id)
 
-    if (respuesta.error) return alert("Error al procesar la colicitud: " + respuesta.error.message)
+    if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
     if (respuesta.data) { this.butacasOcupadas.set(respuesta.data.map(entrada => entrada.butaca)) }
   }
 
@@ -73,13 +73,16 @@ export class Compra {
     if (!funcionComprada) return []
 
     const precioUnitario: number = funcionComprada.precio * (1 - descuento)
+    const codigoQr: string = crypto.randomUUID()
+
+    this.entradaService.codigoQrGenerado.set(codigoQr)
 
     return this.butacasSeleccionadas().map(butaca => ({
       funcion_id: funcionComprada.id,
       butaca: butaca,
       usuario_id: comprador?.id,
       precio: precioUnitario,
-      codigo_qr: crypto.randomUUID(),
+      codigo_qr: codigoQr,
       valida: true
     }))
   }

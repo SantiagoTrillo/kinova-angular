@@ -1,36 +1,28 @@
 <main>
   <div class="pagina-entradas">
     <div class="entradas">
-      @for (entrada of this.entradaService.entradasCompradas(); track $index) {
-        <div class="pdf">
-          <span>Sala {{ this.funcionService.funcionSeleccionada()?.sala_id }}</span>
-          <span>{{ this.peliculaService.peliculaSeleccionada()?.titulo }}</span>
-          <span>{{ this.funcionService.funcionSeleccionada()?.fecha_hora | date: "dd/M/yyyy" }}</span>
+      <div class="pdf">
+        <span>----------Entradas----------</span>
+        <span>Sala {{ this.funcionService.funcionSeleccionada()?.sala_id }}</span>
+        <span>{{ this.peliculaService.peliculaSeleccionada()?.titulo }}</span>
+        <span>{{ this.funcionService.funcionSeleccionada()?.fecha_hora | date: "dd/M/yyyy" }}</span>
+        @for (entrada of this.entradaService.entradasCompradas(); track $index) {
           <span>Fila {{ entrada.butaca.slice(0, 1) }}, butaca {{ entrada.butaca.slice(1) }}</span>
-          <span>{{ entrada.precio | currency: 'ARS': '$ ': '1.0-0' }}</span>
-          <img
-            ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ entrada.codigo_qr }}"
-            height="150"
-            width="150"
-            alt="Código QR"
-          >
-          <span class="qr">{{ entrada.codigo_qr }}</span>
-        </div>
-      }
-      @if (candybarService.compraCandybar(); as compraActual) {
-        <div class="pdf">
-          <span>Productos del Candybar</span>
+        }
+        <span>{{ this.entradaService.entradasCompradas()?.[0]?.precio  | currency: 'ARS': '$ ': '1.0-0' }}</span>
+        @if (candybarService.compraCandybar(); as compraActual) {
+          <span>---Productos del Candybar---</span>
           <span>{{ compraActual.descripcion }}</span>
           <span>{{ compraActual.total | currency: 'ARS': '$ ': '1.0-0' }}</span>
-          <img
-            ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ compraActual.codigo_qr }}"
-            height="150"
-            width="150"
-            alt="Código QR"
-          >
-          <span class="qr">{{ compraActual.codigo_qr }}</span>
-        </div>
-      }
+        }
+        <img
+          ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ this.entradaService.codigoQrGenerado() }}"
+          height="150"
+          width="150"
+          alt="Código QR"
+        >
+        <span class="qr">{{ this.entradaService.codigoQrGenerado() }}</span>
+      </div>
     </div>
     <button (click)="guardarPdf()">Descargar</button>
   </div>
