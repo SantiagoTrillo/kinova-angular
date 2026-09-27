@@ -5,12 +5,12 @@
       <div class="filas">
         <h2>Pantalla</h2>
         @for (fila of filas(); track fila) {
-          @if (fila !== "K") {
-            <div class="columnas">
-              <span>{{ fila }}</span>
-              @for (columna of (fila === "J" ? columnasAccesibles() : columnasRegulares()); track $index) {
-                <div class="butacas">
-                  @for (numero of columna; track numero) {
+          <div class="columnas">
+            <span>{{ fila }}</span>
+            @for (columna of (fila === "J" ? columnasAccesibles() : columnasRegulares()); track $index) {
+              <div class="butacas" [class.central]="$index === 1">
+                @for (numero of columna; track numero) {
+                  @if (fila !== "K") {
                     <div>
                       <button
                         [class.accesible]="fila === 'J'"
@@ -19,11 +19,11 @@
                         (click)="seleccionarButaca(fila + numero)">{{ numero }}
                       </button>
                     </div>
-                  }
-                </div>
-              }
-            </div>
-          }
+                  } @else { <div class="fila-accesible"><button></button></div> }
+                }
+              </div>
+            }
+          </div>
         }
       </div>
       <div class="leyenda">

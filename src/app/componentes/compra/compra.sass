@@ -46,7 +46,7 @@ div.leyenda
       &.seleccionado
         background-color: var(--azul-helado)
       &.accesible
-        background-color: var(--gris-ceniza)
+        background-color: var(--oliva-polvoriento)
 
 div.filas
   display: flex
@@ -66,7 +66,11 @@ div.filas
       font-weight: lighter
     div.butacas
       display: flex
+      justify-content: center
       margin: 7px 7px 0 0
+      width: 124px
+      &.central
+        width: 620px
       div
         display: flex
         flex-direction: column
@@ -81,6 +85,9 @@ div.filas
           height: 25px
           padding: 0
           font-weight: bold
+          &.accesible
+            background-color: var(--oliva-polvoriento)
+            color: var(--negro-tinta)
           &.ocupada
             background-color: var(--algodon-azucar)
             color: var(--negro-tinta)
@@ -88,5 +95,6 @@ div.filas
           &.seleccionado
             background-color: var(--azul-helado)
             color: var(--negro-tinta)
-          &.accesible
-            background-color: var(--gris-ceniza)
+
+div.fila-accesible
+  visibility: hidden
