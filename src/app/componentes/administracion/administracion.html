@@ -24,8 +24,8 @@
         </div>
         <div class="contenedor-horarios">
           <div class="cabecera-horarios">
-            @if (obtenerFuncionesPelicula(pelicula.id).length === 0) {<span>No hay funciones programadas aún</span>}
-            @else {<span>Fechas y Horarios</span>}
+            @if (obtenerFuncionesPelicula(pelicula.id).length === 0) { <span>No hay funciones programadas aún</span> }
+            @else { <span>Fechas y Horarios</span> }
             <button (click)="seleccionarPlantilla(plantillaCrearFuncion); seleccionarPelicula(pelicula)"><i class="fa-solid fa-plus"></i></button>
           </div>
           <div class="horarios-funcion">
@@ -46,7 +46,7 @@
   <div class="plantilla-crear-funcion">
     <div class="titulo">Registrar una nueva función para {{  peliculaSeleccionada()?.titulo }}</div>
     <form [formGroup]="formularioCreacionFuncion" (ngSubmit)="crearFuncion()">
-      <label>Fecha: <input class="seleccionable" type="date" formControlName="fecha"></label>
+      <label>Fecha: <app-selector-fecha (fechaSeleccionada)="formularioCreacionFuncion.patchValue({ fecha: $event })"/></label>
       <label>
         Formato:
         <select formControlName="formato">
@@ -81,13 +81,21 @@
     } @if (cuponesDisponibles().length === 0) {<span>ayuda</span>}
   </div>
 </ng-template>
+<ng-template #plantillaReportes>
+  <div class="plantilla-reportes">
+    <h2>Reporte de Ventas Diario</h2>
+    <div class="reporte">
+      <label>Facturación: <span>{{ facturacionDiaria() | currency: 'ARS': '$ ': '1.0-0'  }}</span></label>
+      <label>Entradas vendidas: <span class="entradas-vendidas">{{ entradasVendidasDiarias() }}</span></label>
+    </div>
+  </div>
+</ng-template>
 <main>
   <div class="solapas">
     <button (click)="seleccionarPlantilla(plantillaPeliculas)">Películas</button>
     <button (click)="seleccionarPlantilla(plantillaFunciones)">Funciones</button>
     <button (click)="seleccionarPlantilla(plantillaCupones)">Cupones</button>
+    <button (click)="seleccionarPlantilla(plantillaReportes)">Reportes</button>
   </div>
-  <div class="panel">
-    <ng-container [ngTemplateOutlet]="plantillaSeleccionada()"/>
-  </div>
+  <div class="panel"><ng-container [ngTemplateOutlet]="plantillaSeleccionada()"/></div>
 </main>

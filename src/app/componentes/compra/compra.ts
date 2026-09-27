@@ -84,7 +84,8 @@ export class Compra {
       usuario_id: comprador?.id,
       precio: precioUnitario,
       codigo_qr: codigoQr,
-      valida: true
+      valida: true,
+      fecha_compra: new Date()
     }))
   }
 

@@ -1,5 +1,6 @@
 section
   background-color: var(--gris-sombra)
+  border: 1px solid var(--azul-helado)
   border-radius: 10px
   padding: 5px
   display: flex
@@ -8,9 +9,23 @@ section
   h2
     margin: 10px
   ul
-    margin: 0 7px 7px 7px
-    padding: 0 0 0 15px
-    li
+    display: flex
+    flex-direction: column
+    padding: 0
+    margin: 0
+    width: 520px
+    label
       display: flex
-      align-content: center
+      justify-content: space-between
+      align-items: baseline
+      background-color: var(--gris-sombra)
+      border: 1px solid var(--azul-helado)
+      border-radius: 5px
       padding: 5px
+      margin: 4px 8px
+      li
+        list-style: none
+        width: 238px
+        padding: 5px
+        background-color: var(--negro-jet)
+        border-radius: 5px

@@ -1,0 +1,9 @@
+<select #selectorDia (change)="seleccionarDia(Number(selectorDia.value)); seleccionarFecha()">
+  @for (dia of dias(); track $index) { <option value="{{ dia }}">{{ dia }}</option> }
+</select>
+<select class="mes" #selectorMes (change)="seleccionarMes(Number(selectorMes.value)); seleccionarFecha()">
+  @for (mes of meses(); track $index) { <option value="{{ $index + 1 }}">{{ mes }}</option>  }
+</select>
+<select #selectorAnio (change)="seleccionarAnio(Number(selectorAnio.value)); seleccionarFecha()">
+  @for (anio of anios(); track $index) { <option value="{{ anio }}">{{ anio }}</option> }
+</select>

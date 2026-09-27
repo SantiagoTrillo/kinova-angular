@@ -4,12 +4,13 @@ import { Router, RouterLink } from "@angular/router"
 import { SesionService } from "../../servicios/sesion-service"
 import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { SupabaseService } from "../../servicios/supabase-service"
+import { SelectorFecha } from "../selectores/selector-fecha/selector-fecha"
 
 @Component({
   selector: "app-registro",
   templateUrl: "./registro.html",
   styleUrl: "./registro.sass",
-  imports: [ReactiveFormsModule, RouterLink]
+  imports: [ReactiveFormsModule, RouterLink, SelectorFecha]
 })
 export class Registro {
   private supabaseService: SupabaseService = inject(SupabaseService)

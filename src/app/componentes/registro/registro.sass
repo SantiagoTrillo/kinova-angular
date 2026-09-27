@@ -7,9 +7,10 @@ main
     justify-content: center
     form
       background-color: var(--gris-sombra)
+      border: 1px solid var(--azul-helado)
       border-radius: 10px
       padding: 5px
-      width: 500px
+      width: 530px
       display: flex
       flex-direction: column
       margin: 10px
@@ -19,19 +20,22 @@ main
         align-items: baseline
         margin: 4px 8px
         user-select: none
+        border: 1px solid var(--azul-helado)
+        border-radius: 5px
+        padding: 5px
         input, select
-          width: 180px
+          width: 238px
           background-color: var(--negro-jet)
           border: none
           border-radius: 5px
           padding: 5px
           &.ng-invalid.ng-touched
-            outline: 2px solid var(--algodon-azucar)
+            border: 1px solid var(--algodon-azucar)
         input.fecha, select
           cursor: pointer
       button
         background-color: var(--negro-jet)
-        border: none
+        border: 1px solid var(--azul-helado)
         border-radius: 5px
         margin: 5px 8px 5px 8px
         padding: 5px

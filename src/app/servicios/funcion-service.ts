@@ -29,7 +29,7 @@ export class FuncionService {
   }
 
   async crearFuncion(datosFormulario: any, pelicula: PeliculaInterface): Promise<boolean> {
-    const inicioFuncion: number = new Date(`${ datosFormulario.fecha }T${ datosFormulario.hora }`).getTime()
+    const inicioFuncion: number = new Date(`${ datosFormulario.fecha } ${ datosFormulario.hora }`).getTime()
     const finFuncion: number = inicioFuncion + (pelicula.duracion + 30) * 60 * 1000
     const idSala: number | null = await this.buscarSalaLibre(inicioFuncion, finFuncion)
 

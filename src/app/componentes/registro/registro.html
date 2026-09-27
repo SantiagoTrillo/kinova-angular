@@ -6,7 +6,9 @@
       <label>Contraseña: <input type="password" formControlName="contrasenia"></label>
       <label>Nombre: <input type="text" formControlName="nombre"></label>
       <label>Apellido: <input type="text" formControlName="apellido"></label>
-      <label>Fecha de nacimiento: <input type="date" class="fecha" formControlName="fecha_nacimiento"></label>
+      <label>
+        Fecha de nacimiento: <app-selector-fecha (fechaSeleccionada)="formularioRegistro.patchValue({ fecha_nacimiento: $event })"/>
+      </label>
       <label>Tipo de sangre:
         <select formControlName="tipo_sangre">
           <option value="0-">O-</option>

@@ -6,4 +6,5 @@ export interface EntradaInterface {
   precio: number
   codigo_qr: string
   valida: boolean
+  fecha_compra: Date
 }

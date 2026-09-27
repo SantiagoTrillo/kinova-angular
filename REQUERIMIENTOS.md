@@ -73,8 +73,14 @@ El sistema debe permitir al administrador controlar y configurar:
 - **Idioma:** configurar si la función se proyecta en Castellano o Subtitulada.
 - **Distribución**: salas, funciones, butacas, productos.
   - **Importante**: la distribución de salas debe de ser automática, asegurándose de que dos funciones no se proyecten al mismo tiempo y en la misma sala.
+- **Reportes de ventas**: indican cuánto se facturó y cuántas entradas se vendieron por día.
 
-## 2. Requerimientos Fuera del Alcance
+## 2. Requerimientos No Funcionales
 
-### 2.1. Mapa del Cine
+### 2.1. Experiencia del Usuario
+La página no debe contar con los selectores de fechas y horas predeterminados del navegador.
+
+## 3. Requerimientos Fuera del Alcance
+
+### 3.1. Mapa del Cine
 Luego de comprar las entradas, el usuario debe poder acceder al mapa del cine en donde se le indique la sala en la que se proyectará su función.

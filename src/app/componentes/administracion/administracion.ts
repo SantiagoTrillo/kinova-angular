@@ -1,5 +1,5 @@
 import { Component, inject, signal, TemplateRef, WritableSignal } from "@angular/core"
-import { DatePipe, NgOptimizedImage, NgTemplateOutlet, TitleCasePipe } from "@angular/common"
+import {CurrencyPipe, DatePipe, NgOptimizedImage, NgTemplateOutlet, TitleCasePipe} from "@angular/common"
 import { DuracionPipe } from "../../tuberias/duracion-pipe"
 import { PeliculaService } from "../../servicios/pelicula-service"
 import { PeliculaInterface } from "../../interfaces/pelicula-interface"
@@ -8,24 +8,29 @@ import { FuncionInterface } from "../../interfaces/funcion-interface"
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
 import { CuponService } from "../../servicios/cupon-service"
 import { CuponInterface}  from "../../interfaces/cupon-interface"
+import {EntradaService} from "../../servicios/entrada-service";
+import {SelectorFecha} from "../selectores/selector-fecha/selector-fecha";
 
 @Component({
   selector: "app-administracion",
   templateUrl: "./administracion.html",
   styleUrl: "./administracion.sass",
-  imports: [NgOptimizedImage, DuracionPipe, NgTemplateOutlet, DatePipe, ReactiveFormsModule, TitleCasePipe]
+  imports: [NgOptimizedImage, DuracionPipe, NgTemplateOutlet, DatePipe, ReactiveFormsModule, TitleCasePipe, CurrencyPipe, SelectorFecha]
 })
 export class Administracion {
   private peliculaService: PeliculaService = inject(PeliculaService)
   private funcionService: FuncionService = inject(FuncionService)
-  private formBuilder: FormBuilder = inject(FormBuilder)
   private cuponService: CuponService = inject(CuponService)
+  private entradaService: EntradaService = inject(EntradaService)
+  private formBuilder: FormBuilder = inject(FormBuilder)
 
   plantillaSeleccionada: WritableSignal<TemplateRef<any> | null> = signal<TemplateRef<any> | null>(null)
   peliculasDisponibles: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
   peliculaSeleccionada: WritableSignal<PeliculaInterface | null> = signal<PeliculaInterface | null>(null)
   funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
   cuponesDisponibles: WritableSignal<CuponInterface[]> = signal<CuponInterface[]>([])
+  facturacionDiaria: WritableSignal<number> = signal<number>(0)
+  entradasVendidasDiarias: WritableSignal<number> = signal<number>(0)
 
   formularioCreacionFuncion = this.formBuilder.nonNullable.group({
     fecha: ["", Validators.required],
@@ -39,6 +44,8 @@ export class Administracion {
     this.peliculasDisponibles.set(await this.peliculaService.obtenerPeliculas())
     this.funcionesDisponibles.set(await this.funcionService.obtenerFunciones())
     this.cuponesDisponibles.set(await this.cuponService.obtenerCupones())
+    this.facturacionDiaria.set(await this.entradaService.obtenerFacturacionDiaria())
+    this.entradasVendidasDiarias.set(await this.entradaService.obtenerEntradasVendidasDiarias())
   }
 
   seleccionarPlantilla(plantillaSeleccionada: TemplateRef<any>): void { this.plantillaSeleccionada.set(plantillaSeleccionada) }
