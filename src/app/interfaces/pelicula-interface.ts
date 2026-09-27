@@ -7,4 +7,5 @@ export interface PeliculaInterface {
   imagen: string
   puntuacion_promedio?: number
   generos: string[]
+  restriccion_edad: string
 }

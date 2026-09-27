@@ -1,7 +1,8 @@
 <div>
   <img width="270" height="405" ngSrc="{{ pelicula().imagen }}" alt="Póster de una película" (click)="seleccionarPelicula(pelicula())">
   <div>
-    <h3>{{ pelicula().titulo }}</h3>
-    <span>{{ pelicula().duracion | duracion }}</span>
+    <span class="titulo-pelicula">{{ pelicula().titulo }}</span>
+    <span class="detalles-pelicula">{{ pelicula().restriccion_edad }}</span>
+    <span class="detalles-pelicula">{{ pelicula().duracion | duracion }}</span>
   </div>
 </div>

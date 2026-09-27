@@ -10,6 +10,7 @@ Cada película registrada en el sistema debe contar obligatoriamente con:
 - **Duración**.
 - **Puntuación promedio.**
 - **Géneros.**
+- **Restricción de edad**.
 
 ### 1.2. Cartelera
 La página principal del cine debe contar con:
@@ -23,10 +24,11 @@ Todas las salas comparten la misma distribución física fija:
     - Columna izquierda: 4 butacas.
     - Columna central: 20 butacas.
     - Columna derecha: 4 butacas.
-  - Total por fila: 28 butacas (560 butacas por sala).
+      - **Importante**: la fila J es de butacas accesibles, con disposición 2-10-2, y la fila K debe estar vacía.
+  - Total por fila: 28 butacas/14 butacas accesibles (518 butacas por sala).
 
 ### 1.4. Venta y Emisión de Entradas
-Los clientes deben poder seleccionar película, función, butacas y productos del candybar para sacar sus entradas.
+Los clientes deben poder seleccionar película, función, butacas y productos del candybar para sacar sus entradas. Las butacas ocupadas por otros usuarios deberán marcarse en tiempo real. La venta de películas que sean para mayores de 13 y 18 años deberá estar prohibida para usuarios anónimos y usuarios registrados menores de dichos rangos.
 
 Al concretar la compra, el sistema debe generar automáticamente un comprobante en PDF con los datos de la entrada y un **código QR** que el cliente presentará para acceder a la sala.
 

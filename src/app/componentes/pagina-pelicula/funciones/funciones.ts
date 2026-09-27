@@ -1,18 +1,21 @@
 import { Component, inject, input, InputSignal, signal, WritableSignal } from "@angular/core"
 import { FuncionInterface } from "../../../interfaces/funcion-interface"
 import { DatePipe, TitleCasePipe } from "@angular/common"
-import { RouterLink } from "@angular/router"
 import { FuncionService } from "../../../servicios/funcion-service"
 import { PeliculaInterface } from "../../../interfaces/pelicula-interface"
+import { SesionService } from "../../../servicios/sesion-service"
+import { Router } from "@angular/router"
 
 @Component({
   selector: "app-funciones",
   templateUrl: "./funciones.html",
   styleUrl: "./funciones.sass",
-  imports: [DatePipe, RouterLink, TitleCasePipe]
+  imports: [DatePipe, TitleCasePipe]
 })
 export class Funciones {
   private funcionService: FuncionService = inject(FuncionService)
+  private sesionService: SesionService = inject(SesionService)
+  private router: Router = inject(Router)
 
   peliculaActual: InputSignal<PeliculaInterface> = input.required<PeliculaInterface>()
   funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
@@ -95,11 +98,26 @@ export class Funciones {
   seleccionarHorario(horario: string): void { this.horarioSeleccionado.set(horario) }
 
   seleccionarFuncion(): void {
+    if (!this.verificarRestriccionEdad()) return alert("No cumplís con el requisito de edad para ver esta película")
+
     const funcionSeleccionada: FuncionInterface | undefined = this.funcionesDisponibles().find(funcion =>
       funcion.fecha_hora === this.horarioSeleccionado() && funcion.formato === this.formatoSeleccionado() &&
       funcion.idioma === this.idiomaSeleccionado())
 
-    if (funcionSeleccionada) this.funcionService.seleccionarFuncion(funcionSeleccionada)
+    if (funcionSeleccionada) {
+      this.funcionService.seleccionarFuncion(funcionSeleccionada)
+      this.router.navigate(["/compra"])
+    }
+  }
+
+  verificarRestriccionEdad(): boolean {
+    const restriccionEdad: string = this.peliculaActual().restriccion_edad
+    const edadUsuario: number = this.sesionService.calcularEdadUsuario()
+
+    if (restriccionEdad === "+13") return edadUsuario >= 13
+    if (restriccionEdad === "+18") return edadUsuario >= 18
+
+    return true
   }
 
   limpiarSelecciones(): void {

@@ -42,5 +42,16 @@ export class SesionService {
     return usuarioAutenticado
   }
 
+  calcularEdadUsuario(): number {
+    const usuarioActual = this.usuarioActual()
+
+    if (!usuarioActual) return 0
+
+    const fechaNacimiento: string = usuarioActual.fecha_nacimiento
+    const diferenciaMilisegundos: number = Date.now() - new Date(fechaNacimiento).getTime()
+
+    return Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24 * 365.25))
+  }
+
   cerrarSesion(): void { this.usuarioActual.set(null) }
 }
