@@ -9,7 +9,7 @@ import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { EntradaService } from "../../servicios/entrada-service"
 import { CuponService } from "../../servicios/cupon-service"
 import { CuponInterface } from "../../interfaces/cupon-interface"
-import {PuntoService} from "../../servicios/punto-service";
+import { PuntoService } from "../../servicios/punto-service"
 
 @Component({
   selector: "app-compra",
@@ -22,7 +22,7 @@ export class Compra {
   private sesionService: SesionService = inject(SesionService)
   private entradaService: EntradaService = inject(EntradaService)
   private cuponService: CuponService = inject(CuponService)
-  private puntosService: PuntoService = inject(PuntoService)
+  private puntoService: PuntoService = inject(PuntoService)
   private router: Router = inject(Router)
 
   filas: Signal<string[]> = signal(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'])
@@ -35,8 +35,7 @@ export class Compra {
   butacasSeleccionadas: WritableSignal<string[]> = signal<string[]>([])
 
   ngOnInit(): void {
-    this.obtenerButacasOcupadas()
-    setInterval(() => this.obtenerButacasOcupadas(), 1000)
+    this.obtenerButacasOcupadas().then(_ => setInterval(() => this.obtenerButacasOcupadas(), 1000))
   }
 
   async obtenerButacasOcupadas(): Promise<void> {
@@ -53,17 +52,23 @@ export class Compra {
     const entradas: EntradaInterface[] = this.armarEntradas(descuento)
     const totalCompra: number = this.entradaService.calcularTotalEntradas(entradas)
     const butacasSeleccionadas: string = this.butacasSeleccionadas().join(", ")
-    const confirmacion: boolean = confirm(mejorCupon ? `Butacas seleccionadas: ${ butacasSeleccionadas }\nDescuento aplicado (${ mejorCupon.nombre }): ${ descuento * 100 }%\nTotal: $${ totalCompra.toLocaleString("es-AR") }\n¿Deseás confirmar la compra?` : `Butacas seleccionadas: ${ butacasSeleccionadas }\nTotal: $${ totalCompra }\n¿Deseás confirmar la compra?`)
+    let confirmacion: boolean
 
+    if (this.sesionService.modoCanjeActivado()) confirmacion = confirm(`Butacas seleccionadas: ${ butacasSeleccionadas }\nTotal: ${ totalCompra.toLocaleString("es-AR") } puntos\n¿Deseás confirmar la compra?`)
+    else confirmacion = confirm(mejorCupon ? `Butacas seleccionadas: ${ butacasSeleccionadas }\nDescuento aplicado (${ mejorCupon.nombre }): ${ descuento * 100 }%\nTotal: $${ totalCompra.toLocaleString("es-AR") }\n¿Deseás confirmar la compra?` : `Butacas seleccionadas: ${ butacasSeleccionadas }\nTotal: $${ totalCompra.toLocaleString("es-AR") }\n¿Deseás confirmar la compra?`)
     if (confirmacion) {
       const respuesta = await this.supabaseService.cliente.from("entradas").insert(entradas)
 
       if (respuesta.error) return alert(respuesta.error.message)
 
       this.entradaService.comprarEntradas(entradas)
-      await this.puntosService.acreditarPuntos(totalCompra)
 
-      if (mejorCupon) await this.cuponService.canjearCupon(mejorCupon.id)
+      if (this.sesionService.modoCanjeActivado()) await this.puntoService.descontarPuntos(totalCompra)
+      else {
+        await this.puntoService.acreditarPuntos(totalCompra)
+
+        if (mejorCupon) await this.cuponService.canjearCupon(mejorCupon.id)
+      }
 
       this.router.navigate(["/candybar"])
     }
@@ -75,7 +80,8 @@ export class Compra {
 
     if (!funcionComprada) return []
 
-    const precioUnitario: number = funcionComprada.precio * (1 - descuento)
+    const precioUnitario: number = this.sesionService.modoCanjeActivado() ? funcionComprada.precio_puntos :
+      funcionComprada.precio * (1 - descuento)
     const codigoQr: string = crypto.randomUUID()
 
     this.entradaService.codigoQrGenerado.set(codigoQr)

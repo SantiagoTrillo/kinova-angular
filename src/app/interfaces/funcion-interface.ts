@@ -6,4 +6,5 @@ export interface FuncionInterface {
   idioma: string
   precio: number
   sala_id: number
+  precio_puntos: number
 }

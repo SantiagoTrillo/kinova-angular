@@ -30,9 +30,21 @@ export class PuntoService {
 
     if (!usuarioActual) return
 
-    const puntosActuales = await this.obtenerPuntos()
+    const puntosActuales: number = await this.obtenerPuntos()
     const respuesta = await this.supabaseService.cliente.from("usuarios")
       .update({ puntos: puntosActuales + pesosGastados }).eq("id", usuarioActual.id)
+
+    if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
+  }
+
+  async descontarPuntos(puntosGastados: number): Promise<void> {
+    const usuarioActual: UsuarioInterface | null = this.sesionService.usuarioActual()
+
+    if (!usuarioActual) return
+
+    const puntosActuales: number = await this.obtenerPuntos()
+    const respuesta = await this.supabaseService.cliente.from("usuarios")
+      .update({ puntos: puntosActuales - puntosGastados }).eq("id", usuarioActual.id)
 
     if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
   }

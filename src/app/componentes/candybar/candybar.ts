@@ -4,6 +4,7 @@ import { ProductoInterface } from "../../interfaces/producto-interface"
 import { CandybarService } from "../../servicios/candybar-service"
 import { Router } from "@angular/router"
 import { PuntoService } from "../../servicios/punto-service"
+import { SesionService } from "../../servicios/sesion-service"
 
 @Component({
   selector: "app-candybar",
@@ -13,8 +14,10 @@ import { PuntoService } from "../../servicios/punto-service"
 })
 export class Candybar {
   private candybarService: CandybarService = inject(CandybarService)
-  private puntosService: PuntoService = inject(PuntoService)
+  private puntoService: PuntoService = inject(PuntoService)
   private router: Router = inject(Router)
+
+  sesionService: SesionService = inject(SesionService)
 
   categorias: Signal<string[]> = signal<string[]>(["Combos", "Pochoclos", "Bebidas", "Snacks Salados", "Snacks Dulces"])
 
@@ -48,10 +51,13 @@ export class Candybar {
         if (producto.cantidad > 1) return `${ producto.nombre } X${ producto.cantidad }`
         else return producto.nombre
       }).join(", ")
-      const confirmacion: boolean = confirm(`Productos seleccionados: ${ nombreProductos }\nTotal: $${ totalCompra.toLocaleString("es-AR") }\n¿Deseás confirmar la compra?`)
+      let confirmacion: boolean
 
+      if (this.sesionService.modoCanjeActivado()) confirmacion =  confirm(`Productos seleccionados: ${ nombreProductos }\nTotal: ${ totalCompra.toLocaleString("es-AR") } puntos\n¿Deseás confirmar la compra?`)
+      else confirmacion =  confirm(`Productos seleccionados: ${ nombreProductos }\nTotal: $${ totalCompra.toLocaleString("es-AR") }\n¿Deseás confirmar la compra?`)
       if (confirmacion) { this.candybarService.crearCompra(productosComprados).then(async _ => {
-        await this.puntosService.acreditarPuntos(totalCompra)
+        if (this.sesionService.modoCanjeActivado()) await this.puntoService.descontarPuntos(totalCompra)
+        else await this.puntoService.acreditarPuntos(totalCompra)
         this.router.navigate(["/entrada"])
       })}
     }
@@ -59,6 +65,7 @@ export class Candybar {
 
   calcularTotalProductos(productos: ProductoInterface[]): number {
     return productos.reduce((total: number, producto: ProductoInterface): number =>
-      total + (producto.precio * producto.cantidad), 0)
+      total + (this.sesionService.modoCanjeActivado() ? producto.precio_puntos * producto.cantidad :
+        producto.precio * producto.cantidad), 0)
   }
 }

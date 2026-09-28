@@ -9,7 +9,7 @@
           <div class="producto">
             <img width="500" height="333" ngSrc="{{ producto.imagen }}" alt="Imagen de un producto del candybar">
             <h3>{{ producto.nombre}}</h3>
-            <span>{{ producto.precio | currency: 'ARS': '$ ': '1.0-0' }}</span>
+            <span>{{ sesionService.modoCanjeActivado() ? producto.precio_puntos.toLocaleString("es-AR") : producto.precio | currency: 'ARS': '$ ': '1.0-0' }}</span>
             <div class="seleccion-productos">
               <button class="operador" (click)="decrementarProducto(producto)">-</button>
               <span>{{ producto.cantidad }}</span>

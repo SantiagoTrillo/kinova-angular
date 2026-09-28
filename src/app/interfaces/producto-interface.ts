@@ -5,4 +5,5 @@ export interface ProductoInterface {
   precio: number
   categoria: string
   cantidad: number
+  precio_puntos: number
 }

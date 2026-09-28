@@ -13,13 +13,14 @@ export class EntradaService {
   entradasCompradas: WritableSignal<EntradaInterface[] | null> = signal<EntradaInterface[] | null>(null)
   codigoQrGenerado: WritableSignal<string | null> = signal<string | null>(null)
 
-  async obtenerEntradasCanjeadas(): Promise<EntradaInterface[]> {
+  async obtenerEntradasCanjeadas(): Promise<any[]> {
     const usuarioActual: UsuarioInterface | null = this.sesionService.usuarioActual()
 
     if (!usuarioActual) return []
 
-    const respuesta = await this.supabaseService.cliente.from("entradas").select("*")
-      .eq("usuario_id", usuarioActual.id).eq("precio", 0)
+    const respuesta = await this.supabaseService.cliente.from("entradas")
+      .select("*, funciones(sala_id, fecha_hora, peliculas(titulo))").eq("usuario_id", usuarioActual.id)
+      .eq("precio", 0)
 
     if (respuesta.error) {
       alert("Error al procesar la solicitud: " + respuesta.error.message)
@@ -27,7 +28,7 @@ export class EntradaService {
     }
     if (!respuesta.data) return []
 
-    return respuesta.data as EntradaInterface[]
+    return respuesta.data
   }
 
   calcularTotalEntradas(entradas: EntradaInterface[]): number {
