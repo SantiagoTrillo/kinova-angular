@@ -4,6 +4,7 @@ import { ProductoInterface } from "../interfaces/producto-interface"
 import { SesionService } from "./sesion-service"
 import { CompraCandybar } from "../interfaces/compra-candybar"
 import { EntradaService } from "./entrada-service"
+import { UsuarioInterface } from "../interfaces/usuario-interface"
 
 @Service()
 export class CandybarService {
@@ -23,6 +24,23 @@ export class CandybarService {
     if (!respuesta.data) return []
 
     return respuesta.data.map(producto => ({...producto, cantidad: 0}))
+  }
+
+  async obtenerProductosCanjeados(): Promise<CompraCandybar[]> {
+    const usuarioActual: UsuarioInterface | null = this.sesionService.usuarioActual()
+
+    if (!usuarioActual) return []
+
+    const respuesta = await this.supabaseService.cliente.from("compras_candybar").select("*")
+      .eq("usuario_id", usuarioActual.id).eq("total", 0)
+
+    if (respuesta.error) {
+      alert("Error al procesar la solicitud: " + respuesta.error.message)
+      return []
+    }
+    if (!respuesta.data) return []
+
+    return respuesta.data as CompraCandybar[]
   }
 
   async crearCompra(productos: ProductoInterface[]): Promise<void> {

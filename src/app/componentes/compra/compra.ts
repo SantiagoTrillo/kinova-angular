@@ -9,6 +9,7 @@ import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { EntradaService } from "../../servicios/entrada-service"
 import { CuponService } from "../../servicios/cupon-service"
 import { CuponInterface } from "../../interfaces/cupon-interface"
+import {PuntoService} from "../../servicios/punto-service";
 
 @Component({
   selector: "app-compra",
@@ -21,6 +22,7 @@ export class Compra {
   private sesionService: SesionService = inject(SesionService)
   private entradaService: EntradaService = inject(EntradaService)
   private cuponService: CuponService = inject(CuponService)
+  private puntosService: PuntoService = inject(PuntoService)
   private router: Router = inject(Router)
 
   filas: Signal<string[]> = signal(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'])
@@ -51,19 +53,19 @@ export class Compra {
     const entradas: EntradaInterface[] = this.armarEntradas(descuento)
     const totalCompra: number = this.entradaService.calcularTotalEntradas(entradas)
     const butacasSeleccionadas: string = this.butacasSeleccionadas().join(", ")
-    const confirmacion: boolean = confirm(mejorCupon ? `Butacas seleccionadas: ${butacasSeleccionadas}\nDescuento aplicado (${mejorCupon.nombre}): ${descuento * 100}%\nTotal: $${totalCompra.toLocaleString("es-AR")}\n¿Deseás confirmar la compra?` : `Butacas seleccionadas: ${butacasSeleccionadas}\nTotal: $${totalCompra}\n¿Deseás confirmar la compra?`)
+    const confirmacion: boolean = confirm(mejorCupon ? `Butacas seleccionadas: ${ butacasSeleccionadas }\nDescuento aplicado (${ mejorCupon.nombre }): ${ descuento * 100 }%\nTotal: $${ totalCompra.toLocaleString("es-AR") }\n¿Deseás confirmar la compra?` : `Butacas seleccionadas: ${ butacasSeleccionadas }\nTotal: $${ totalCompra }\n¿Deseás confirmar la compra?`)
 
     if (confirmacion) {
       const respuesta = await this.supabaseService.cliente.from("entradas").insert(entradas)
 
       if (respuesta.error) return alert(respuesta.error.message)
-      else {
-        this.entradaService.comprarEntradas(entradas)
 
-        if (mejorCupon) await this.cuponService.canjearCupon(mejorCupon.id)
+      this.entradaService.comprarEntradas(entradas)
+      await this.puntosService.acreditarPuntos(totalCompra)
 
-        this.router.navigate(["/candybar"])
-      }
+      if (mejorCupon) await this.cuponService.canjearCupon(mejorCupon.id)
+
+      this.router.navigate(["/candybar"])
     }
   }
 

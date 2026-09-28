@@ -9,4 +9,5 @@ export interface UsuarioInterface {
   dias_vacaciones_anuales: number
   contrasenia: string
   rol: string
+  puntos: number
 }

@@ -47,9 +47,11 @@ Datos obligatorios solicitados en el registro:
   - **Color de ojos.**
   - **Cantidad de días de vacaciones por año.**
 
-Cada usuario que se registre recibe un **cupón de descuento** para utilizar en su primera compra. Los usuarios **mayores de 50 años** tienen cupones exclusivos.
+Cada usuario que se registre recibe un **cupón de descuento** para utilizar en su primera compra. Los usuarios **mayores de 50 años** pueden conseguir cupones exclusivos.
 
-Además, cada usuario contará con un **rol**, el cual la administración podrá cambiar según sea necesario.
+Además, cada usuario contará con un **rol**, que le permitirá hacer diferentes acciones dentro de la página.
+
+Por otro lado, cada vez que un usuario haga compras, podrá acumular puntos **(1 punto por peso gastado)** canjeables por entradas y productos del candybar. Dichos puntos deben poder verse en el perfil junto con el historial de canjes.
 
 ### 1.6. Reseñas y Calificaciones
 Los clientes deben poder consultar y dejar valoraciones sobre las películas:
@@ -61,6 +63,7 @@ Los clientes deben poder consultar y dejar valoraciones sobre las películas:
 ### 1.7. Candybar
 Los clientes deben poder comprar comida y bebida junto con sus entradas:
 - Cada producto debe contar con un nombre, imagen, precio y categoría.
+- Los combos deben mostrarse destacados en la parte superior de la página.
 - Deben poder retirarse con el código QR.
   - **Importante**: los números del código QR deben de estar presentes por si el lector llega a fallar.
   - **Importante**: una vez escaneado, el código QR debe dejar de ser válido.
@@ -75,6 +78,8 @@ El sistema debe permitir al administrador controlar y configurar:
 - **Distribución**: salas, funciones, butacas, productos.
   - **Importante**: la distribución de salas debe de ser automática, asegurándose de que dos funciones no se proyecten al mismo tiempo y en la misma sala.
 - **Reportes de ventas**: indican cuánto se facturó y cuántas entradas se vendieron por día.
+- **Costo de puntos de los canjes**: modificar los puntos necesarios para hacer canjes por entradas o productos del candybar.
+- **Precio de los combos del candybar**: modificar los precios de los combos del candybar.
 
 ## 2. Requerimientos No Funcionales
 

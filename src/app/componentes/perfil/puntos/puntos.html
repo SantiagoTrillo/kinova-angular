@@ -1,0 +1,33 @@
+<section>
+  <div>
+    <h2>Puntos Disponibles: <span>{{ puntosDisponibles() }}</span></h2>
+    <button (click)="activarModoCanje()">Canjear</button>
+  </div>
+  <h2>Historial de Canjes</h2>
+  <h3>Entradas Canjeadas</h3>
+  <ul>
+    @for (entradaCanjeada of entradasCanjeadas(); track $index) {
+      <li>
+        <label>Sala: <span>{{  }}</span></label>
+        <label>Título: <span>{{  }}</span></label>
+        <label>Fecha: <span>{{  }}</span></label>
+        <label>Butacas:</label>
+      </li>
+    }
+  </ul>
+  <h3>Productos del Candybar Canjeados</h3>
+  <ul>
+    @for (productoCanjeado of productosCanjeados(); track $index) {
+      <li>
+        <label>Descripción: <span>{{ productoCanjeado.descripcion }}</span></label>
+        <img
+          ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ productoCanjeado.codigo_qr }}"
+          height="150"
+          width="150"
+          alt="Código QR"
+        >
+        <label>Código: <span>{{ productoCanjeado.codigo_qr }}</span></label>
+      </li>
+    }
+  </ul>
+</section>

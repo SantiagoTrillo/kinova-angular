@@ -3,6 +3,7 @@ import { CurrencyPipe, NgOptimizedImage } from "@angular/common"
 import { ProductoInterface } from "../../interfaces/producto-interface"
 import { CandybarService } from "../../servicios/candybar-service"
 import { Router } from "@angular/router"
+import { PuntoService } from "../../servicios/punto-service"
 
 @Component({
   selector: "app-candybar",
@@ -12,15 +13,14 @@ import { Router } from "@angular/router"
 })
 export class Candybar {
   private candybarService: CandybarService = inject(CandybarService)
+  private puntosService: PuntoService = inject(PuntoService)
   private router: Router = inject(Router)
 
   categorias: Signal<string[]> = signal<string[]>(["Combos", "Pochoclos", "Bebidas", "Snacks Salados", "Snacks Dulces"])
 
   productosDisponibles: WritableSignal<ProductoInterface[]> = signal<ProductoInterface[]>([])
   productoSeleccionado: Signal<boolean> = computed((): boolean => {
-    for (const producto of this.productosDisponibles()) {
-      if (producto.cantidad > 0) return true
-    }
+    for (const producto of this.productosDisponibles()) { if (producto.cantidad > 0) return true }
     return false
   })
 
@@ -48,9 +48,12 @@ export class Candybar {
         if (producto.cantidad > 1) return `${ producto.nombre } X${ producto.cantidad }`
         else return producto.nombre
       }).join(", ")
-      const confirmacion: boolean = confirm(`Productos seleccionados: ${nombreProductos}\nTotal: $${totalCompra.toLocaleString("es-AR")}\n¿Deseás confirmar la compra?`)
+      const confirmacion: boolean = confirm(`Productos seleccionados: ${ nombreProductos }\nTotal: $${ totalCompra.toLocaleString("es-AR") }\n¿Deseás confirmar la compra?`)
 
-      if (confirmacion) { this.candybarService.crearCompra(productosComprados).then(_ => this.router.navigate(["/entrada"])) }
+      if (confirmacion) { this.candybarService.crearCompra(productosComprados).then(async _ => {
+        await this.puntosService.acreditarPuntos(totalCompra)
+        this.router.navigate(["/entrada"])
+      })}
     }
   }
 

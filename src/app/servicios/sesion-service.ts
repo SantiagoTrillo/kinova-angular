@@ -7,6 +7,7 @@ export class SesionService {
   private supabaseService: SupabaseService = inject(SupabaseService)
 
   usuarioActual: WritableSignal<UsuarioInterface | null> = signal<UsuarioInterface | null>(null)
+  modoCanjeActivado: WritableSignal<boolean> = signal<boolean>(false)
 
   async registrarUsuario(usuarioNuevo: UsuarioInterface): Promise<UsuarioInterface | null> {
     const respuesta = await this.supabaseService.cliente.from("usuarios").insert(usuarioNuevo)

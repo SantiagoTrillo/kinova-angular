@@ -1,14 +1,34 @@
 import { inject, Service, signal, WritableSignal } from "@angular/core"
 import { EntradaInterface } from "../interfaces/entrada-interface"
 import { SupabaseService } from "./supabase-service"
+import { SesionService } from "./sesion-service"
+import { UsuarioInterface } from "../interfaces/usuario-interface"
 
 @Service()
 export class EntradaService {
-  supabaseService: SupabaseService = inject(SupabaseService)
+  private supabaseService: SupabaseService = inject(SupabaseService)
+  private sesionService: SesionService = inject(SesionService)
 
   recargoVip: WritableSignal<number> = signal<number>(0.5)
   entradasCompradas: WritableSignal<EntradaInterface[] | null> = signal<EntradaInterface[] | null>(null)
   codigoQrGenerado: WritableSignal<string | null> = signal<string | null>(null)
+
+  async obtenerEntradasCanjeadas(): Promise<EntradaInterface[]> {
+    const usuarioActual: UsuarioInterface | null = this.sesionService.usuarioActual()
+
+    if (!usuarioActual) return []
+
+    const respuesta = await this.supabaseService.cliente.from("entradas").select("*")
+      .eq("usuario_id", usuarioActual.id).eq("precio", 0)
+
+    if (respuesta.error) {
+      alert("Error al procesar la solicitud: " + respuesta.error.message)
+      return []
+    }
+    if (!respuesta.data) return []
+
+    return respuesta.data as EntradaInterface[]
+  }
 
   calcularTotalEntradas(entradas: EntradaInterface[]): number {
     return entradas.reduce((total: number, entrada: EntradaInterface): number => total + entrada.precio, 0)
