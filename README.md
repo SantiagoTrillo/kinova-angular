@@ -47,9 +47,13 @@ ng serve -o
 La aplicación va a estar disponible y lista para usar en `http://localhost:4200/`.
 
 ## Soluciones técnicas
-- **Asignación automática de salas:** algoritmo que detecta salas libres asegurando que no existan superposiciones, considerando la duración de la película más los 30 de descanso entre cada función.
-- **Matriz de 560 butacas y cambio de estado en tiempo real:** representación de la cuadrícula física 4-20-4 mediante señales reactivas y sincronización de butacas ocupadas en tiempo real entre múltiples clientes concurrentes mediante actualización periódica a Supabase.
-- **Emisión de tickets con código QR y PDF:** generación de identificadores únicos UUID para entradas y compras del candybar y exportación a PDF.
-- **Validación de código QR vía escáner:** módulo de escáner para empleados que consulta la compra en Supabase y marca el comprobante como no válido para impedir su reutilización tras la entrega.
-- **Cálculo de calificaciones y promedios de películas:** sistema de calificación de 1 a 5 estrellas con cálculo de la puntuación promedio de las películas ante cada nueva reseña.
-- **Gestión de cupones:** detección y aplicación automática del mejor cupón de descuento disponible para el usuario autenticado sobre el total de la compra.
+- **Asignación automática de salas:** algoritmo que detecta salas libres asegurando que no existan superposiciones horarias, considerando la duración de la película más los 30 minutos de descanso entre cada función, e informando las funciones en conflicto cuando no hay disponibilidad.
+- **Matriz de 518 butacas con sector accesible y tiempo real:** representación de la cuadrícula física 4-20-4 junto con la fila J de butacas accesibles (disposición 2-10-2) y espacio en fila K mediante señales reactivas, con sincronización de butacas ocupadas en tiempo real hacia Supabase.
+- **Ranking de éxitos taquilleros y filtrado en tiempo real:** determinación de las 3 películas con mayor cantidad de entradas vendidas y filtrado dinámico de la cartelera combinando búsqueda por título y selección de género.
+- **Validación de restricción de edad:** verificación automática de la clasificación de la película (`ATP`, `+13`, `+18`) calculando la edad del usuario a partir de su fecha de nacimiento y restringiendo la compra a usuarios anónimos o menores de la edad requerida.
+- **Emisión de ticket unificado con código QR y PDF:** generación de un UUID compartido para las entradas y la compra del candybar dentro de un mismo comprobante exportable a PDF.
+- **Validación de código QR vía escáner:** módulo de escáner para empleados que verifica la validez de las entradas o compras del candybar en Supabase e invalida el código tras su uso para impedir su reutilización.
+- **Cálculo de calificaciones y promedios de películas:** sistema de valoración de 1 a 5 estrellas con actualización automática de la puntuación promedio de cada película ante cada nueva reseña publicada.
+- **Gestión de cupones y beneficios:** otorgamiento de cupones de bienvenida, cupones para mayores de 50 años y aplicación automática del mejor cupón de descuento disponible sobre el total de la compra, con porcentaje configurable desde administración.
+- **Reportes diarios de ventas y facturación:** cálculo en el panel de administración del total recaudado y la cantidad de entradas vendidas en el día a partir de la fecha de compra registrada.
+- **Selectores personalizados de fecha y hora:** componentes basados en señales computadas que reemplazan los selectores predeterminados del navegador

@@ -10,12 +10,13 @@ import { CuponService } from "../../servicios/cupon-service"
 import { CuponInterface}  from "../../interfaces/cupon-interface"
 import {EntradaService} from "../../servicios/entrada-service";
 import {SelectorFecha} from "../selectores/selector-fecha/selector-fecha";
+import {SelectorHora} from "../selectores/selector-hora/selector-hora";
 
 @Component({
   selector: "app-administracion",
   templateUrl: "./administracion.html",
   styleUrl: "./administracion.sass",
-  imports: [NgOptimizedImage, DuracionPipe, NgTemplateOutlet, DatePipe, ReactiveFormsModule, TitleCasePipe, CurrencyPipe, SelectorFecha]
+  imports: [NgOptimizedImage, DuracionPipe, NgTemplateOutlet, DatePipe, ReactiveFormsModule, TitleCasePipe, CurrencyPipe, SelectorFecha, SelectorHora]
 })
 export class Administracion {
   private peliculaService: PeliculaService = inject(PeliculaService)

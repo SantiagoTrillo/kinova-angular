@@ -1,0 +1,12 @@
+<select #selectorHora (change)="seleccionarHora(Number(selectorHora.value)); seleccionarMomento()">
+  @for (hora of horas(); track $index) { <option value="{{ hora }}">{{ hora }}</option> }
+</select>
+<select class="minuto" #selectorMinuto (change)="seleccionarMinuto(Number(selectorMinuto.value)); seleccionarMomento()">
+  @for (minuto of minutos(); track $index) {
+    @if (minuto <= 9) { <option value="{{ minuto }}">0{{ minuto }}</option> }
+    @else { <option value="{{ minuto }}">{{ minuto }}</option> }
+  }
+</select>
+<select #selectorAbreviatura (change)="seleccionarAbreviatura(selectorAbreviatura.value); seleccionarMomento()">
+  @for (abreviatura of abreviaturas(); track $index) { <option value="{{ abreviatura }}">{{ abreviatura }}</option> }
+</select>

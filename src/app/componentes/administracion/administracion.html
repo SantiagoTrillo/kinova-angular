@@ -63,8 +63,8 @@
           <option value="Subtitulada">Subtitulada</option>
         </select>
       </label>
-      <label>Hora: <input class="seleccionable" type="time" formControlName="hora"></label>
-      <label>Precio: <input type="number" formControlName="precio"></label>
+      <label>Hora: <app-selector-hora (momentoSeleccionado)="formularioCreacionFuncion.patchValue({ hora: $event })"/></label>
+      <label>Precio: <input class="precio" type="number" formControlName="precio"></label>
       <button type="submit">Crear función</button>
     </form>
   </div>
