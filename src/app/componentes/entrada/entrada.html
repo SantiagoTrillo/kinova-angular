@@ -10,7 +10,9 @@
           <span>Fila {{ entrada.butaca.slice(0, 1) }}, butaca {{ entrada.butaca.slice(1) }}</span>
         }
         @if (this.entradaService.entradasCompradas(); as entradasCompradas) {
-          <span>{{ entradasCompradas[0].precio * entradasCompradas.length | currency: 'ARS': '$ ': '1.0-0' }}</span>
+          <span>
+            {{ this.entradaService.calcularTotalEntradas(entradasCompradas) | currency: 'ARS': '$ ': '1.0-0' }}
+          </span>
         }
         @if (candybarService.compraCandybar(); as compraActual) {
           <span>---Productos del Candybar---</span>

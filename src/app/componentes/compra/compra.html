@@ -14,6 +14,7 @@
                     <div>
                       <button
                         [class.accesible]="fila === 'J'"
+                        [class.vip]="fila === 'R' || fila === 'S' || fila === 'T'"
                         [class.ocupada]="butacasOcupadas().includes(fila + numero)"
                         [class.seleccionado]="butacasSeleccionadas().includes(fila + numero)"
                         (click)="seleccionarButaca(fila + numero)">{{ numero }}
@@ -42,6 +43,10 @@
         <div>
           <button disabled class="accesible"></button>
           <span>Accesible</span>
+        </div>
+        <div>
+          <button disabled class="vip"></button>
+          <span>V.I.P.</span>
         </div>
       </div>
       <button class="compra oculto" [class.visible]="butacasSeleccionadas().length > 0" (click)="confirmarCompra()">Confirmar compra</button>

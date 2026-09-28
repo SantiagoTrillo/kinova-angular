@@ -25,6 +25,7 @@ Todas las salas comparten la misma distribución física fija:
     - Columna central: 20 butacas.
     - Columna derecha: 4 butacas.
       - **Importante**: la fila J es de butacas accesibles, con disposición 2-10-2, y la fila K debe estar vacía.
+      - **Importante**: las filas R, S y T son de butacas V.I.P. y deberán contar con un precio más elevado que el de una butaca regular o accesible.
   - Total por fila: 28 butacas/14 butacas accesibles (518 butacas por sala).
 
 ### 1.4. Venta y Emisión de Entradas

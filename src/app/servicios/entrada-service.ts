@@ -6,8 +6,15 @@ import { SupabaseService } from "./supabase-service"
 export class EntradaService {
   supabaseService: SupabaseService = inject(SupabaseService)
 
+  recargoVip: WritableSignal<number> = signal<number>(0.5)
   entradasCompradas: WritableSignal<EntradaInterface[] | null> = signal<EntradaInterface[] | null>(null)
   codigoQrGenerado: WritableSignal<string | null> = signal<string | null>(null)
+
+  calcularTotalEntradas(entradas: EntradaInterface[]): number {
+    return entradas.reduce((total: number, entrada: EntradaInterface): number => total + entrada.precio, 0)
+  }
+
+  comprarEntradas(entradas: EntradaInterface[]): void { this.entradasCompradas.set(entradas) }
 
   async obtenerFacturacionDiaria(): Promise<number> {
     const respuesta = await this.supabaseService.cliente.from("entradas")
@@ -34,6 +41,4 @@ export class EntradaService {
 
     return respuesta.data.reduce(total=> total + 1, 0)
   }
-
-  comprarEntradas(entradas: EntradaInterface[]): void { this.entradasCompradas.set(entradas) }
 }

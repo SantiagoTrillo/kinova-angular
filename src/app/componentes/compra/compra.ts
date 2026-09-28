@@ -49,7 +49,7 @@ export class Compra {
     const mejorCupon: CuponInterface | null = await this.cuponService.obtenerMejorCupon()
     const descuento: number = mejorCupon ? mejorCupon.descuento : 0
     const entradas: EntradaInterface[] = this.armarEntradas(descuento)
-    const totalCompra: number = this.calcularTotalEntrada(entradas)
+    const totalCompra: number = this.entradaService.calcularTotalEntradas(entradas)
     const butacasSeleccionadas: string = this.butacasSeleccionadas().join(", ")
     const confirmacion: boolean = confirm(mejorCupon ? `Butacas seleccionadas: ${butacasSeleccionadas}\nDescuento aplicado (${mejorCupon.nombre}): ${descuento * 100}%\nTotal: $${totalCompra.toLocaleString("es-AR")}\n¿Deseás confirmar la compra?` : `Butacas seleccionadas: ${butacasSeleccionadas}\nTotal: $${totalCompra}\n¿Deseás confirmar la compra?`)
 
@@ -82,21 +82,24 @@ export class Compra {
       funcion_id: funcionComprada.id,
       butaca: butaca,
       usuario_id: comprador?.id,
-      precio: precioUnitario,
+      precio: butaca.startsWith("R") || butaca.startsWith("S") || butaca.startsWith("T") ?
+        precioUnitario * (1 + this.entradaService.recargoVip()) : precioUnitario,
       codigo_qr: codigoQr,
       valida: true,
       fecha_compra: new Date()
     }))
   }
 
-  calcularTotalEntrada(entradas: EntradaInterface[]): number {
-    return entradas.reduce((total: number, entrada: EntradaInterface): number => total + entrada.precio, 0)
-  }
-
   seleccionarButaca(butacaSeleccionada: string): void {
     if (this.butacasOcupadas().includes(butacaSeleccionada)) return
     if (this.butacasSeleccionadas().includes(butacaSeleccionada)) this.butacasSeleccionadas.update(butacas =>
       butacas.filter(butaca => butaca !== butacaSeleccionada))
-    else this.butacasSeleccionadas.update(butacas => [...butacas, butacaSeleccionada])
+    else {
+      this.butacasSeleccionadas.update(butacas => [...butacas, butacaSeleccionada])
+
+      if (butacaSeleccionada.startsWith("J")) alert("Acaba de seleccionar una butaca accesible")
+      if (butacaSeleccionada.startsWith("R") || butacaSeleccionada.startsWith("S") ||
+        butacaSeleccionada.startsWith("T")) alert("Acaba de seleccionar una butaca V.I.P. con un precio más elevado")
+    }
   }
 }
