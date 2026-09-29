@@ -3,11 +3,13 @@ import { EntradaInterface } from "../interfaces/entrada-interface"
 import { SupabaseService } from "./supabase-service"
 import { SesionService } from "./sesion-service"
 import { UsuarioInterface } from "../interfaces/usuario-interface"
+import { FuncionService } from "./funcion-service"
 
 @Service()
 export class EntradaService {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private sesionService: SesionService = inject(SesionService)
+  private funcionService: FuncionService = inject(FuncionService)
 
   recargoVip: WritableSignal<number> = signal<number>(0.5)
   entradasCompradas: WritableSignal<EntradaInterface[] | null> = signal<EntradaInterface[] | null>(null)
@@ -32,7 +34,16 @@ export class EntradaService {
   }
 
   calcularTotalEntradas(entradas: EntradaInterface[]): number {
-    return entradas.reduce((total: number, entrada: EntradaInterface): number => total + entrada.precio, 0)
+    const precioPuntos: number = this.funcionService.funcionSeleccionada()?.precio_puntos ?? 0
+
+    return entradas.reduce((total: number, entrada: EntradaInterface): number => {
+      if (!this.sesionService.modoCanjeActivado()) return total + entrada.precio
+
+      const butacaVip: boolean = entrada.butaca.startsWith("R") || entrada.butaca.startsWith("S") ||
+        entrada.butaca.startsWith("T")
+
+      return total + (butacaVip ? precioPuntos * (1 + this.recargoVip()) : precioPuntos)
+    }, 0)
   }
 
   comprarEntradas(entradas: EntradaInterface[]): void { this.entradasCompradas.set(entradas) }

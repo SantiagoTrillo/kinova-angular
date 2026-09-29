@@ -12,22 +12,22 @@
           <ul>
             @for (entradaCanjeada of entradasCanjeadas(); track $index) {
               <li>
-                <label>Sala: <span>{{ entradaCanjeada.sala_id }}</span></label>
-                <label>Título: <span>{{ entradaCanjeada.titulo }}</span></label>
-                <label>Fecha: <span>{{ entradaCanjeada.fecha_hora }}</span></label>
+                <label>Sala: <span>{{ entradaCanjeada.funciones.sala_id }}</span></label>
+                <label>Título: <span>{{ entradaCanjeada.funciones.peliculas.titulo }}</span></label>
+                <label>Fecha: <span>{{ entradaCanjeada.funciones.fecha_hora  | date: "dd/M/yyyy" }}</span></label>
                 <label>Butacas: <span>Fila {{ entradaCanjeada.butaca.slice(0, 1) }}, butaca {{ entradaCanjeada.butaca.slice(1) }}</span></label>
                 <label>Estado: <span
                   [class.disponible]="entradaCanjeada.valida"
-                  [class.utilizada]="!entradaCanjeada.valida"
-                >{{ entradaCanjeada.valida ? "Disponible" : "Utilizada" }}
-              </span></label>
+                  [class.canjeado]="!entradaCanjeada.valida"
+                >{{ entradaCanjeada.valida ? "Disponible" : "Canjeado" }}
+                </span></label>
                 <img
                   ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ entradaCanjeada.codigo_qr }}"
                   height="150"
                   width="150"
                   alt="Código QR"
                 >
-                <label>Código: <span>{{ entradaCanjeada.codigo_qr }}</span></label>
+                <span class="qr">{{ entradaCanjeada.codigo_qr }}</span>
               </li>
             }
           </ul>
@@ -38,13 +38,18 @@
             @for (productoCanjeado of productosCanjeados(); track $index) {
               <li>
                 <label>Descripción: <span>{{ productoCanjeado.descripcion }}</span></label>
+                <label>Estado: <span
+                  [class.disponible]="productoCanjeado.valida"
+                  [class.canjeado]="!productoCanjeado.valida"
+                >{{ productoCanjeado.valida ? "Disponible" : "Canjeado" }}
+                </span></label>
                 <img
                   ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ productoCanjeado.codigo_qr }}"
                   height="150"
                   width="150"
                   alt="Código QR"
                 >
-                <label>Código: <span>{{ productoCanjeado.codigo_qr }}</span></label>
+                <span class="qr">{{ productoCanjeado.codigo_qr }}</span>
               </li>
             }
           </ul>

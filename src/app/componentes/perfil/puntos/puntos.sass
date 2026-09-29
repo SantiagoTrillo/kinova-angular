@@ -7,35 +7,71 @@ section
     background-color: var(--gris-sombra)
     border: 1px solid var(--azul-helado)
     border-radius: 10px
-    padding: 5px
+    display: flex
+    flex-direction: column
+    width: 1203px
     div.contenedor-puntos
       display: flex
+      justify-content: center
       align-items: center
-      gap: 10px
       margin: 5px
       button
         border: 1px solid var(--azul-helado)
         background-color: var(--negro-jet)
         border-radius: 5px
-        padding: 5px
+        padding: 6px 12px
         cursor: pointer
 
 div.contenedor-historial
   display: flex
   flex-direction: column
   align-items: center
-  label
-    border: 1px solid var(--azul-helado)
-    border-radius: 5px
-    span
-      background-color: var(--negro-jet)
-      border-radius: 5px
+  ul
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+    gap: 15px
+    padding: 0
+    margin: 10px
+    li
+      display: flex
+      flex-direction: column
+      align-items: center
+      gap: 5px
+      //width: 272px
+      padding: 10px
+      background-color: var(--gris-sombra)
+      border: 1px solid var(--azul-helado)
+      border-radius: 10px
+      label
+        display: flex
+        justify-content: space-between
+        align-items: start
+        width: 100%
+        background-color: var(--gris-sombra)
+        border: 1px solid var(--azul-helado)
+        border-radius: 5px
+        padding: 5px 8px
+        gap: 10px
+        span
+          background-color: var(--negro-jet)
+          width: 266px
+          border-radius: 5px
+          padding: 5px 8px
+          white-space: break-spaces
+      img
+        margin: 6px 0
+        border-radius: 5px
 
 h2, h3
-  margin: 5px
+  margin: 8px
 
 span.disponible
   color: greenyellow
 
-span.utilizada
+span.canjeado
   color: red
+
+span.qr
+  font-weight: lighter
+  font-size: 12px

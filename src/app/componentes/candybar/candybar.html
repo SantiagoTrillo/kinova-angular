@@ -6,14 +6,23 @@
     <div class="categoria">
       @for (producto of productosDisponibles(); track producto.id) {
         @if (producto.categoria === categoria) {
-          <div class="producto">
-            <img width="500" height="333" ngSrc="{{ producto.imagen }}" alt="Imagen de un producto del candybar">
+          <div class="producto" [class.combo]="categoria === 'Combos'">
+            <img
+              [class.combo]="categoria === 'Combos'"
+              width="500"
+              height="333"
+              ngSrc="{{ producto.imagen }}"
+              alt="Imagen de un producto del candybar"
+            >
             <h3>{{ producto.nombre}}</h3>
-            <span>{{ sesionService.modoCanjeActivado() ? producto.precio_puntos.toLocaleString("es-AR") : producto.precio | currency: 'ARS': '$ ': '1.0-0' }}</span>
+            <span>
+              {{ sesionService.modoCanjeActivado() ? producto.precio_puntos.toLocaleString("es-AR")
+              : producto.precio | currency: 'ARS': '$ ': '1.0-0' }}
+            </span>
             <div class="seleccion-productos">
-              <button class="operador" (click)="decrementarProducto(producto)">-</button>
+              <button class="operador" [class.combo]="categoria === 'Combos'" (click)="decrementarProducto(producto)">-</button>
               <span>{{ producto.cantidad }}</span>
-              <button class="operador" (click)="aumentarProducto(producto)">+</button>
+              <button class="operador" [class.combo]="categoria === 'Combos'" (click)="aumentarProducto(producto)">+</button>
             </div>
           </div>
         }

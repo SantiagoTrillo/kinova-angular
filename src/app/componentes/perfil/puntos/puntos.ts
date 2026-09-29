@@ -3,7 +3,7 @@ import { PuntoService } from "../../../servicios/punto-service"
 import { CompraCandybar } from "../../../interfaces/compra-candybar"
 import { EntradaService } from "../../../servicios/entrada-service"
 import { CandybarService } from "../../../servicios/candybar-service"
-import { NgOptimizedImage } from "@angular/common"
+import {DatePipe, NgOptimizedImage} from "@angular/common"
 import { SesionService } from "../../../servicios/sesion-service"
 import { Router } from "@angular/router"
 
@@ -11,7 +11,7 @@ import { Router } from "@angular/router"
   selector: "app-puntos",
   templateUrl: "./puntos.html",
   styleUrl: "./puntos.sass",
-  imports: [NgOptimizedImage]
+  imports: [NgOptimizedImage, DatePipe]
 })
 export class Puntos {
   private puntoService: PuntoService = inject(PuntoService)

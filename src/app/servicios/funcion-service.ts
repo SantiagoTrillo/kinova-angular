@@ -41,7 +41,8 @@ export class FuncionService {
       formato: datosFormulario.formato,
       idioma: datosFormulario.idioma,
       precio: datosFormulario.precio,
-      sala_id: idSala
+      sala_id: idSala,
+      precio_puntos: datosFormulario.precio_puntos
     })
 
     if (respuesta.error) {
@@ -96,6 +97,13 @@ export class FuncionService {
       }
     }
     return null
+  }
+
+  async actualizarPrecioPuntos(nuevoPrecio: number, idFuncion: number): Promise<void> {
+    const respuesta = await this.supabaseService.cliente.from("funciones")
+      .update({ precio_puntos: nuevoPrecio}).eq("id", idFuncion)
+
+    if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
   }
 
   seleccionarFuncion(funcion: FuncionInterface): void { this.funcionSeleccionada.set(funcion) }

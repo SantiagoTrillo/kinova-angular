@@ -11,13 +11,18 @@
         }
         @if (this.entradaService.entradasCompradas(); as entradasCompradas) {
           <span>
-            {{ this.entradaService.calcularTotalEntradas(entradasCompradas) | currency: 'ARS': '$ ': '1.0-0' }}
+            {{ sesionService.modoCanjeActivado() ?
+            entradaService.calcularTotalEntradas(entradasCompradas).toLocaleString("es-AR") + " puntos" :
+            entradaService.calcularTotalEntradas(entradasCompradas) | currency: 'ARS': '$ ': '1.0-0' }}
           </span>
         }
         @if (candybarService.compraCandybar(); as compraActual) {
           <span>---Productos del Candybar---</span>
           <span>{{ compraActual.descripcion }}</span>
-          <span>{{ compraActual.total | currency: 'ARS': '$ ': '1.0-0' }}</span>
+          <span>
+            {{ sesionService.modoCanjeActivado() ? candybarService.puntosGastados().toLocaleString("es-AR") + " puntos" :
+            candybarService.puntosGastados() | currency: 'ARS': '$ ': '1.0-0' }}
+          </span>
         }
         <img
           ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ this.entradaService.codigoQrGenerado() }}"

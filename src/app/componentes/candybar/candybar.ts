@@ -51,13 +51,14 @@ export class Candybar {
         if (producto.cantidad > 1) return `${ producto.nombre } X${ producto.cantidad }`
         else return producto.nombre
       }).join(", ")
-      let confirmacion: boolean
+      const mensajeTotal: string = this.sesionService.modoCanjeActivado() ? `${ totalCompra.toLocaleString("es-AR") } puntos` :
+        `$${ totalCompra.toLocaleString("es-AR") }`
+      const confirmacion: boolean = confirm(
+        `Productos seleccionados: ${ nombreProductos }\nTotal: ${ mensajeTotal }\n¿Deseás confirmar la compra?`
+      )
 
-      if (this.sesionService.modoCanjeActivado()) confirmacion =  confirm(`Productos seleccionados: ${ nombreProductos }\nTotal: ${ totalCompra.toLocaleString("es-AR") } puntos\n¿Deseás confirmar la compra?`)
-      else confirmacion =  confirm(`Productos seleccionados: ${ nombreProductos }\nTotal: $${ totalCompra.toLocaleString("es-AR") }\n¿Deseás confirmar la compra?`)
       if (confirmacion) { this.candybarService.crearCompra(productosComprados).then(async _ => {
-        if (this.sesionService.modoCanjeActivado()) await this.puntoService.descontarPuntos(totalCompra)
-        else await this.puntoService.acreditarPuntos(totalCompra)
+        await this.puntoService.actualizarPuntos(totalCompra)
         this.router.navigate(["/entrada"])
       })}
     }

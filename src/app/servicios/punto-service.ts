@@ -25,26 +25,15 @@ export class PuntoService {
     return respuesta.data.puntos
   }
 
-  async acreditarPuntos(pesosGastados: number): Promise<void> {
+  async actualizarPuntos(costo: number): Promise<void> {
     const usuarioActual: UsuarioInterface | null = this.sesionService.usuarioActual()
 
     if (!usuarioActual) return
 
     const puntosActuales: number = await this.obtenerPuntos()
+    const nuevosPuntos: number = this.sesionService.modoCanjeActivado() ? puntosActuales - costo : puntosActuales + costo
     const respuesta = await this.supabaseService.cliente.from("usuarios")
-      .update({ puntos: puntosActuales + pesosGastados }).eq("id", usuarioActual.id)
-
-    if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
-  }
-
-  async descontarPuntos(puntosGastados: number): Promise<void> {
-    const usuarioActual: UsuarioInterface | null = this.sesionService.usuarioActual()
-
-    if (!usuarioActual) return
-
-    const puntosActuales: number = await this.obtenerPuntos()
-    const respuesta = await this.supabaseService.cliente.from("usuarios")
-      .update({ puntos: puntosActuales - puntosGastados }).eq("id", usuarioActual.id)
+      .update({ puntos: nuevosPuntos }).eq("id", usuarioActual.id)
 
     if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
   }

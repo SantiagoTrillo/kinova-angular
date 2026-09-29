@@ -11,6 +11,8 @@ import { CuponInterface}  from "../../interfaces/cupon-interface"
 import {EntradaService} from "../../servicios/entrada-service";
 import {SelectorFecha} from "../selectores/selector-fecha/selector-fecha";
 import {SelectorHora} from "../selectores/selector-hora/selector-hora";
+import {ProductoInterface} from "../../interfaces/producto-interface";
+import {CandybarService} from "../../servicios/candybar-service";
 
 @Component({
   selector: "app-administracion",
@@ -21,6 +23,7 @@ import {SelectorHora} from "../selectores/selector-hora/selector-hora";
 export class Administracion {
   private peliculaService: PeliculaService = inject(PeliculaService)
   private funcionService: FuncionService = inject(FuncionService)
+  private candybarService: CandybarService = inject(CandybarService)
   private cuponService: CuponService = inject(CuponService)
   private entradaService: EntradaService = inject(EntradaService)
   private formBuilder: FormBuilder = inject(FormBuilder)
@@ -29,6 +32,9 @@ export class Administracion {
   peliculasDisponibles: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
   peliculaSeleccionada: WritableSignal<PeliculaInterface | null> = signal<PeliculaInterface | null>(null)
   funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
+  funcionSeleccionada: WritableSignal<FuncionInterface | null> = signal<FuncionInterface | null>(null)
+  productosDisponibles: WritableSignal<ProductoInterface[]> = signal<ProductoInterface[]>([])
+  productosSeleccionado: WritableSignal<ProductoInterface | null> = signal<ProductoInterface | null>(null)
   cuponesDisponibles: WritableSignal<CuponInterface[]> = signal<CuponInterface[]>([])
   facturacionDiaria: WritableSignal<number> = signal<number>(0)
   entradasVendidasDiarias: WritableSignal<number> = signal<number>(0)
@@ -38,12 +44,14 @@ export class Administracion {
     formato: ["", Validators.required],
     idioma: ["", Validators.required],
     hora: ["", Validators.required],
-    precio: [null as number | null, [Validators.required, Validators.min(0)]]
+    precio: [null as number | null, [Validators.required, Validators.min(0)]],
+    precio_puntos: [null as number | null, [Validators.required, Validators.min(0)]]
   })
 
   async ngOnInit(): Promise<void> {
     this.peliculasDisponibles.set(await this.peliculaService.obtenerPeliculas())
     this.funcionesDisponibles.set(await this.funcionService.obtenerFunciones())
+    this.productosDisponibles.set(await this.candybarService.obtenerProductos())
     this.cuponesDisponibles.set(await this.cuponService.obtenerCupones())
     this.facturacionDiaria.set(await this.entradaService.obtenerFacturacionDiaria())
     this.entradasVendidasDiarias.set(await this.entradaService.obtenerEntradasVendidasDiarias())
@@ -80,6 +88,30 @@ export class Administracion {
     }
   }
 
+  actualizarPrecioPuntos(nuevoPrecio: number, id: number, objeto: string): void {
+    if (!nuevoPrecio || nuevoPrecio <= 0) return alert("El nuevo precio debe ser mayor a 0")
+
+    if (objeto === "funcion") {
+      this.funcionService.actualizarPrecioPuntos(nuevoPrecio, id).then(_ =>
+        this.actualizarSenialFunciones(id, nuevoPrecio))
+    } else {
+      this.candybarService.actualizarPrecioPuntos(nuevoPrecio, id).then(_ =>
+        this.actualizarSenialProductos(id, nuevoPrecio))
+    }
+  }
+
+  private actualizarSenialFunciones(idFuncion: number, precioPuntos: number): void {
+    this.funcionesDisponibles.update(funciones =>
+      funciones.map(funcion => funcion.id === idFuncion ? { ...funcion, precio_puntos: precioPuntos } : funcion))
+    this.funcionSeleccionada.update(funcion => funcion ? { ...funcion, precio_puntos: precioPuntos } : null)
+  }
+
+  private actualizarSenialProductos(idProducto: number, precioPuntos: number): void {
+    this.productosDisponibles.update(productos =>
+      productos.map(producto => producto.id === idProducto ? { ...producto, precio_puntos: precioPuntos } : producto))
+    this.productosSeleccionado.update(producto => producto ? { ...producto, precio_puntos: precioPuntos } : null)
+  }
+
   actualizarDescuentoCupon(nombreCupon: string, nuevoDescuento: number): void {
     if (!nuevoDescuento || nuevoDescuento < 0.1 || nuevoDescuento > 1) return alert("El descuento debe ser mayor que 0 y menor que 1")
 
@@ -93,4 +125,8 @@ export class Administracion {
   }
 
   seleccionarPelicula(peliculaSeleccionada: PeliculaInterface): void { this.peliculaSeleccionada.set(peliculaSeleccionada) }
+
+  seleccionarFuncion(funcionSeleccionada: FuncionInterface): void { this.funcionSeleccionada.set(funcionSeleccionada) }
+
+  seleccionarProducto(productoSeleccionado: ProductoInterface): void { this.productosSeleccionado.set(productoSeleccionado) }
 }

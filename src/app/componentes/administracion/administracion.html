@@ -30,7 +30,7 @@
           </div>
           <div class="horarios-funcion">
             @for (funcion of obtenerFuncionesPelicula(pelicula.id); track funcion.id) {
-              <div class="detalles-funcion">
+              <div class="detalles-funcion" (click)="seleccionarFuncion(funcion); seleccionarPlantilla(plantillaModificarFuncion)">
                 <span>{{ funcion.fecha_hora | date: 'EEE d' | titlecase }} {{ funcion.fecha_hora | date: 'shortTime' }}</span>
                 <span>{{ funcion.formato }} - {{ funcion.idioma }}</span>
                 <span>Sala {{ funcion.sala_id }}</span>
@@ -65,9 +65,46 @@
       </label>
       <label>Hora: <app-selector-hora (momentoSeleccionado)="formularioCreacionFuncion.patchValue({ hora: $event })"/></label>
       <label>Precio: <input class="precio" type="number" formControlName="precio"></label>
+      <label>Precio en puntos: <input type="number" formControlName="precio_puntos"></label>
       <button type="submit">Crear función</button>
     </form>
   </div>
+</ng-template>
+<ng-template #plantillaModificarFuncion>
+  @if (funcionSeleccionada(); as funcionActual) {
+    <div class="plantilla-modificar-funcion">
+      <label>Precio en puntos: <span>{{ funcionActual.precio_puntos }}</span></label>
+      <label>Nuevo precio en puntos: <input #nuevoPrecioPuntos type="number"></label>
+      <button (click)="actualizarPrecioPuntos(nuevoPrecioPuntos.valueAsNumber, funcionActual.id, 'funcion')">Actualizar precio en puntos</button>
+    </div>
+  }
+</ng-template>
+<ng-template #plantillaCandybar>
+  <div class="plantilla-candybar">
+    @for (producto of productosDisponibles(); track $index) {
+      <div class="producto">
+        <img
+          (click)="seleccionarProducto(producto); seleccionarPlantilla(plantillaModificarProducto)"
+          width="140"
+          height="195"
+          ngSrc="{{ producto.imagen }}"
+          alt="Imagen de un producto del candybar"
+        >
+        <span>Nombre: {{  producto.nombre }}</span>
+        <span>Precio: {{ producto.precio | currency: 'ARS': '$ ': '1.0-0' }}</span>
+        <span>Precio en puntos: {{ producto.precio_puntos }}</span>
+      </div>
+    }
+  </div>
+</ng-template>
+<ng-template #plantillaModificarProducto>
+  @if (productosSeleccionado(); as productoActual) {
+    <div class="plantilla-modificar-producto">
+      <label>Precio en puntos: <span>{{ productoActual.precio_puntos }}</span></label>
+      <label>Nuevo precio en puntos: <input #nuevoPrecioPuntos type="number"></label>
+      <button (click)="actualizarPrecioPuntos(nuevoPrecioPuntos.valueAsNumber, productoActual.id, 'producto')">Actualizar precio en puntos</button>
+    </div>
+  }
 </ng-template>
 <ng-template #plantillaCupones>
   <div class="plantilla-cupones">
@@ -94,6 +131,7 @@
   <div class="solapas">
     <button (click)="seleccionarPlantilla(plantillaPeliculas)">Películas</button>
     <button (click)="seleccionarPlantilla(plantillaFunciones)">Funciones</button>
+    <button (click)="seleccionarPlantilla(plantillaCandybar)">Candybar</button>
     <button (click)="seleccionarPlantilla(plantillaCupones)">Cupones</button>
     <button (click)="seleccionarPlantilla(plantillaReportes)">Reportes</button>
   </div>
