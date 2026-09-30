@@ -1,11 +1,15 @@
 <header>
   <nav>
-    <div>
-      <a routerLink=""><h2>Kinova</h2></a>
-      @if (sesionService.usuarioActual()?.rol === "Empleado") { <a routerLink="/escáner"><h2>Escáner de Códigos QR</h2></a> }
-      @if (sesionService.usuarioActual()?.rol === "Administrador") { <a routerLink="/administración"><h2>Administración</h2></a> }
-      @if (sesionService.usuarioActual()) { <a class="escaner" routerLink="/perfil"><i class="fa-solid fa-user"></i></a> }
-      @else { <a routerLink="/registro"><i class="fa-solid fa-user"></i></a> }
+    <div class="accesos-directos">
+      <div class="logo"><img ngSrc="icons/icon-72x72.png" width="40" height="40" alt="Logo de Kinova" ><h1 class="kinova">inova</h1></div>
+      @if (sesionService.usuarioActual()?.rol !== "Empleado" && sesionService.usuarioActual()?.rol !== "Administrador") {
+        <a routerLink=""><h1>Cartelera</h1></a>
+        <a routerLink="/candybar"><h1>Candybar</h1></a>
+      }
+      @if (sesionService.usuarioActual()?.rol === "Empleado") { <a routerLink="/escáner"><h1>Escáner de Códigos QR</h1></a> }
+      @if (sesionService.usuarioActual()?.rol === "Administrador") { <a routerLink="/administración"><h1>Panel de Administración</h1></a> }
+      @if (sesionService.usuarioActual()) { <a class="escaner" routerLink="/perfil"><h1>Mi Perfil</h1></a> }
+      @else { <a routerLink="/inicio-sesión"><h1>Iniciar Sesión</h1></a> }
     </div>
   </nav>
 </header>

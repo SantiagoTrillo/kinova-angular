@@ -5,6 +5,7 @@ import { CandybarService } from "../../servicios/candybar-service"
 import { Router } from "@angular/router"
 import { PuntoService } from "../../servicios/punto-service"
 import { SesionService } from "../../servicios/sesion-service"
+import { FuncionService } from "../../servicios/funcion-service"
 
 @Component({
   selector: "app-candybar",
@@ -18,6 +19,7 @@ export class Candybar {
   private router: Router = inject(Router)
 
   sesionService: SesionService = inject(SesionService)
+  funcionService: FuncionService = inject(FuncionService)
 
   categorias: Signal<string[]> = signal<string[]>(["Combos", "Pochoclos", "Bebidas", "Snacks Salados", "Snacks Dulces"])
 
@@ -44,7 +46,7 @@ export class Candybar {
   comprarProductos(): void {
     const productosComprados: ProductoInterface[] = this.productosDisponibles().filter(producto => producto.cantidad > 0)
 
-    if (productosComprados.length === 0) this.router.navigate(["/entrada"])
+    if (productosComprados.length === 0) this.router.navigate(["/comprobante"])
     else {
       const totalCompra: number = this.calcularTotalProductos(productosComprados)
       const nombreProductos: string = productosComprados.map(producto => {
@@ -59,7 +61,7 @@ export class Candybar {
 
       if (confirmacion) { this.candybarService.crearCompra(productosComprados).then(async _ => {
         await this.puntoService.actualizarPuntos(totalCompra)
-        this.router.navigate(["/entrada"])
+        this.router.navigate(["/comprobante"])
       })}
     }
   }

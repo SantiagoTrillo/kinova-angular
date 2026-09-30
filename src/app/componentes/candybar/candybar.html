@@ -1,21 +1,23 @@
 <main>
   <h1 class="titulo">Date un gustito antes de entrar a la sala</h1>
-  <button class="compra" (click)="comprarProductos()">{{ productoSeleccionado() ? "Confirmar compra" : "Omitir" }}</button>
+  @if (funcionService.funcionSeleccionada() || productoSeleccionado()) {
+    <button class="compra" (click)="comprarProductos()">{{ productoSeleccionado() ? "Confirmar compra" : "Omitir" }}</button>
+  }
   @for (categoria of categorias(); track categoria) {
-    <h2>{{ categoria }}</h2>
-    <div class="categoria">
+    <h2>{{ categoria === "Combos" ? "Combos Imperdibles" : categoria }}</h2>
+    <div class="categoria" [class.combos]="categoria === 'Combos'">
       @for (producto of productosDisponibles(); track producto.id) {
         @if (producto.categoria === categoria) {
           <div class="producto" [class.combo]="categoria === 'Combos'">
             <img
               [class.combo]="categoria === 'Combos'"
-              width="500"
-              height="333"
+              [width]="categoria === 'Combos' ? 290 : 235"
+              [height]="categoria === 'Combos' ? 193 : 157"
               ngSrc="{{ producto.imagen }}"
               alt="Imagen de un producto del candybar"
             >
-            <h3>{{ producto.nombre}}</h3>
-            <span>
+            <h3>{{ producto.nombre }}</h3>
+            <span [class.combo]="categoria === 'Combos'">
               {{ sesionService.modoCanjeActivado() ? producto.precio_puntos.toLocaleString("es-AR")
               : producto.precio | currency: 'ARS': '$ ': '1.0-0' }}
             </span>

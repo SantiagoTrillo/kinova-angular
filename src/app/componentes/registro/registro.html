@@ -1,9 +1,9 @@
 <main>
   <div class="titulo"><h2>¡Registrate para obtener beneficios exclusivos!</h2></div>
   <section class="registro">
-    <form [formGroup]="formularioRegistro" (ngSubmit)="registrarUsuario()">
-      <label>Correo electrónico: <input type="email" formControlName="correo_electronico"></label>
-      <label>Contraseña: <input type="password" formControlName="contrasenia"></label>
+    <form [formGroup]="formularioRegistro" (ngSubmit)="registrarUsuario()" autocomplete="off">
+      <label>Correo electrónico: <input type="email" formControlName="correo_electronico" autocomplete="off"></label>
+      <label>Contraseña: <input type="password" formControlName="contrasenia" autocomplete="new-password"></label>
       <label>Nombre: <input type="text" formControlName="nombre"></label>
       <label>Apellido: <input type="text" formControlName="apellido"></label>
       <label>
@@ -35,10 +35,7 @@
         </select>
       </label>
       <label>Días de vacaciones por año: <input type="number" formControlName="dias_vacaciones_anuales"></label>
-      <div class="botones">
-        <button type="submit">Registrarse</button>
-        <button type="button" routerLink="/inicio-sesión">Iniciar sesión</button>
-      </div>
+      <button type="submit">Registrarse</button>
     </form>
   </section>
 </main>

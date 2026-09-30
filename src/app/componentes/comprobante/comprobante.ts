@@ -7,12 +7,12 @@ import { CandybarService } from "../../servicios/candybar-service"
 import { SesionService } from "../../servicios/sesion-service"
 
 @Component({
-  selector: "app-entrada",
-  templateUrl: "./entrada.html",
-  styleUrl: "./entrada.sass",
+  selector: "app-comprobante",
+  templateUrl: "./comprobante.html",
+  styleUrl: "./comprobante.sass",
   imports: [CurrencyPipe, DatePipe, NgOptimizedImage]
 })
-export class Entrada {
+export class Comprobante {
   entradaService: EntradaService = inject(EntradaService)
   funcionService: FuncionService = inject(FuncionService)
   peliculaService: PeliculaService = inject(PeliculaService)
@@ -23,6 +23,7 @@ export class Entrada {
     this.peliculaService.peliculaSeleccionada.set(null)
     this.funcionService.funcionSeleccionada.set(null)
     this.entradaService.entradasCompradas.set(null)
+    this.entradaService.codigoQrGenerado.set(null)
     this.candybarService.compraCandybar.set(null)
     this.sesionService.modoCanjeActivado.set(false)
   }

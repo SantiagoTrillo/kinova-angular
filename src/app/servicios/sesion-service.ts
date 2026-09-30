@@ -54,5 +54,7 @@ export class SesionService {
     return Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24 * 365.25))
   }
 
-  cerrarSesion(): void { this.usuarioActual.set(null) }
+  cerrarSesion(): void {
+    this.usuarioActual.set(null)
+  }
 }

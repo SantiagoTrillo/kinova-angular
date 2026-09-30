@@ -51,6 +51,10 @@ export class CandybarService {
   }
 
   async crearCompra(productos: ProductoInterface[]): Promise<void> {
+    if (!this.entradaService.codigoQrGenerado()) {
+      this.entradaService.codigoQrGenerado.set(crypto.randomUUID())
+    }
+
     const descripcion: string = productos.map(producto =>
       producto.cantidad > 1 ? `${ producto.nombre } X${ producto.cantidad }` : producto.nombre).join("\n")
     const totalCompra: number = this.calcularTotalProductos(productos)

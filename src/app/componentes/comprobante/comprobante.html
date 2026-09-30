@@ -2,14 +2,14 @@
   <div class="pagina-entradas">
     <div class="entradas">
       <div class="pdf">
-        <span>----------Entradas----------</span>
-        <span>Sala {{ this.funcionService.funcionSeleccionada()?.sala_id }}</span>
-        <span>{{ this.peliculaService.peliculaSeleccionada()?.titulo }}</span>
-        <span>{{ this.funcionService.funcionSeleccionada()?.fecha_hora | date: "dd/M/yyyy" }}</span>
-        @for (entrada of this.entradaService.entradasCompradas(); track $index) {
-          <span>Fila {{ entrada.butaca.slice(0, 1) }}, butaca {{ entrada.butaca.slice(1) }}</span>
-        }
         @if (this.entradaService.entradasCompradas(); as entradasCompradas) {
+          <span>----------Entradas----------</span>
+          <span>Sala {{ this.funcionService.funcionSeleccionada()?.sala_id }}</span>
+          <span>{{ this.peliculaService.peliculaSeleccionada()?.titulo }}</span>
+          <span>{{ this.funcionService.funcionSeleccionada()?.fecha_hora | date: "dd/M/yyyy" }}</span>
+          @for (entrada of entradasCompradas; track $index) {
+            <span>Fila {{ entrada.butaca.slice(0, 1) }}, butaca {{ entrada.butaca.slice(1) }}</span>
+          }
           <span>
             {{ sesionService.modoCanjeActivado() ?
             entradaService.calcularTotalEntradas(entradasCompradas).toLocaleString("es-AR") + " puntos" :

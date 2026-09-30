@@ -4,7 +4,10 @@
     <form [formGroup]="formularioInicioSesion" (ngSubmit)="iniciarSesion()">
       <label>Correo electrónico: <input type="email" formControlName="correo_electronico"></label>
       <label>Contraseña: <input type="password" formControlName="contrasenia"></label>
-      <button type="submit">Iniciar sesión</button>
+      <div class="botones">
+        <button type="submit">Iniciar sesión</button>
+        <button type="button" routerLink="/registro">Registrarse</button>
+      </div>
     </form>
   </section>
 </main>

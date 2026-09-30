@@ -1,6 +1,6 @@
 import { Component, inject, signal, WritableSignal } from "@angular/core"
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
-import { Router, RouterLink } from "@angular/router"
+import { Router } from "@angular/router"
 import { SesionService } from "../../servicios/sesion-service"
 import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { SupabaseService } from "../../servicios/supabase-service"
@@ -10,7 +10,7 @@ import { SelectorFecha } from "../selectores/selector-fecha/selector-fecha"
   selector: "app-registro",
   templateUrl: "./registro.html",
   styleUrl: "./registro.sass",
-  imports: [ReactiveFormsModule, RouterLink, SelectorFecha]
+  imports: [ReactiveFormsModule, SelectorFecha]
 })
 export class Registro {
   private supabaseService: SupabaseService = inject(SupabaseService)

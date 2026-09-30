@@ -1,14 +1,14 @@
 import { Component, inject } from "@angular/core"
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
 import { SesionService } from "../../servicios/sesion-service"
-import { Router } from "@angular/router"
+import { Router, RouterLink } from "@angular/router"
 import { UsuarioInterface } from "../../interfaces/usuario-interface"
 
 @Component({
   selector: "app-inicio-sesion",
   templateUrl: "./inicio-sesion.html",
   styleUrl: "./inicio-sesion.sass",
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule, RouterLink]
 })
 export class InicioSesion {
   private sesionService: SesionService = inject(SesionService)

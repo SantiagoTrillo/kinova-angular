@@ -12,8 +12,12 @@ div.categoria
   display: flex
   justify-content: center
   flex-wrap: wrap
+  &.combos
+    width: 89%
+    justify-content: space-evenly
 
 div.producto
+  width: 235px
   display: flex
   flex-direction: column
   align-items: center
@@ -21,11 +25,19 @@ div.producto
   background-color: var(--gris-sombra)
   border: 1px solid var(--azul-helado)
   &.combo
+    width: 290px
     border: 1px solid var(--naranja)
+  h3
+    font-size: 16px
+    text-align: center
   img
+    width: 100%
+    object-fit: cover
     border-bottom: 1px solid var(--azul-helado)
     &.combo
       border-bottom: 1px solid var(--naranja)
+  span.combo
+    color: var(--naranja)
 
 div.seleccion-productos
   display: flex

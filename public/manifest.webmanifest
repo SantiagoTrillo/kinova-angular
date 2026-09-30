@@ -1,6 +1,8 @@
 {
-  "name": "kinova-angular",
-  "short_name": "kinova-angular",
+  "name": "Kinova",
+  "short_name": "Kinova",
+  "theme_color": "#0C0E14",
+  "background_color": "#0C0E14",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

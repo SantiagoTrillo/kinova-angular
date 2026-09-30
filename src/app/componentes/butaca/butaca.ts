@@ -12,11 +12,11 @@ import { CuponInterface } from "../../interfaces/cupon-interface"
 import { PuntoService } from "../../servicios/punto-service"
 
 @Component({
-  selector: "app-compra",
-  templateUrl: "./compra.html",
-  styleUrl: "./compra.sass"
+  selector: "app-butaca",
+  templateUrl: "./butaca.html",
+  styleUrl: "./butaca.sass"
 })
-export class Compra {
+export class Butaca {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private funcionService: FuncionService = inject(FuncionService)
   private sesionService: SesionService = inject(SesionService)

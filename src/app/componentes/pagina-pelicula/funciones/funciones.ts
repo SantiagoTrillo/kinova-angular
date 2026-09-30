@@ -106,7 +106,7 @@ export class Funciones {
 
     if (funcionSeleccionada) {
       this.funcionService.seleccionarFuncion(funcionSeleccionada)
-      this.router.navigate(["/compra"])
+      this.router.navigate(["/butaca"])
     }
   }
 

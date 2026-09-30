@@ -8,33 +8,37 @@ import { redireccionGuard } from "./guardias/redireccion-guard"
 export const routes: Routes = [
   {
     path: "",
-    component: PaginaPrincipal
+    component: PaginaPrincipal,
+    canActivate: [sesionGuard]
   },
   {
     path: "película",
     component: PaginaPelicula,
-    canActivate: [redireccionGuard]
+    canMatch: [redireccionGuard],
+    canActivate: [sesionGuard]
   },
   {
-    path: "compra",
+    path: "butaca",
     loadComponent: () =>
-      import("./componentes/compra/compra")
-        .then(m => m.Compra),
-    canActivate: [redireccionGuard]
+      import("./componentes/butaca/butaca")
+        .then(m => m.Butaca),
+    canMatch: [redireccionGuard],
+    canActivate: [sesionGuard]
   },
   {
     path: "candybar",
     loadComponent: () =>
       import("./componentes/candybar/candybar")
         .then(m => m.Candybar),
-    canActivate: [redireccionGuard]
+    canActivate: [sesionGuard]
   },
   {
-    path: "entrada",
+    path: "comprobante",
     loadComponent: () =>
-      import("./componentes/entrada/entrada")
-        .then(m => m.Entrada),
-    canActivate: [redireccionGuard]
+      import("./componentes/comprobante/comprobante")
+        .then(m => m.Comprobante),
+    canMatch: [redireccionGuard],
+    canActivate: [sesionGuard]
   },
   {
     path: "registro",
@@ -63,21 +67,22 @@ export const routes: Routes = [
     loadComponent: () =>
       import("./componentes/resenia/resenia")
         .then(m => m.Resenia),
-    canActivate: [redireccionGuard]
+    canMatch: [redireccionGuard],
+    canActivate: [sesionGuard]
   },
   {
     path: "escáner",
     loadComponent: () =>
       import("./componentes/escaner/escaner")
         .then(m => m.Escaner),
-    canActivate: [sesionGuard]
+    canMatch: [redireccionGuard]
   },
   {
     path: "administración",
     loadComponent: () =>
       import("./componentes/administracion/administracion")
         .then(m => m.Administracion),
-    canActivate: [sesionGuard]
+    canMatch: [redireccionGuard]
   },
   {
     path: "**",
