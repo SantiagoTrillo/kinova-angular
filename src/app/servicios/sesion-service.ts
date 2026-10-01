@@ -6,8 +6,9 @@ import { SupabaseService } from "./supabase-service"
 export class SesionService {
   private supabaseService: SupabaseService = inject(SupabaseService)
 
-  usuarioActual: WritableSignal<UsuarioInterface | null> = signal<UsuarioInterface | null>(null)
-  modoCanjeActivado: WritableSignal<boolean> = signal<boolean>(false)
+  usuarioActual: WritableSignal<UsuarioInterface | null> = signal<UsuarioInterface | null>(
+    sessionStorage.getItem("usuarioActual") ? JSON.parse(sessionStorage.getItem("usuarioActual")!) : null
+  )
 
   async registrarUsuario(usuarioNuevo: UsuarioInterface): Promise<UsuarioInterface | null> {
     const respuesta = await this.supabaseService.cliente.from("usuarios").insert(usuarioNuevo)
@@ -22,6 +23,7 @@ export class SesionService {
     const usuarioRegistrado = respuesta.data as UsuarioInterface
 
     this.usuarioActual.set(usuarioRegistrado)
+    sessionStorage.setItem("usuarioActual", JSON.stringify(usuarioRegistrado))
 
     return usuarioRegistrado
   }
@@ -39,6 +41,7 @@ export class SesionService {
     const usuarioAutenticado = respuesta.data as UsuarioInterface
 
     this.usuarioActual.set(usuarioAutenticado)
+    sessionStorage.setItem("usuarioActual", JSON.stringify(usuarioAutenticado))
 
     return usuarioAutenticado
   }
@@ -56,5 +59,6 @@ export class SesionService {
 
   cerrarSesion(): void {
     this.usuarioActual.set(null)
+    sessionStorage.removeItem("usuarioActual")
   }
 }

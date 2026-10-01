@@ -2,7 +2,6 @@
   <div class="componente-puntos">
     <div class="contenedor-puntos">
       <h2>Puntos Disponibles: <span>{{ puntosDisponibles() }}</span></h2>
-      @if (puntosDisponibles() > 0) { <button (click)="activarModoCanje()">Canjear</button> }
     </div>
     <div class="contenedor-historial">
       @if (entradasCanjeadas().length > 0 || productosCanjeados().length > 0) {

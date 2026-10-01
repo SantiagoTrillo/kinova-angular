@@ -33,16 +33,19 @@ export class EntradaService {
     return respuesta.data
   }
 
-  calcularTotalEntradas(entradas: EntradaInterface[]): number {
-    const precioPuntos: number = this.funcionService.funcionSeleccionada()?.precio_puntos ?? 0
+  calcularTotalEntradas(entradas: EntradaInterface[] | string[], esCanje: boolean = false): number {
+    const funcion = this.funcionService.funcionSeleccionada()
+    const precioPuntos: number = funcion?.precio_puntos ?? 0
+    const precioPesos: number = funcion?.precio ?? 0
 
-    return entradas.reduce((total: number, entrada: EntradaInterface): number => {
-      if (!this.sesionService.modoCanjeActivado()) return total + entrada.precio
+    return entradas.reduce((total: number, item: EntradaInterface | string): number => {
+      if (typeof item !== "string" && item.precio > 0) return total + item.precio
 
-      const butacaVip: boolean = entrada.butaca.startsWith("R") || entrada.butaca.startsWith("S") ||
-        entrada.butaca.startsWith("T")
+      const precioBase: number = (esCanje || (typeof item !== "string" && item.precio === 0)) ? precioPuntos : precioPesos
+      const butaca: string = typeof item === "string" ? item : item.butaca
+      const butacaVip: boolean = butaca.startsWith("R") || butaca.startsWith("S") || butaca.startsWith("T")
 
-      return total + (butacaVip ? precioPuntos * (1 + this.recargoVip()) : precioPuntos)
+      return total + (butacaVip ? precioBase * (1 + this.recargoVip()) : precioBase)
     }, 0)
   }
 

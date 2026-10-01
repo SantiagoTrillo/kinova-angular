@@ -4,7 +4,6 @@ import { ProductoInterface } from "../../interfaces/producto-interface"
 import { CandybarService } from "../../servicios/candybar-service"
 import { Router } from "@angular/router"
 import { PuntoService } from "../../servicios/punto-service"
-import { SesionService } from "../../servicios/sesion-service"
 import { FuncionService } from "../../servicios/funcion-service"
 
 @Component({
@@ -18,7 +17,6 @@ export class Candybar {
   private puntoService: PuntoService = inject(PuntoService)
   private router: Router = inject(Router)
 
-  sesionService: SesionService = inject(SesionService)
   funcionService: FuncionService = inject(FuncionService)
 
   categorias: Signal<string[]> = signal<string[]>(["Combos", "Pochoclos", "Bebidas", "Snacks Salados", "Snacks Dulces"])
@@ -53,10 +51,8 @@ export class Candybar {
         if (producto.cantidad > 1) return `${ producto.nombre } X${ producto.cantidad }`
         else return producto.nombre
       }).join(", ")
-      const mensajeTotal: string = this.sesionService.modoCanjeActivado() ? `${ totalCompra.toLocaleString("es-AR") } puntos` :
-        `$${ totalCompra.toLocaleString("es-AR") }`
       const confirmacion: boolean = confirm(
-        `Productos seleccionados: ${ nombreProductos }\nTotal: ${ mensajeTotal }\n¿Deseás confirmar la compra?`
+        `Productos seleccionados: ${ nombreProductos }\nTotal: $${ totalCompra.toLocaleString("es-AR") }\n¿Deseás confirmar la compra?`
       )
 
       if (confirmacion) { this.candybarService.crearCompra(productosComprados).then(async _ => {
@@ -67,8 +63,6 @@ export class Candybar {
   }
 
   calcularTotalProductos(productos: ProductoInterface[]): number {
-    return productos.reduce((total: number, producto: ProductoInterface): number =>
-      total + (this.sesionService.modoCanjeActivado() ? producto.precio_puntos * producto.cantidad :
-        producto.precio * producto.cantidad), 0)
+    return productos.reduce((total: number, producto: ProductoInterface): number => total + producto.precio * producto.cantidad, 0)
   }
 }

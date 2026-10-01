@@ -45,9 +45,7 @@ export class CandybarService {
   }
 
   calcularTotalProductos(productos: ProductoInterface[]): number {
-    return productos.reduce((total: number, producto: ProductoInterface): number =>
-      total + (this.sesionService.modoCanjeActivado() ? producto.precio_puntos * producto.cantidad :
-        producto.precio * producto.cantidad), 0)
+    return productos.reduce((total: number, producto: ProductoInterface): number => total + producto.precio * producto.cantidad, 0)
   }
 
   async crearCompra(productos: ProductoInterface[]): Promise<void> {
@@ -61,14 +59,13 @@ export class CandybarService {
     const respuesta = await this.supabaseService.cliente.from("compras_candybar").insert({
       descripcion: descripcion,
       usuario_id: this.sesionService.usuarioActual()?.id,
-      total: this.sesionService.modoCanjeActivado() ? 0 : totalCompra,
+      total: totalCompra,
       codigo_qr: this.entradaService.codigoQrGenerado(),
       valida: true
     }).select().single()
 
     if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
     if (!respuesta.data) return
-    if (this.sesionService.modoCanjeActivado()) this.puntosGastados.set(totalCompra)
 
     this.compraCandybar.set(respuesta.data)
   }

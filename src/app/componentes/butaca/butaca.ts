@@ -8,19 +8,19 @@ import { FuncionInterface } from "../../interfaces/funcion-interface"
 import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { EntradaService } from "../../servicios/entrada-service"
 import { CuponService } from "../../servicios/cupon-service"
-import { CuponInterface } from "../../interfaces/cupon-interface"
 import { PuntoService } from "../../servicios/punto-service"
+import { ModalCompra } from "../modal-compra/modal-compra"
 
 @Component({
   selector: "app-butaca",
   templateUrl: "./butaca.html",
-  styleUrl: "./butaca.sass"
+  styleUrl: "./butaca.sass",
+  imports: [ModalCompra]
 })
 export class Butaca {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private funcionService: FuncionService = inject(FuncionService)
   private sesionService: SesionService = inject(SesionService)
-  private entradaService: EntradaService = inject(EntradaService)
   private cuponService: CuponService = inject(CuponService)
   private puntoService: PuntoService = inject(PuntoService)
   private router: Router = inject(Router)
@@ -33,7 +33,9 @@ export class Butaca {
 
   butacasOcupadas: WritableSignal<string[]> = signal<string[]>([])
   butacasSeleccionadas: WritableSignal<string[]> = signal<string[]>([])
+  mostrarModalCompra: WritableSignal<boolean> = signal<boolean>(false)
 
+  entradaService: EntradaService = inject(EntradaService)
   intervaloButacas: any
 
   ngOnInit(): void {
@@ -41,7 +43,7 @@ export class Butaca {
       this.obtenerButacasOcupadas(), 1000))
   }
 
-  ngOnDestroy(): void { clearInterval(this.intervaloButacas)}
+  ngOnDestroy(): void { clearInterval(this.intervaloButacas) }
 
   async obtenerButacasOcupadas(): Promise<void> {
     const funcionActual: FuncionInterface | null = this.funcionService.funcionSeleccionada()
@@ -49,44 +51,39 @@ export class Butaca {
     if (!funcionActual) return
 
     const respuesta = await this.supabaseService.cliente.from("entradas")
-      .select("butaca").eq("funcion_id", this.funcionService.funcionSeleccionada()?.id)
+      .select("butaca").eq("funcion_id", funcionActual.id)
 
     if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
     if (respuesta.data) { this.butacasOcupadas.set(respuesta.data.map(entrada => entrada.butaca)) }
   }
 
-  async confirmarCompra(): Promise<void> {
-    const mejorCupon: CuponInterface | null = this.sesionService.modoCanjeActivado() ? null : await this.cuponService.obtenerMejorCupon()
-    const descuento: number = mejorCupon ? mejorCupon.descuento : 0
-    const entradas: EntradaInterface[] = this.armarEntradas(descuento)
-    const totalCompra: number = this.entradaService.calcularTotalEntradas(entradas)
-    const butacasSeleccionadas: string = this.butacasSeleccionadas().join(", ")
-    const mensajeDescuento: string = mejorCupon ? `Descuento aplicado (${ mejorCupon.nombre }): ${ descuento * 100 }%\n` : ""
-    const mensajeTotal: string = this.sesionService.modoCanjeActivado() ? `${ totalCompra.toLocaleString("es-AR") } puntos`
-      : `$${ totalCompra.toLocaleString("es-AR") }`
-    const confirmacion: boolean = confirm(`Butacas seleccionadas: ${ butacasSeleccionadas }\n${ mensajeDescuento }Total: ${ mensajeTotal }\n¿Deseás confirmar la compra?`)
+  async finalizarCompra(datosCompra: any): Promise<void> {
+    const registrado: boolean = !!this.sesionService.usuarioActual()
+    const canje: boolean = registrado && datosCompra.metodoPago === "puntos"
+    const descuento: number = datosCompra.cupon ? datosCompra.cupon.descuento : 0
+    const entradas: EntradaInterface[] = this.armarEntradas(descuento, canje)
+    const respuesta = await this.supabaseService.cliente.from("entradas").insert(entradas)
 
-    if (confirmacion) {
-      const respuesta = await this.supabaseService.cliente.from("entradas").insert(entradas)
+    if (respuesta.error) return alert(respuesta.error.message)
 
-      if (respuesta.error) return alert(respuesta.error.message)
+    this.entradaService.comprarEntradas(entradas)
 
-      this.entradaService.comprarEntradas(entradas)
-      await this.puntoService.actualizarPuntos(totalCompra)
-
-      if (mejorCupon) await this.cuponService.canjearCupon(mejorCupon.id)
-
-      this.router.navigate(["/candybar"])
+    if (registrado) {
+      await this.puntoService.actualizarPuntos(datosCompra.total, canje)
+      if (datosCompra.cupon) await this.cuponService.canjearCupon(datosCompra.cupon.id)
     }
+
+    this.mostrarModalCompra.set(false)
+    this.router.navigate(["/candybar"])
   }
 
-  armarEntradas(descuento: number = 0): EntradaInterface[] {
+  armarEntradas(descuento: number = 0, canje: boolean = false): EntradaInterface[] {
     const funcionComprada: FuncionInterface | null = this.funcionService.funcionSeleccionada()
     const comprador: UsuarioInterface | null = this.sesionService.usuarioActual()
 
     if (!funcionComprada) return []
 
-    const precioUnitario: number = this.sesionService.modoCanjeActivado() ? 0 : funcionComprada.precio * (1 - descuento)
+    const precioUnitario: number = canje ? 0 : funcionComprada.precio * (1 - descuento)
     const codigoQr: string = crypto.randomUUID()
 
     this.entradaService.codigoQrGenerado.set(codigoQr)
@@ -115,4 +112,8 @@ export class Butaca {
         butacaSeleccionada.startsWith("T")) alert("Acaba de seleccionar una butaca V.I.P. con un precio más elevado")
     }
   }
+
+  abrirModalCompra(): void { this.mostrarModalCompra.set(true) }
+
+  cerrarModalCompra(): void { this.mostrarModalCompra.set(false) }
 }

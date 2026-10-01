@@ -39,17 +39,6 @@ export class CuponService {
     return respuesta.data.map((fila: any): CuponInterface => fila.cupones as CuponInterface)
   }
 
-  async obtenerMejorCupon(): Promise<CuponInterface | null> {
-    if (this.sesionService.modoCanjeActivado()) return null
-
-    const cupones: CuponInterface[] = await this.obtenerCuponesUsuario()
-
-    if (cupones.length === 0) return null
-
-    return cupones.reduce((mejorCupon: CuponInterface, cuponActual: CuponInterface): CuponInterface =>
-      cuponActual.descuento > mejorCupon.descuento ? cuponActual : mejorCupon)
-  }
-
   async canjearCupon(cuponId: number): Promise<void> {
     const usuarioActual: UsuarioInterface | null = this.sesionService.usuarioActual()
 

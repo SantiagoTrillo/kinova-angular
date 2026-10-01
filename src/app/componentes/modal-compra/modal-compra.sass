@@ -1,0 +1,89 @@
+div.modal-fondo
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  backdrop-filter: blur(4px)
+  display: flex
+  justify-content: center
+  align-items: center
+  z-index: 2
+
+div.modal
+  background-color: var(--gris-sombra)
+  border: 1px solid var(--azul-helado)
+  border-radius: 20px
+  padding: 15px 20px 20px 20px
+  display: flex
+  flex-direction: column
+  align-items: center
+  width: 420px
+  gap: 15px
+  color: var(--blanco)
+  div.cabecera
+    display: flex
+    justify-content: space-between
+    align-items: center
+    width: 100%
+    h2
+      margin: 0
+      text-align: center
+      flex: 1
+    button
+      background: transparent
+      border: none
+      color: var(--blanco)
+      cursor: pointer
+      padding: 5px
+  div.detalles
+    width: 100%
+    display: flex
+    flex-direction: column
+    gap: 10px
+    label
+      display: flex
+      justify-content: space-between
+      align-items: center
+      background-color: var(--gris-sombra)
+      border: 1px solid var(--azul-helado)
+      border-radius: 5px
+      padding: 5px 8px
+      span
+        width: 150px
+        background-color: var(--negro-jet)
+        border-radius: 5px
+        padding: 5px 8px
+        text-align: right
+      &.descuento
+        visibility: hidden
+        &.visible
+          visibility: visible
+    div.selectores
+      display: flex
+      justify-content: space-between
+      margin-top: 10px
+      select
+        width: 180px
+        background-color: var(--negro-jet)
+        border: 1px solid var(--azul-helado)
+        border-radius: 8px
+        color: var(--blanco)
+        padding: 10px
+        cursor: pointer
+        &:disabled
+          background-color: var(--gris-sombra)
+          border: 1px solid var(--negro-jet)
+          color: gray
+          cursor: not-allowed
+          user-select: none
+    button
+      width: 180px
+      align-self: center
+      background-color: var(--negro-jet)
+      border: 1px solid var(--azul-helado)
+      border-radius: 8px
+      color: var(--blanco)
+      padding: 10px
+      cursor: pointer
+      margin-top: 10px

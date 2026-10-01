@@ -18,8 +18,7 @@
             >
             <h3>{{ producto.nombre }}</h3>
             <span [class.combo]="categoria === 'Combos'">
-              {{ sesionService.modoCanjeActivado() ? producto.precio_puntos.toLocaleString("es-AR")
-              : producto.precio | currency: 'ARS': '$ ': '1.0-0' }}
+              {{ producto.precio | currency: 'ARS': '$ ': '1.0-0' }}
             </span>
             <div class="seleccion-productos">
               <button class="operador" [class.combo]="categoria === 'Combos'" (click)="decrementarProducto(producto)">-</button>

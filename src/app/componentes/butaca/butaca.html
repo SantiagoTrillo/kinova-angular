@@ -49,7 +49,17 @@
           <span>V.I.P.</span>
         </div>
       </div>
-      <button class="compra oculto" [class.visible]="butacasSeleccionadas().length > 0" (click)="confirmarCompra()">Confirmar compra</button>
+      <button class="compra oculto" [class.visible]="butacasSeleccionadas().length > 0" (click)="abrirModalCompra()">Confirmar compra</button>
     </div>
   </div>
+  @if (mostrarModalCompra()) {
+    <app-modal-compra
+      etiquetaElementos="Butacas seleccionadas"
+      [elementos]="butacasSeleccionadas().join(', ')"
+      [totalPesos]="entradaService.calcularTotalEntradas(butacasSeleccionadas())"
+      [totalPuntos]="entradaService.calcularTotalEntradas(butacasSeleccionadas(), true)"
+      (cerrar)="cerrarModalCompra()"
+      (confirmar)="finalizarCompra($event)"
+    />
+  }
 </main>
