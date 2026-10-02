@@ -1,7 +1,21 @@
-select
-  background-color: var(--negro-jet)
-  border: none
-  border-radius: 5px
-  padding: 5px
-  &.mes
-    margin: 0 5px
+div.contenedor-selector
+  display: flex
+  gap: 5px
+  width: 100%
+  white-space: nowrap
+  select
+    background-color: var(--negro-jet)
+    border: none
+    border-radius: 5px
+    padding: 5px 3px
+    color: white
+    font-family: inherit
+    font-size: 12px
+    cursor: pointer
+    text-align: center
+    &.dia
+      flex: 1
+    &.mes
+      flex: 2
+    &.anio
+      flex: 1.2

@@ -30,19 +30,41 @@ div.pelicula, div.producto
   overflow: hidden
   border-radius: 10px
   border: 1px solid var(--azul-helado)
+  &.nueva, &.nuevo
+    border: 2px dashed var(--azul-helado)
+    background-color: transparent
+    cursor: pointer
+    justify-content: center
+    i
+      font-size: 32px
+      color: var(--blanco)
+  &.no-disponible
+    border: 1px solid var(--negro-jet)
+    img
+      border-bottom: 1px solid var(--negro-jet)
+      filter: grayscale(100%)
+      opacity: 0.5
+    span
+      color: gray
+      opacity: 0.5
   img
     border-bottom: 1px solid var(--azul-helado)
+    cursor: pointer
   span
     font-size: 12px
     text-align: center
-    &.duracion
-      margin-top: auto
   button
     background-color: var(--negro-jet)
-    border: none
     cursor: pointer
-    margin: 5px 10px 10px 10px
+    margin: auto 10px 8px 10px
     border-radius: 10px
+    font-size: 12px
+    padding: 4px 8px
+    color: white
+    &.desactivar
+      border: 1px solid red
+    &.activar
+      border: 1px solid greenyellow
 
 i.fa-check
   color: greenyellow
@@ -93,7 +115,7 @@ div.cabecera-horarios
 
 div.horarios-funcion
   display: grid
-  grid-template-columns: repeat(3, 1fr)
+  grid-template-columns: repeat(2, 1fr)
   gap: 10px
 
 div.detalles-funcion
@@ -102,139 +124,136 @@ div.detalles-funcion
   background-color: var(--gris-sombra)
   padding: 10px
   justify-content: space-between
+  align-items: center
   border-radius: 10px
   border: 1px solid var(--azul-helado)
-  cursor: pointer
+  &.no-disponible
+    border: 1px solid var(--negro-jet)
+    span
+      color: gray
+      opacity: 0.5
+  div.datos-funcion
+    display: flex
+    gap: 7.9px
+    flex: 1
+    cursor: pointer
+    align-items: center
   span
     background-color: var(--negro-jet)
     padding: 5px 10px
     border-radius: 10px
     font-size: 12px
-
-div.plantilla-crear-funcion
-  display: flex
-  flex-direction: column
-  align-items: center
-  gap: 10px
-  padding: 10px
-  form
-    display: flex
-    gap: 6px
-    font-size: 14px
-    label
-      background-color: var(--gris-sombra)
-      padding: 5px
-      border: 1px solid var(--azul-helado)
-      border-radius: 10px
-      display: flex
-      align-items: center
-      gap: 6px
-      white-space: nowrap
-      input, select
-        background-color: var(--negro-jet)
-        border: none
-        padding: 5px
-        text-align: center
-        border-radius: 10px
-        &.ng-invalid.ng-touched
-          outline: 1px solid var(--algodon-azucar)
-      input
-        width: 52px
-      input.seleccionable
-        cursor: text
-      select
-        cursor: pointer
-    button
-      background-color: var(--negro-jet)
-      border: 1px solid var(--azul-helado)
-      padding: 5px 8px
-      cursor: pointer
-      border-radius: 10px
-      white-space: nowrap
-
-div.plantilla-candybar
-  div.producto
-    height: 300px
-    padding-bottom: 8px
-    img
-      cursor: pointer
-    span
-      margin: 0 2px
-
-div.plantilla-modificar-funcion, div.plantilla-modificar-producto
-  display: flex
-  justify-content: center
-  padding: 10px
-  gap: 10px
-  font-size: 13px
-  label
+    white-space: nowrap
+  button.boton-accion-funcion
+    background-color: var(--negro-jet)
+    cursor: pointer
+    border-radius: 8px
+    padding: 6px 9px
+    font-size: 12px
     display: flex
     align-items: center
-    gap: 10px
-    padding: 5px
-    background-color: var(--gris-sombra)
-    border: 1px solid var(--azul-helado)
-    border-radius: 10px
-    span
-      padding: 5px
-      background-color: var(--negro-jet)
-      border-radius: 10px
-      width: 52px
-      text-align: center
-    input
-      background-color: var(--negro-jet)
-      border: none
-      text-align: center
-      border-radius: 10px
-      padding: 5px
-      width: 52px
-  button
-    background-color: var(--negro-jet)
-    padding: 10px
-    cursor: pointer
-    border-radius: 10px
-    border: 1px solid var(--azul-helado)
+    justify-content: center
+    &.desactivar
+      border: 1px solid red
+      i
+        color: red
+    &.activar
+      border: 1px solid greenyellow
+      i
+        color: greenyellow
 
 div.plantilla-cupones
   display: flex
   flex-direction: column
+  align-items: stretch
+  width: fit-content
+  margin: 0 auto
+  padding: 10px
 
 div.cupon
   display: flex
-  align-items: baseline
+  align-items: center
   justify-content: center
-  margin: 10px
+  margin: 8px 0
   gap: 10px
   font-size: 14px
+  &.no-disponible
+    label
+      border: 1px solid var(--negro-jet)
+      color: gray
+      opacity: 0.6
+      input
+        color: gray
+    button.boton-actualizar-cupon, button.boton-otorgar-cupon
+      border: 1px solid var(--negro-jet)
+      color: gray
+      opacity: 0.6
+  &.nuevo
+    width: 100%
+    min-width: 600px
+    height: 42px
+    border: 2px dashed var(--azul-helado)
+    border-radius: 10px
+    background-color: transparent
+    cursor: pointer
+    justify-content: center
+    margin: 8px 0
+    i
+      font-size: 20px
+      color: var(--blanco)
   label
     display: flex
-    align-items: baseline
-    gap: 10px
-    padding: 5px
+    align-items: center
+    gap: 8px
+    padding: 5px 10px
     background-color: var(--gris-sombra)
     border: 1px solid var(--azul-helado)
     border-radius: 10px
-    span
-      padding: 5px
-      background-color: var(--negro-jet)
-      border-radius: 10px
-      &.nombre
-        width: 222px
-      &.descuento
-        text-align: center
+    font-size: 13px
+    height: 42px
     input
       background-color: var(--negro-jet)
       border: none
-      text-align: center
-      border-radius: 10px
-      padding: 5px
-      width: 30px
-  button
+      border-radius: 8px
+      padding: 6px 10px
+      color: white
+      font-family: inherit
+      font-size: 13px
+      &.input-nombre
+        width: 180px
+      &.input-descuento
+        width: 60px
+        text-align: center
+  button.boton-actualizar-cupon, button.boton-otorgar-cupon
     background-color: var(--negro-jet)
-    padding: 10px
+    padding: 10px 16px
     cursor: pointer
     border-radius: 10px
     border: 1px solid var(--azul-helado)
+    color: white
+    font-size: 13px
+    height: 42px
+    display: flex
+    align-items: center
+    justify-content: center
+  button.boton-accion-cupon
+    background-color: var(--negro-jet)
+    cursor: pointer
+    border-radius: 10px
+    padding: 10px 14px
+    font-size: 13px
+    height: 42px
+    display: flex
+    align-items: center
+    justify-content: center
+    &.desactivar
+      border: 1px solid red
+      i
+        color: red
+    &.activar
+      border: 1px solid greenyellow
+      i
+        color: greenyellow
 
 div.plantilla-reportes
   display: flex

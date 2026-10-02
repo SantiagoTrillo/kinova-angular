@@ -1,20 +1,33 @@
-<div class="modal-fondo">
+<div class="contenedor-modal">
   <div class="modal">
-    <div class="cabecera">
+    <div class="cabecera-modal">
       <h2>Revisión de la compra</h2>
       <button (click)="cerrarModal()"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <div class="detalles">
+    <div class="detalles-modal">
       <label>{{ etiquetaElementos() }}: <span>{{ elementos() }}</span></label>
       <label>Total: <span>{{ metodoPago() === 'pesos' ? (calcularTotal() | currency: 'ARS': '$ ': '1.0-0') : (calcularTotal().toLocaleString("es-AR") + " puntos") }}</span></label>
-      <label class="descuento" [class.visible]="cuponSeleccionado() && metodoPago() === 'pesos'">Monto descontado: <span>- {{ calcularMontoDescontado() | currency: 'ARS': '$ ': '1.0-0' }}</span></label>
       @if (sesionService.usuarioActual()) {
-        <div class="selectores">
+        @if (cuponesUsuario().length > 0) {
+          <label
+            class="descuento"
+            [class.visible]="cuponSeleccionado() && metodoPago() === 'pesos'"
+          >Monto descontado:
+            <span>
+            - {{ calcularMontoDescontado() | currency: 'ARS': '$ ': '1.0-0' }}
+          </span></label>
+        }
+        <div>
           <select #selectorMetodo (change)="seleccionarMetodoPago(selectorMetodo.value)">
             <option value="pesos">Pesos</option>
             <option value="puntos">Puntos</option>
           </select>
-          <select #selectorCupon [disabled]="metodoPago() === 'puntos' || cuponesUsuario().length === 0" (change)="cambiarCupon(selectorCupon.value)">
+          <select
+            #selectorCupon
+            [class.registro]="cuponSeleccionado()?.id === 1"
+            [disabled]="metodoPago() === 'puntos' || cuponesUsuario().length === 0"
+            (change)="cambiarCupon(selectorCupon.value)"
+          >
             <option value="">Sin cupón</option>
             @for (cupon of cuponesUsuario(); track cupon.id) {
               <option value="{{ cupon.id }}">{{ cupon.nombre }} ({{ cupon.descuento * 100 }}%)</option>

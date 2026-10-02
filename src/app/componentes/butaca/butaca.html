@@ -54,9 +54,10 @@
   </div>
   @if (mostrarModalCompra()) {
     <app-modal-compra
+      tipoCompra="entrada"
       etiquetaElementos="Butacas seleccionadas"
       [elementos]="butacasSeleccionadas().join(', ')"
-      [totalPesos]="entradaService.calcularTotalEntradas(butacasSeleccionadas())"
+      [totalPesos]="entradaService.calcularTotalEntradas(butacasSeleccionadas(), false)"
       [totalPuntos]="entradaService.calcularTotalEntradas(butacasSeleccionadas(), true)"
       (cerrar)="cerrarModalCompra()"
       (confirmar)="finalizarCompra($event)"

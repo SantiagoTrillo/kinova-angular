@@ -1,0 +1,28 @@
+<div class="contenedor-formulario">
+  <h3>Nueva Película</h3>
+  <form [formGroup]="formularioPelicula" (ngSubmit)="guardarPelicula()">
+    <div class="columnas-formulario">
+      <div class="columna izquierda">
+        <label>Título: <input type="text" formControlName="titulo" placeholder="Título de la película"></label>
+        <label>Sinopsis: <textarea formControlName="sinopsis" rows="5" placeholder="Descripción de la trama"></textarea></label>
+        <label>Géneros: <input type="text" formControlName="generos" placeholder="Acción, Aventura, Drama"></label>
+      </div>
+      <div class="columna derecha">
+        <label>Duración: <input type="number" formControlName="duracion" placeholder="Minutos"></label>
+        <label>
+          Restricción de edad:
+          <select formControlName="restriccion_edad">
+            <option value="ATP">ATP</option>
+            <option value="+13">+13</option>
+            <option value="+18">+18</option>
+          </select>
+        </label>
+        <label>URL del póster: <input type="text" formControlName="imagen" placeholder="https://..."></label>
+      </div>
+    </div>
+    <div class="botones">
+      <button type="submit">Crear película</button>
+      <button type="button" class="cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

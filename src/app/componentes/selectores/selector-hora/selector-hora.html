@@ -1,12 +1,14 @@
-<select #selectorHora (change)="seleccionarHora(Number(selectorHora.value)); seleccionarMomento()">
-  @for (hora of horas(); track $index) { <option value="{{ hora }}">{{ hora }}</option> }
-</select>
-<select class="minuto" #selectorMinuto (change)="seleccionarMinuto(Number(selectorMinuto.value)); seleccionarMomento()">
-  @for (minuto of minutos(); track $index) {
-    @if (minuto <= 9) { <option value="{{ minuto }}">0{{ minuto }}</option> }
-    @else { <option value="{{ minuto }}">{{ minuto }}</option> }
-  }
-</select>
-<select #selectorAbreviatura (change)="seleccionarAbreviatura(selectorAbreviatura.value); seleccionarMomento()">
-  @for (abreviatura of abreviaturas(); track $index) { <option value="{{ abreviatura }}">{{ abreviatura }}</option> }
-</select>
+<div class="contenedor-selector">
+  <select [value]="horaSeleccionada()" #selectorHora (change)="seleccionarHora(selectorHora.value); seleccionarMomento()">
+    @for (hora of horas(); track $index) { <option [value]="hora" [selected]="hora === horaSeleccionada()">{{ hora }}</option> }
+  </select>
+  <select class="minuto" [value]="minutoSeleccionado()" #selectorMinuto (change)="seleccionarMinuto(selectorMinuto.value); seleccionarMomento()">
+    @for (minuto of minutos(); track $index) {
+      @if (minuto <= 9) { <option [value]="minuto" [selected]="minuto === minutoSeleccionado()">0{{ minuto }}</option> }
+      @else { <option [value]="minuto" [selected]="minuto === minutoSeleccionado()">{{ minuto }}</option> }
+    }
+  </select>
+  <select [value]="abreviaturaSeleccionada()" #selectorAbreviatura (change)="seleccionarAbreviatura(selectorAbreviatura.value); seleccionarMomento()">
+    @for (abreviatura of abreviaturas(); track $index) { <option [value]="abreviatura" [selected]="abreviatura === abreviaturaSeleccionada()">{{ abreviatura }}</option> }
+  </select>
+</div>

@@ -1,0 +1,29 @@
+<div class="contenedor-formulario">
+  <h3>Modificar Producto del Candybar</h3>
+  <form [formGroup]="formularioProducto" (ngSubmit)="guardarCambios()">
+    <div class="columnas-formulario">
+      <label>Nombre: <input type="text" formControlName="nombre"></label>
+      <label>Precio: <input type="number" formControlName="precio"></label>
+      <label>
+        Categoría:
+        <select formControlName="categoria">
+          <option value="Combos">Combos</option>
+          <option value="Pochoclos">Pochoclos</option>
+          <option value="Bebidas">Bebidas</option>
+          <option value="Snacks Salados">Snacks Salados</option>
+          <option value="Snacks Dulces">Snacks Dulces</option>
+        </select>
+      </label>
+      <label>Precio en puntos: <input type="number" formControlName="precio_puntos"></label>
+      <label>URL de la imagen: <input type="text" formControlName="imagen"></label>
+      <label class="fila">
+        <span>Disponible:</span>
+        <input type="checkbox" formControlName="disponible">
+      </label>
+    </div>
+    <div class="botones">
+      <button type="submit">Guardar cambios</button>
+      <button type="button" class="cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

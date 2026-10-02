@@ -1,0 +1,13 @@
+<div class="contenedor-formulario">
+  <h3>Nuevo Cupón de Descuento</h3>
+  <form [formGroup]="formularioCupon" (ngSubmit)="guardarCupon()">
+    <div class="columnas-formulario">
+      <label class="columna">Nombre: <input type="text" formControlName="nombre" placeholder="Nombre del cupón"></label>
+      <label class="columna">Descuento: <input type="number" formControlName="descuento" placeholder="0.15"></label>
+    </div>
+    <div class="botones">
+      <button type="submit">Crear cupón</button>
+      <button type="button" class="cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

@@ -10,6 +10,7 @@ import { EntradaService } from "../../servicios/entrada-service"
 import { CuponService } from "../../servicios/cupon-service"
 import { PuntoService } from "../../servicios/punto-service"
 import { ModalCompra } from "../modal-compra/modal-compra"
+import { ToastService } from "../../servicios/toast-service"
 
 @Component({
   selector: "app-butaca",
@@ -19,6 +20,7 @@ import { ModalCompra } from "../modal-compra/modal-compra"
 })
 export class Butaca {
   private supabaseService: SupabaseService = inject(SupabaseService)
+  private toastService: ToastService = inject(ToastService)
   private funcionService: FuncionService = inject(FuncionService)
   private sesionService: SesionService = inject(SesionService)
   private cuponService: CuponService = inject(CuponService)
@@ -53,7 +55,7 @@ export class Butaca {
     const respuesta = await this.supabaseService.cliente.from("entradas")
       .select("butaca").eq("funcion_id", funcionActual.id)
 
-    if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
+    if (respuesta.error) return this.toastService.mostrarToast("No se pudieron cargar las butacas ocupadas", "error")
     if (respuesta.data) { this.butacasOcupadas.set(respuesta.data.map(entrada => entrada.butaca)) }
   }
 
@@ -64,12 +66,15 @@ export class Butaca {
     const entradas: EntradaInterface[] = this.armarEntradas(descuento, canje)
     const respuesta = await this.supabaseService.cliente.from("entradas").insert(entradas)
 
-    if (respuesta.error) return alert(respuesta.error.message)
+    if (respuesta.error) return this.toastService.mostrarToast("No se pudieron registrar las entradas", "error")
 
     this.entradaService.comprarEntradas(entradas)
+    this.entradaService.cuponAplicado.set(datosCompra.cupon)
+    this.entradaService.montoDescontado.set(datosCompra.descuento ?? 0)
 
     if (registrado) {
       await this.puntoService.actualizarPuntos(datosCompra.total, canje)
+
       if (datosCompra.cupon) await this.cuponService.canjearCupon(datosCompra.cupon.id)
     }
 
@@ -107,9 +112,13 @@ export class Butaca {
     else {
       this.butacasSeleccionadas.update(butacas => [...butacas, butacaSeleccionada])
 
-      if (butacaSeleccionada.startsWith("J")) alert("Acaba de seleccionar una butaca accesible")
-      if (butacaSeleccionada.startsWith("R") || butacaSeleccionada.startsWith("S") ||
-        butacaSeleccionada.startsWith("T")) alert("Acaba de seleccionar una butaca V.I.P. con un precio más elevado")
+      if (butacaSeleccionada.startsWith("J")) {
+        this.toastService.mostrarToast("Seleccionaste una butaca accesible", "exito")
+      }
+      if (
+        butacaSeleccionada.startsWith("R") || butacaSeleccionada.startsWith("S")
+        || butacaSeleccionada.startsWith("T")
+      ) this.toastService.mostrarToast("Seleccionaste una butaca V.I.P. con precio diferencial", "exito")
     }
   }
 

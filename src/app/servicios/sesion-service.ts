@@ -1,10 +1,12 @@
 import { inject, Service, signal, WritableSignal } from "@angular/core"
 import { UsuarioInterface } from "../interfaces/usuario-interface"
 import { SupabaseService } from "./supabase-service"
+import { ToastService } from "./toast-service"
 
 @Service()
 export class SesionService {
   private supabaseService: SupabaseService = inject(SupabaseService)
+  private toastService: ToastService = inject(ToastService)
 
   usuarioActual: WritableSignal<UsuarioInterface | null> = signal<UsuarioInterface | null>(
     sessionStorage.getItem("usuarioActual") ? JSON.parse(sessionStorage.getItem("usuarioActual")!) : null
@@ -14,11 +16,10 @@ export class SesionService {
     const respuesta = await this.supabaseService.cliente.from("usuarios").insert(usuarioNuevo)
       .select().single()
 
-    if (respuesta.error) {
-      alert("Error al procesar la solicitud: " + respuesta.error.message)
+    if (respuesta.error || !respuesta.data) {
+      if (respuesta.error) this.toastService.mostrarToast("No se pudo registrar el usuario", "error")
       return null
     }
-    if (!respuesta.data) return null
 
     const usuarioRegistrado = respuesta.data as UsuarioInterface
 
@@ -32,11 +33,10 @@ export class SesionService {
     const respuesta = await this.supabaseService.cliente.from("usuarios").select("*")
       .eq("correo_electronico", correoElectronico).eq("contrasenia", contrasenia).single()
 
-    if (respuesta.error) {
-      alert("Error al procesar la solicitud: " + respuesta.error.message)
+    if (respuesta.error || !respuesta.data) {
+      if (respuesta.error) this.toastService.mostrarToast("El correo o la contraseña son incorrectos", "error")
       return null
     }
-    if (!respuesta.data) return null
 
     const usuarioAutenticado = respuesta.data as UsuarioInterface
 

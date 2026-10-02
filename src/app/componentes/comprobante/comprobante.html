@@ -3,26 +3,39 @@
     <div class="entradas">
       <div class="pdf">
         @if (this.entradaService.entradasCompradas(); as entradasCompradas) {
-          <span>----------Entradas----------</span>
+          <span>-------------Entradas-------------</span>
           <span>Sala {{ this.funcionService.funcionSeleccionada()?.sala_id }}</span>
           <span>{{ this.peliculaService.peliculaSeleccionada()?.titulo }}</span>
-          <span>{{ this.funcionService.funcionSeleccionada()?.fecha_hora | date: "dd/M/yyyy" }}</span>
+          <span>
+            {{ this.funcionService.funcionSeleccionada()?.fecha_hora | date: "d/M/yy" }}
+            {{ this.funcionService.funcionSeleccionada()?.fecha_hora | date: "shortTime" }}
+          </span>
           @for (entrada of entradasCompradas; track $index) {
             <span>Fila {{ entrada.butaca.slice(0, 1) }}, butaca {{ entrada.butaca.slice(1) }}</span>
           }
+          @if (entradaService.cuponAplicado(); as cuponEntrada) {
+            <span>Cupón aplicado: {{ cuponEntrada.nombre }} (-{{ entradaService.montoDescontado() | currency: 'ARS': '$ ': '1.0-0' }})</span>
+          }
           <span>
-            {{ entradasCompradas[0]?.precio === 0 ?
-            entradaService.calcularTotalEntradas(entradasCompradas).toLocaleString("es-AR") + " puntos" :
-            entradaService.calcularTotalEntradas(entradasCompradas) | currency: 'ARS': '$ ': '1.0-0' }}
+            {{ !!entradaService.entradasCompradas() && !!candybarService.compraCandybar() ? "Subtotal: " : "Total: " }}{{ entradasCompradas[0]?.precio === 0 ?
+            entradaService.calcularTotalEntradas(entradasCompradas, true).toLocaleString("es-AR") + " puntos" :
+            entradaService.calcularTotalEntradas(entradasCompradas, false) | currency: 'ARS': '$ ': '1.0-0' }}
           </span>
         }
         @if (candybarService.compraCandybar(); as compraActual) {
-          <span>---Productos del Candybar---</span>
+          <span>------Productos del Candybar------</span>
           <span>{{ compraActual.descripcion }}</span>
+          @if (candybarService.cuponAplicado(); as cuponCandybar) {
+            <span>Cupón aplicado: {{ cuponCandybar.nombre }} (-{{ candybarService.montoDescontado() | currency: 'ARS': '$ ': '1.0-0' }})</span>
+          }
           <span>
-            {{ compraActual.total === 0 ? candybarService.puntosGastados().toLocaleString("es-AR") + " puntos" :
+            {{ !!entradaService.entradasCompradas() && !!candybarService.compraCandybar() ? "Subtotal: " : "Total: " }}{{ compraActual.total === 0 ? candybarService.puntosGastados().toLocaleString("es-AR") + " puntos" :
             compraActual.total | currency: 'ARS': '$ ': '1.0-0' }}
           </span>
+        }
+        @if (!!entradaService.entradasCompradas() && !!candybarService.compraCandybar()) {
+          <span>--------------Total---------------</span>
+          <span>{{ obtenerTotalFinal() }}</span>
         }
         <img
           ngSrc="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ this.entradaService.codigoQrGenerado() }}"

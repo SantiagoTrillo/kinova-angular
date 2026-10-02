@@ -5,6 +5,7 @@ import { ReseniaService } from "../../servicios/resenia-service"
 import { SupabaseService } from "../../servicios/supabase-service"
 import { PeliculaInterface } from "../../interfaces/pelicula-interface"
 import { Volver } from "../../directivas/volver"
+import { ToastService } from "../../servicios/toast-service"
 
 @Component({
   selector: "app-resenia",
@@ -14,6 +15,7 @@ import { Volver } from "../../directivas/volver"
 })
 export class Resenia {
   private supabaseService: SupabaseService = inject(SupabaseService)
+  private toastService: ToastService = inject(ToastService)
 
   resenias: WritableSignal<ReseniaInterface[]> = signal<ReseniaInterface[]>([])
   calificacionSeleccionada: WritableSignal<number> = signal<number>(0)
@@ -37,7 +39,7 @@ export class Resenia {
     }
     const respuesta = await this.supabaseService.cliente.from("resenias").insert(reseniaNueva)
 
-    if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
+    if (respuesta.error) return this.toastService.mostrarToast("No se pudo publicar la reseña", "error")
 
     await this.actualizarPuntuacionPromedio()
     this.calificacionSeleccionada.set(0)

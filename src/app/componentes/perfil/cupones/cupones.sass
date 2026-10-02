@@ -11,11 +11,19 @@ section
     margin: 10px
   ul
     margin: 0 7px 7px 7px
-    background-color: var(--negro-jet)
     border-radius: 5px
-    border: 1px solid var(--azul-helado)
-    padding: 0 0 0 15px
-    li
+    padding: 0
+    label
       display: flex
-      align-content: center
+      align-items: center
       padding: 5px
+      gap: 5px
+      border: 1px solid var(--azul-helado)
+      border-radius: 5px
+      li
+        list-style: none
+        background-color: var(--negro-jet)
+        border-radius: 5px
+        padding: 5px
+        &.registro
+          color: var(--naranja)

@@ -3,7 +3,7 @@ export interface PeliculaInterface {
   titulo: string
   sinopsis: string
   duracion: number
-  principal: boolean
+  disponible: boolean
   imagen: string
   puntuacion_promedio?: number
   generos: string[]

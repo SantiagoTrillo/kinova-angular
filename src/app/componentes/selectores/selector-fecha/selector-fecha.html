@@ -1,9 +1,11 @@
-<select #selectorDia (change)="seleccionarDia(Number(selectorDia.value)); seleccionarFecha()">
-  @for (dia of dias(); track $index) { <option value="{{ dia }}">{{ dia }}</option> }
-</select>
-<select class="mes" #selectorMes (change)="seleccionarMes(Number(selectorMes.value)); seleccionarFecha()">
-  @for (mes of meses(); track $index) { <option value="{{ $index + 1 }}">{{ mes }}</option>  }
-</select>
-<select #selectorAnio (change)="seleccionarAnio(Number(selectorAnio.value)); seleccionarFecha()">
-  @for (anio of anios(); track $index) { <option value="{{ anio }}">{{ anio }}</option> }
-</select>
+<div class="contenedor-selector">
+  <select class="dia" [value]="diaSeleccionado()" #selectorDia (change)="seleccionarDia(selectorDia.value); seleccionarFecha()">
+    @for (dia of dias(); track $index) { <option [value]="dia" [selected]="dia === diaSeleccionado()">{{ dia }}</option> }
+  </select>
+  <select class="mes" [value]="mesSeleccionado()" #selectorMes (change)="seleccionarMes(selectorMes.value); seleccionarFecha()">
+    @for (mes of meses(); track $index) { <option [value]="$index + 1" [selected]="$index + 1 === mesSeleccionado()">{{ mes }}</option> }
+  </select>
+  <select class="anio" [value]="anioSeleccionado()" #selectorAnio (change)="seleccionarAnio(selectorAnio.value); seleccionarFecha()">
+    @for (anio of anios(); track $index) { <option [value]="anio" [selected]="anio === anioSeleccionado()">{{ anio }}</option> }
+  </select>
+</div>

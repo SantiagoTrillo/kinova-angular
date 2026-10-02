@@ -3,7 +3,7 @@
     <h2>Cupones disponibles</h2>
     <ul>
       @for (cupon of cuponesDisponibles(); track cupon.id) {
-        <li>{{ cupon.nombre }} ({{ cupon.descuento * 100 }}% de descuento)</li>
+        <label>{{ cupon.nombre }}<li [class.registro]="cupon.id === 1">{{ cupon.descuento * 100 }}% de descuento</li></label>
       }
     </ul>
   </section>

@@ -6,4 +6,5 @@ export interface ProductoInterface {
   categoria: string
   cantidad: number
   precio_puntos: number
+  disponible: boolean
 }

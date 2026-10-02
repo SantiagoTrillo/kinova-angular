@@ -1,0 +1,25 @@
+<div class="contenedor-formulario">
+  <h3>Nuevo Producto del Candybar</h3>
+  <form [formGroup]="formularioProducto" (ngSubmit)="guardarProducto()">
+    <div class="columnas-formulario">
+      <label>Nombre: <input type="text" formControlName="nombre" placeholder="Gaseosa 1.5L"></label>
+      <label>Precio: <input type="number" formControlName="precio" placeholder="5000"></label>
+      <label>
+        Categoría:
+        <select formControlName="categoria">
+          <option value="Combos">Combos</option>
+          <option value="Pochoclos">Pochoclos</option>
+          <option value="Bebidas">Bebidas</option>
+          <option value="Snacks Salados">Snacks Salados</option>
+          <option value="Snacks Dulces">Snacks Dulces</option>
+        </select>
+      </label>
+      <label>Precio en puntos: <input type="number" formControlName="precio_puntos" placeholder="500"></label>
+      <label class="ancho-completo">URL de la imagen: <input type="text" formControlName="imagen" placeholder="https://..."></label>
+    </div>
+    <div class="botones">
+      <button type="submit">Crear producto</button>
+      <button type="button" class="cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

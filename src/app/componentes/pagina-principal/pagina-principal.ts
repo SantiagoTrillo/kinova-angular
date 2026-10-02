@@ -4,6 +4,7 @@ import { PeliculaInterface } from "../../interfaces/pelicula-interface"
 import { PeliculaService } from "../../servicios/pelicula-service"
 import { SupabaseService } from "../../servicios/supabase-service"
 import { TarjetaPelicula } from "./cartelera/tarjeta-pelicula/tarjeta-pelicula"
+import { ToastService } from "../../servicios/toast-service"
 
 @Component({
   selector: "app-pagina-principal",
@@ -14,6 +15,7 @@ import { TarjetaPelicula } from "./cartelera/tarjeta-pelicula/tarjeta-pelicula"
 export class PaginaPrincipal {
   private peliculaService: PeliculaService = inject(PeliculaService)
   private supabaseService: SupabaseService = inject(SupabaseService)
+  private toastService: ToastService = inject(ToastService)
 
   peliculas: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
   exitosTaquilleros: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
@@ -30,11 +32,12 @@ export class PaginaPrincipal {
     const respuesta = await this.supabaseService.cliente.from("entradas")
       .select("funciones(pelicula_id)")
 
-    if (respuesta.error) return alert("Error al procesar la solicitud: " + respuesta.error.message)
+    if (respuesta.error) return this.toastService.mostrarToast("No se pudieron cargar los éxitos taquilleros", "error")
     if (!respuesta.data) return
 
     const idsPeliculasVendidas: number[] = respuesta.data.map((fila: any): number => fila.funciones.pelicula_id)
-    const peliculasOrdenadas: PeliculaInterface[] = [...this.peliculas()].sort((
+    const peliculasActivas: PeliculaInterface[] = this.peliculas().filter(pelicula => pelicula.disponible)
+    const peliculasOrdenadas: PeliculaInterface[] = [...peliculasActivas].sort((
       peliculaA: PeliculaInterface, peliculaB: PeliculaInterface
     ): number => {
         const ventasPeliculaA: number = idsPeliculasVendidas.filter(id => id === peliculaA.id).length

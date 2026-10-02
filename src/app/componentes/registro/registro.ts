@@ -5,6 +5,7 @@ import { SesionService } from "../../servicios/sesion-service"
 import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { SupabaseService } from "../../servicios/supabase-service"
 import { SelectorFecha } from "../selectores/selector-fecha/selector-fecha"
+import { ToastService } from "../../servicios/toast-service"
 
 @Component({
   selector: "app-registro",
@@ -16,6 +17,7 @@ export class Registro {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private formBuilder: FormBuilder = inject(FormBuilder)
   private sesionService: SesionService = inject(SesionService)
+  private toastService: ToastService = inject(ToastService)
   private router: Router = inject(Router)
 
   registroExitoso: WritableSignal<boolean> = signal<boolean>(false)
@@ -48,6 +50,6 @@ export class Registro {
     const cuponRegistro = { usuario_id: usuario.id, cupon_id: 1, utilizado: false }
     const respuesta = await this.supabaseService.cliente.from("cupones_usuarios").insert(cuponRegistro)
 
-    if (respuesta.error) return alert(respuesta.error.message)
+    if (respuesta.error) return this.toastService.mostrarToast("No se pudo otorgar el cupón de registro", "error")
   }
 }

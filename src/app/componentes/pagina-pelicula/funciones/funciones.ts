@@ -5,6 +5,7 @@ import { FuncionService } from "../../../servicios/funcion-service"
 import { PeliculaInterface } from "../../../interfaces/pelicula-interface"
 import { SesionService } from "../../../servicios/sesion-service"
 import { Router } from "@angular/router"
+import { ToastService } from "../../../servicios/toast-service"
 
 @Component({
   selector: "app-funciones",
@@ -15,6 +16,7 @@ import { Router } from "@angular/router"
 export class Funciones {
   private funcionService: FuncionService = inject(FuncionService)
   private sesionService: SesionService = inject(SesionService)
+  private toastService: ToastService = inject(ToastService)
   private router: Router = inject(Router)
 
   peliculaActual: InputSignal<PeliculaInterface> = input.required<PeliculaInterface>()
@@ -31,11 +33,13 @@ export class Funciones {
   async ngOnInit(): Promise<void> {
     const funcionesDisponibles: FuncionInterface[] = await this.funcionService.obtenerFunciones()
     const funcionesPelicula: FuncionInterface[] = funcionesDisponibles
-      .filter(funcion => funcion.pelicula_id === this.peliculaActual().id)
+      .filter(funcion => funcion.disponible && funcion.pelicula_id === this.peliculaActual().id)
 
     this.funcionesDisponibles.set(funcionesPelicula)
-    this.fechaSeleccionada.set(this.funcionesDisponibles()[0].fecha_hora.slice(0, 10))
-    this.obtenerDetallesFunciones()
+    if (this.funcionesDisponibles().length > 0) {
+      this.fechaSeleccionada.set(this.funcionesDisponibles()[0].fecha_hora.slice(0, 10))
+      this.obtenerDetallesFunciones()
+    }
   }
 
   obtenerDetallesFunciones(): void {
@@ -56,7 +60,6 @@ export class Funciones {
     this.fechasDisponibles.set(fechas)
     this.formatosDisponibles.set(formatos)
     this.idiomasDisponibles.set(idiomas)
-
     this.obtenerHorarios()
   }
 
@@ -98,7 +101,7 @@ export class Funciones {
   seleccionarHorario(horario: string): void { this.horarioSeleccionado.set(horario) }
 
   seleccionarFuncion(): void {
-    if (!this.verificarRestriccionEdad()) return alert("No cumplís con el requisito de edad para ver esta película")
+    if (!this.verificarRestriccionEdad()) return this.toastService.mostrarToast("No cumplís con el requisito de edad para ver esta película", "error")
 
     const funcionSeleccionada: FuncionInterface | undefined = this.funcionesDisponibles().find(funcion =>
       funcion.fecha_hora === this.horarioSeleccionado() && funcion.formato === this.formatoSeleccionado() &&

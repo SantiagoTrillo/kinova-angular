@@ -1,0 +1,69 @@
+div.contenedor-formulario
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 10px
+  padding: 12px 20px
+  h3
+    margin: 0
+    font-size: 16px
+  form
+    display: flex
+    flex-direction: column
+    gap: 10px
+    width: 550px
+    div.columnas-formulario
+      display: grid
+      grid-template-columns: 1fr 1fr
+      gap: 14px
+    div.columna
+      display: flex
+      flex-direction: column
+      gap: 10px
+      &.izquierda
+        justify-content: space-between
+    label
+      display: flex
+      flex-direction: column
+      gap: 4px
+      background-color: var(--gris-sombra)
+      padding: 6px 10px
+      border: 1px solid var(--azul-helado)
+      border-radius: 10px
+      font-size: 12px
+      &.fila
+        flex-direction: row
+        justify-content: space-between
+        align-items: center
+        padding: 6px 10px
+        pointer-events: none
+      input, select
+        background-color: var(--negro-jet)
+        border: none
+        border-radius: 6px
+        padding: 5px 8px
+        color: white
+        font-family: inherit
+        font-size: 12px
+        width: 100%
+      select
+        cursor: pointer
+      &.fila input
+        width: auto
+        cursor: pointer
+        pointer-events: auto
+    div.botones
+      display: flex
+      gap: 10px
+      justify-content: center
+      margin-top: 5px
+      button
+        background-color: var(--negro-jet)
+        border: 1px solid var(--azul-helado)
+        padding: 6px 14px
+        border-radius: 10px
+        cursor: pointer
+        color: white
+        font-size: 12px
+        &.cancelar
+          border-color: var(--azul-helado)

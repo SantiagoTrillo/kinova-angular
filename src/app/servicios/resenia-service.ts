@@ -2,11 +2,13 @@ import { inject, Service, Signal, signal } from "@angular/core"
 import { SupabaseService } from "./supabase-service"
 import { ReseniaInterface } from "../interfaces/resenia-interface"
 import { PeliculaService } from "./pelicula-service"
+import { ToastService } from "./toast-service"
 
 @Service()
 export class ReseniaService {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private peliculaService: PeliculaService = inject(PeliculaService)
+  private toastService: ToastService = inject(ToastService)
 
   estrellas: Signal<number[]> = signal<number[]>([1, 2, 3, 4, 5])
 
@@ -15,7 +17,7 @@ export class ReseniaService {
       .eq("pelicula_id", this.peliculaService.peliculaSeleccionada()?.id).order("id", { ascending: false })
 
     if (respuesta.error) {
-      alert("Error al procesar la solicitud: " + respuesta.error.message)
+      this.toastService.mostrarToast("No se pudieron cargar las reseñas", "error")
       return []
     }
     if (!respuesta.data) return []

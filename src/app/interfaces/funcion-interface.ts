@@ -7,4 +7,5 @@ export interface FuncionInterface {
   precio: number
   sala_id: number
   precio_puntos: number
+  disponible: boolean
 }

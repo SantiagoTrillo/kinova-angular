@@ -7,7 +7,7 @@
     <h2>{{ categoria === "Combos" ? "Combos Imperdibles" : categoria }}</h2>
     <div class="categoria" [class.combos]="categoria === 'Combos'">
       @for (producto of productosDisponibles(); track producto.id) {
-        @if (producto.categoria === categoria) {
+        @if (producto.disponible && producto.categoria === categoria) {
           <div class="producto" [class.combo]="categoria === 'Combos'">
             <img
               [class.combo]="categoria === 'Combos'"
@@ -29,5 +29,16 @@
         }
       }
     </div>
+  }
+  @if (mostrarModalCompra()) {
+    <app-modal-compra
+      tipoCompra="candybar"
+      etiquetaElementos="Productos seleccionados"
+      [elementos]="obtenerDescripcionProductos()"
+      [totalPesos]="candybarService.calcularTotalProductos(obtenerProductosSeleccionados(), false)"
+      [totalPuntos]="candybarService.calcularTotalProductos(obtenerProductosSeleccionados(), true)"
+      (cerrar)="cerrarModalCompra()"
+      (confirmar)="finalizarCompra($event)"
+    />
   }
 </main>

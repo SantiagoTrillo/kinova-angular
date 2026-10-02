@@ -1,0 +1,35 @@
+<div class="contenedor-formulario">
+  <h3>Registrar función para {{ peliculaSeleccionada()?.titulo }}</h3>
+  <form [formGroup]="formularioFuncion" (ngSubmit)="guardarFuncion()">
+    <div class="columnas-formulario">
+      <div class="columna">
+        <label>Fecha: <app-selector-fecha (fechaSeleccionada)="formularioFuncion.patchValue({ fecha: $event })"/></label>
+        <label>
+          Formato:
+          <select formControlName="formato">
+            <option value="2D">2D</option>
+            <option value="3D">3D</option>
+            <option value="4D">4D</option>
+            <option value="5D">5D</option>
+          </select>
+        </label>
+        <label>Precio: <input type="number" formControlName="precio" placeholder="10000"></label>
+      </div>
+      <div class="columna">
+        <label>Hora: <app-selector-hora (momentoSeleccionado)="formularioFuncion.patchValue({ hora: $event })"/></label>
+        <label>
+          Idioma:
+          <select formControlName="idioma">
+            <option value="Español">Español</option>
+            <option value="Subtitulada">Subtitulada</option>
+          </select>
+        </label>
+        <label>Precio en puntos: <input type="number" formControlName="precio_puntos" placeholder="1000"></label>
+      </div>
+    </div>
+    <div class="botones">
+      <button type="submit">Crear función</button>
+      <button type="button" class="cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

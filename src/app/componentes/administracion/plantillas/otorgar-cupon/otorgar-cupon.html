@@ -1,0 +1,17 @@
+﻿<div class="contenedor-otorgar">
+  <h3>Otorgar cupón: {{ cuponSeleccionado()?.nombre }} ({{ (cuponSeleccionado()?.descuento ?? 0) * 100 }}% de descuento)</h3>
+  <div class="acciones-otorgar">
+    <div class="seccion-individual">
+      <label>
+        Correo del usuario:
+        <input type="email" [(ngModel)]="correoUsuario" placeholder="usuario@email.com">
+      </label>
+      <button class="boton-enviar" (click)="otorgarAUsuario()">Enviar</button>
+    </div>
+    <button class="boton-accion-otorgar" (click)="otorgarAMayores()">Otorgar a los usuarios mayores de 50</button>
+    <button class="boton-accion-otorgar" (click)="otorgarATodos()">Otorgar a todos los usuarios</button>
+  </div>
+  <div class="botones">
+    <button class="boton-volver" (click)="regresar()">Volver</button>
+  </div>
+</div>
