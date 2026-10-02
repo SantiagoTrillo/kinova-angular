@@ -39,3 +39,10 @@
     </div>
   </div>
 </div>
+@if (mostrarModalConfirmacion()) {
+  <app-modal-confirmacion
+    [mensaje]="'El cupón de registro solo es válido para la primera compra. Al finalizar esta compra el cupón quedará inválido.'"
+    (confirmar)="ejecutarConfirmacion()"
+    (cancelar)="mostrarModalConfirmacion.set(false)"
+  />
+}

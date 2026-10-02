@@ -9,7 +9,7 @@ import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { EntradaService } from "../../servicios/entrada-service"
 import { CuponService } from "../../servicios/cupon-service"
 import { PuntoService } from "../../servicios/punto-service"
-import { ModalCompra } from "../modal-compra/modal-compra"
+import { ModalCompra } from "../modales/modal-compra/modal-compra"
 import { ToastService } from "../../servicios/toast-service"
 
 @Component({

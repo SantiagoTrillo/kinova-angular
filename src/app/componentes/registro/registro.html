@@ -38,4 +38,11 @@
       <button type="submit">Registrarse</button>
     </form>
   </section>
+  @if (mostrarModalConfirmacion()) {
+    <app-modal-confirmacion
+      [mensaje]="'Tenés cambios sin guardar. ¿Estás seguro de que querés abandonar la página?'"
+      (confirmar)="aceptarSalida()"
+      (cancelar)="cancelarSalida()"
+    />
+  }
 </main>

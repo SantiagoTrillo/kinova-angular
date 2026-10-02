@@ -7,14 +7,15 @@ import { PuntoService } from "../../servicios/punto-service"
 import { FuncionService } from "../../servicios/funcion-service"
 import { SesionService } from "../../servicios/sesion-service"
 import { CuponService } from "../../servicios/cupon-service"
-import { ModalCompra } from "../modal-compra/modal-compra"
+import { ModalCompra } from "../modales/modal-compra/modal-compra"
+import { ModalConfirmacion } from "../modales/modal-confirmacion/modal-confirmacion"
 import { CuponInterface } from "../../interfaces/cupon-interface"
 
 @Component({
   selector: "app-candybar",
   templateUrl: "./candybar.html",
   styleUrl: "./candybar.sass",
-  imports: [NgOptimizedImage, CurrencyPipe, ModalCompra]
+  imports: [NgOptimizedImage, CurrencyPipe, ModalCompra, ModalConfirmacion]
 })
 export class Candybar {
   private puntoService: PuntoService = inject(PuntoService)
@@ -30,6 +31,7 @@ export class Candybar {
 
   productosDisponibles: WritableSignal<ProductoInterface[]> = signal<ProductoInterface[]>([])
   mostrarModalCompra: WritableSignal<boolean> = signal<boolean>(false)
+  mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
 
   candybarService: CandybarService = inject(CandybarService)
   funcionService: FuncionService = inject(FuncionService)
@@ -52,15 +54,18 @@ export class Candybar {
         const cuponRegistro: CuponInterface | undefined = cupones.find((cupon: CuponInterface): boolean => cupon.id === 1)
 
         if (cuponRegistro) {
-          const confirmacion: boolean = confirm("El cupón de registro solo es válido para la primera compra. Al finalizar esta compra el cupón quedará inválido.")
-
-          if (!confirmacion) return
-
-          await this.cuponService.desactivarCuponRegistro()
+          this.mostrarModalConfirmacion.set(true)
+          return
         }
       }
       this.router.navigate(["/comprobante"])
     } else this.abrirModalCompra()
+  }
+
+  async confirmarNavegacionComprobante(): Promise<void> {
+    this.mostrarModalConfirmacion.set(false)
+    await this.cuponService.desactivarCuponRegistro()
+    this.router.navigate(["/comprobante"])
   }
 
   async finalizarCompra(datosCompra: any): Promise<void> {

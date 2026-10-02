@@ -41,4 +41,11 @@
       (confirmar)="finalizarCompra($event)"
     />
   }
+  @if (mostrarModalConfirmacion()) {
+    <app-modal-confirmacion
+      [mensaje]="'El cupón de registro solo es válido para la primera compra. Al finalizar esta compra el cupón quedará inválido.'"
+      (confirmar)="confirmarNavegacionComprobante()"
+      (cancelar)="mostrarModalConfirmacion.set(false)"
+    />
+  }
 </main>

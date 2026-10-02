@@ -1,0 +1,12 @@
+<div class="contenedor-modal">
+  <div class="modal">
+    <div class="cabecera-modal"><h2>{{ titulo() }}</h2></div>
+    <div class="detalles-modal">
+      <p>{{ mensaje() }}</p>
+      <div>
+        <button (click)="confirmarAccion()">Aceptar</button>
+        <button (click)="cancelarAccion()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,16 +1,17 @@
 import { Component, inject, input, InputSignal, OnInit, output, OutputEmitterRef, signal, WritableSignal } from "@angular/core"
 import { CurrencyPipe } from "@angular/common"
-import { SesionService } from "../../servicios/sesion-service"
-import { CuponService } from "../../servicios/cupon-service"
-import { PuntoService } from "../../servicios/punto-service"
-import { CuponInterface } from "../../interfaces/cupon-interface"
-import { ToastService } from "../../servicios/toast-service"
+import { SesionService } from "../../../servicios/sesion-service"
+import { CuponService } from "../../../servicios/cupon-service"
+import { PuntoService } from "../../../servicios/punto-service"
+import { CuponInterface } from "../../../interfaces/cupon-interface"
+import { ToastService } from "../../../servicios/toast-service"
+import { ModalConfirmacion } from "../modal-confirmacion/modal-confirmacion"
 
 @Component({
   selector: "app-modal-compra",
   templateUrl: "./modal-compra.html",
   styleUrl: "./modal-compra.sass",
-  imports: [CurrencyPipe]
+  imports: [CurrencyPipe, ModalConfirmacion]
 })
 export class ModalCompra implements OnInit {
   private cuponService: CuponService = inject(CuponService)
@@ -28,6 +29,7 @@ export class ModalCompra implements OnInit {
   cuponSeleccionado: WritableSignal<CuponInterface | null> = signal<CuponInterface | null>(null)
   puntosUsuario: WritableSignal<number> = signal<number>(0)
   primeraCompra: WritableSignal<boolean> = signal<boolean>(false)
+  mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
 
   sesionService: SesionService = inject(SesionService)
   cerrar: OutputEmitterRef<void> = output<void>()
@@ -83,18 +85,20 @@ export class ModalCompra implements OnInit {
       "No disponés de suficientes puntos para realizar esta compra", "error"
     )
     if (this.tipoCompra() === "candybar" && registrado && this.primeraCompra() && this.tieneCuponRegistro() && !this.cuponSeleccionado()) {
-      const confirmacion: boolean = confirm(
-        "El cupón de registro solo es válido para la primera compra. Al finalizar esta compra el cupón quedará inválido."
-      )
-
-      if (!confirmacion) return
+      this.mostrarModalConfirmacion.set(true)
+      return
     }
 
+    this.ejecutarConfirmacion()
+  }
+
+  ejecutarConfirmacion(): void {
+    this.mostrarModalConfirmacion.set(false)
     this.confirmar.emit({
       metodoPago: this.metodoPago(),
       cupon: this.cuponSeleccionado(),
       descuento: this.calcularMontoDescontado(),
-      total: total
+      total: this.calcularTotal()
     })
   }
 

@@ -6,12 +6,13 @@ import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { SupabaseService } from "../../servicios/supabase-service"
 import { SelectorFecha } from "../selectores/selector-fecha/selector-fecha"
 import { ToastService } from "../../servicios/toast-service"
+import { ModalConfirmacion } from "../modales/modal-confirmacion/modal-confirmacion"
 
 @Component({
   selector: "app-registro",
   templateUrl: "./registro.html",
   styleUrl: "./registro.sass",
-  imports: [ReactiveFormsModule, SelectorFecha]
+  imports: [ReactiveFormsModule, SelectorFecha, ModalConfirmacion]
 })
 export class Registro {
   private supabaseService: SupabaseService = inject(SupabaseService)
@@ -21,6 +22,9 @@ export class Registro {
   private router: Router = inject(Router)
 
   registroExitoso: WritableSignal<boolean> = signal<boolean>(false)
+  confirmacionAceptada: WritableSignal<boolean> = signal<boolean>(false)
+  mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
+  rutaDestino: WritableSignal<string> = signal<string>("")
 
   formularioRegistro = this.formBuilder.nonNullable.group({
     correo_electronico: ["", [Validators.required, Validators.email]],
@@ -33,7 +37,7 @@ export class Registro {
     dias_vacaciones_anuales: [null as number | null, [Validators.required, Validators.min(0)]]
   })
 
-  async registrarUsuario(): Promise<void> {
+  protected async registrarUsuario(): Promise<void> {
     if (this.formularioRegistro.valid) {
       const datosFormulario = this.formularioRegistro.getRawValue() as UsuarioInterface
       const usuarioRegistrado: UsuarioInterface | null = await this.sesionService.registrarUsuario(datosFormulario)
@@ -46,10 +50,23 @@ export class Registro {
     }
   }
 
-  async otorgarCuponRegistro(usuario: UsuarioInterface): Promise<void> {
+  protected async otorgarCuponRegistro(usuario: UsuarioInterface): Promise<void> {
     const cuponRegistro = { usuario_id: usuario.id, cupon_id: 1, utilizado: false }
     const respuesta = await this.supabaseService.cliente.from("cupones_usuarios").insert(cuponRegistro)
 
     if (respuesta.error) return this.toastService.mostrarToast("No se pudo otorgar el cupón de registro", "error")
   }
+
+  solicitarConfirmacionSalida(url: string): void {
+    this.rutaDestino.set(url)
+    this.mostrarModalConfirmacion.set(true)
+  }
+
+  protected aceptarSalida(): void {
+    this.confirmacionAceptada.set(true)
+    this.mostrarModalConfirmacion.set(false)
+    this.router.navigate([this.rutaDestino()])
+  }
+
+  protected cancelarSalida(): void { this.mostrarModalConfirmacion.set(false) }
 }
