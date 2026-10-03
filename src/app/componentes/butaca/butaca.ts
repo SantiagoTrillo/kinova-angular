@@ -1,10 +1,12 @@
 import { Component, inject, Signal, signal, WritableSignal } from "@angular/core"
 import { SupabaseService } from "../../servicios/supabase-service"
 import { FuncionService } from "../../servicios/funcion-service"
+import { PeliculaService } from "../../servicios/pelicula-service"
 import { EntradaInterface } from "../../interfaces/entrada-interface"
 import { SesionService } from "../../servicios/sesion-service"
 import { Router } from "@angular/router"
 import { FuncionInterface } from "../../interfaces/funcion-interface"
+import { PeliculaInterface } from "../../interfaces/pelicula-interface"
 import { UsuarioInterface } from "../../interfaces/usuario-interface"
 import { EntradaService } from "../../servicios/entrada-service"
 import { CuponService } from "../../servicios/cupon-service"
@@ -22,6 +24,7 @@ export class Butaca {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private toastService: ToastService = inject(ToastService)
   private funcionService: FuncionService = inject(FuncionService)
+  private peliculaService: PeliculaService = inject(PeliculaService)
   private sesionService: SesionService = inject(SesionService)
   private cuponService: CuponService = inject(CuponService)
   private puntoService: PuntoService = inject(PuntoService)
@@ -84,11 +87,17 @@ export class Butaca {
 
   armarEntradas(descuento: number = 0, canje: boolean = false): EntradaInterface[] {
     const funcionComprada: FuncionInterface | null = this.funcionService.funcionSeleccionada()
+    const peliculaComprada: PeliculaInterface | null = this.peliculaService.peliculaSeleccionada()
     const comprador: UsuarioInterface | null = this.sesionService.usuarioActual()
 
     if (!funcionComprada) return []
 
-    const precioUnitario: number = canje ? 0 : funcionComprada.precio * (1 - descuento)
+    let precioPesosBase: number = funcionComprada.precio
+    if (peliculaComprada && this.peliculaService.verificarEstadoPelicula(peliculaComprada) === "preventa") {
+      precioPesosBase = funcionComprada.precio_preventa
+    }
+
+    const precioUnitario: number = canje ? 0 : precioPesosBase * (1 - descuento)
     const codigoQr: string = crypto.randomUUID()
 
     this.entradaService.codigoQrGenerado.set(codigoQr)
@@ -113,12 +122,12 @@ export class Butaca {
       this.butacasSeleccionadas.update(butacas => [...butacas, butacaSeleccionada])
 
       if (butacaSeleccionada.startsWith("J")) {
-        this.toastService.mostrarToast("Seleccionaste una butaca accesible", "exito")
+        this.toastService.mostrarToast("Seleccionaste una butaca accesible", "informacion")
       }
       if (
         butacaSeleccionada.startsWith("R") || butacaSeleccionada.startsWith("S")
         || butacaSeleccionada.startsWith("T")
-      ) this.toastService.mostrarToast("Seleccionaste una butaca V.I.P. con precio diferencial", "exito")
+      ) this.toastService.mostrarToast("Seleccionaste una butaca V.I.P. con un precio elevado", "informacion")
     }
   }
 

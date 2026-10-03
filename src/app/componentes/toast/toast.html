@@ -1,5 +1,9 @@
 @if (toastService.visible()) {
-  <div [class.error]="toastService.tipo() === 'error'" [class.exito]="toastService.tipo() === 'exito'">
+  <div
+    [class.error]="toastService.tipo() === 'error'"
+    [class.exito]="toastService.tipo() === 'exito'"
+    [class.informacion]="toastService.tipo() === 'informacion'"
+  >
     <span>{{ toastService.mensaje() }}</span>
   </div>
 }

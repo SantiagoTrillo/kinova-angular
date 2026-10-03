@@ -4,15 +4,18 @@ import { SupabaseService } from "./supabase-service"
 import { SesionService } from "./sesion-service"
 import { UsuarioInterface } from "../interfaces/usuario-interface"
 import { FuncionService } from "./funcion-service"
+import { PeliculaService } from "./pelicula-service"
 import { CuponInterface } from "../interfaces/cupon-interface"
 import { ToastService } from "./toast-service"
-import {FuncionInterface} from "../interfaces/funcion-interface";
+import { FuncionInterface } from "../interfaces/funcion-interface"
+import { PeliculaInterface } from "../interfaces/pelicula-interface"
 
 @Service()
 export class EntradaService {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private sesionService: SesionService = inject(SesionService)
   private funcionService: FuncionService = inject(FuncionService)
+  private peliculaService: PeliculaService = inject(PeliculaService)
   private toastService: ToastService = inject(ToastService)
 
   recargoVip: WritableSignal<number> = signal<number>(0.5)
@@ -65,9 +68,15 @@ export class EntradaService {
   }
 
   calcularTotalEntradas(entradas: EntradaInterface[] | string[], canje: boolean): number {
-    const funcion: FuncionInterface | null = this.funcionService.funcionSeleccionada()
-    const precioPuntos: number = funcion?.precio_puntos ?? 0
-    const precioPesos: number = funcion?.precio ?? 0
+    const funcionActual: FuncionInterface | null = this.funcionService.funcionSeleccionada()
+    const peliculaActual: PeliculaInterface | null = this.peliculaService.peliculaSeleccionada()
+    const precioPuntos: number = funcionActual?.precio_puntos ?? 0
+
+    let precioPesos: number = funcionActual?.precio ?? 0
+
+    if (funcionActual && peliculaActual && this.peliculaService.verificarEstadoPelicula(peliculaActual) === "preventa") {
+      precioPesos = funcionActual.precio_preventa
+    }
 
     return entradas.reduce((total: number, entrada: any): number => {
       const precio: number | undefined = entrada.precio

@@ -2,8 +2,8 @@ div.contenedor-formulario
   display: flex
   flex-direction: column
   align-items: center
-  gap: 10px
-  padding: 12px 20px
+  gap: 8px
+  padding: 10px 20px
   h3
     margin: 0
     font-size: 16px
@@ -15,12 +15,12 @@ div.contenedor-formulario
     div.columnas-formulario
       display: grid
       grid-template-columns: 1fr 1fr
-      gap: 15px
+      gap: 10px 15px
     div.columna
       display: flex
       flex-direction: column
       &.izquierda
-        gap: 12px
+        gap: 10px
       &.derecha
         justify-content: space-between
     label
@@ -28,21 +28,23 @@ div.contenedor-formulario
       flex-direction: column
       gap: 4px
       background-color: var(--gris-sombra)
-      padding: 6px 10px
+      padding: 5px 9px
       border: 1px solid var(--azul-helado)
       border-radius: 10px
       font-size: 12px
+      &.ancho-completo
+        grid-column: span 2
       &.fila
         flex-direction: row
         justify-content: space-between
         align-items: center
-        padding: 6px 10px
+        padding: 5px 9px
         pointer-events: none
       input, textarea, select
         background-color: var(--negro-jet)
         border: none
         border-radius: 6px
-        padding: 6px 8px
+        padding: 5px 8px
         color: white
         font-family: inherit
         font-size: 12px
@@ -50,23 +52,8 @@ div.contenedor-formulario
         cursor: pointer
       textarea
         resize: none
-        height: 65px
+        height: 58px
       &.fila input
         width: auto
         cursor: pointer
         pointer-events: auto
-    div.botones
-      display: flex
-      gap: 10px
-      justify-content: center
-      margin-top: 5px
-      button
-        background-color: var(--negro-jet)
-        border: 1px solid var(--azul-helado)
-        padding: 6px 14px
-        border-radius: 10px
-        cursor: pointer
-        color: white
-        font-size: 12px
-        &.cancelar
-          border: 1px solid var(--azul-helado)

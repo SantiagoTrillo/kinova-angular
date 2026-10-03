@@ -3,14 +3,12 @@ import { SupabaseService } from "./supabase-service"
 import { SesionService } from "./sesion-service"
 import { CuponInterface } from "../interfaces/cupon-interface"
 import { UsuarioInterface } from "../interfaces/usuario-interface"
-import { EntradaService } from "./entrada-service"
 import { ToastService } from "./toast-service"
 
 @Service()
 export class CuponService {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private sesionService: SesionService = inject(SesionService)
-  private entradaService: EntradaService = inject(EntradaService)
   private toastService: ToastService = inject(ToastService)
 
   cuponesDisponibles = signal<CuponInterface[]>([])
@@ -45,34 +43,18 @@ export class CuponService {
 
     const cupones: CuponInterface[] = respuesta.data.map((fila: any): CuponInterface => fila.cupones as CuponInterface)
       .filter((cupon: CuponInterface): boolean => cupon && cupon.disponible)
-    const primeraCompra: boolean = await this.verificarPrimeraCompra()
 
-    if (!primeraCompra) {
-      const cuponRegistro: CuponInterface | undefined = cupones.find((cupon: CuponInterface): boolean => cupon.id === 1)
+    const cuponesUnicos: CuponInterface[] = []
+    const idsVistos = new Set<number>()
 
-      if (cuponRegistro) {
-        await this.desactivarCuponRegistro()
-        return cupones.filter((cupon: CuponInterface): boolean => cupon.id !== 1)
+    for (const cupon of cupones) {
+      if (!idsVistos.has(cupon.id)) {
+        idsVistos.add(cupon.id)
+        cuponesUnicos.push(cupon)
       }
     }
-    return cupones
-  }
 
-  async verificarPrimeraCompra(): Promise<boolean> {
-    const usuarioActual: UsuarioInterface | null = this.sesionService.usuarioActual()
-
-    if (!usuarioActual) return false
-
-    const respuestaCandybar = await this.supabaseService.cliente.from("compras_candybar")
-      .select("id").eq("usuario_id", usuarioActual.id)
-
-    if (respuestaCandybar.data?.[0]) return false
-    if (this.entradaService.entradasCompradas()) return true
-
-    const respuestaEntradas = await this.supabaseService.cliente.from("entradas")
-      .select("id").eq("usuario_id", usuarioActual.id)
-
-    return !respuestaEntradas.data?.[0]
+    return cuponesUnicos
   }
 
   async canjearCupon(cuponId: number): Promise<void> {
@@ -167,14 +149,14 @@ export class CuponService {
       }
 
       const respuesta = await this.supabaseService.cliente.from("usuarios")
-        .select("id").eq("correo_electronico", destinatario.trim().toLowerCase()).maybeSingle()
+        .select("id").eq("correo_electronico", destinatario.trim().toLowerCase())
 
-      if (respuesta.error || !respuesta.data) {
+      if (respuesta.error || !respuesta.data?.[0]) {
         this.toastService.mostrarToast("No se encontró ningún usuario con ese correo", "error")
         return false
       }
 
-      usuarios = [respuesta.data]
+      usuarios = [respuesta.data[0]]
 
     } else {
       const respuesta = await this.supabaseService.cliente.from("usuarios")
@@ -198,8 +180,8 @@ export class CuponService {
 
     const respuestaUsuariosExistentes = await this.supabaseService.cliente.from("cupones_usuarios")
       .select("usuario_id").eq("cupon_id", idCupon).eq("utilizado", false)
-    const usuariosConCupon: number[] = respuestaUsuariosExistentes.data?.map((cupon: any): number => cupon.usuario_id) ?? []
-    const usuariosSinCupon: any[] = usuarios.filter(usuario => !usuariosConCupon.includes(usuario.id))
+    const usuariosConCuponActivo: number[] = respuestaUsuariosExistentes.data?.map((cupon: any): number => cupon.usuario_id) ?? []
+    const usuariosSinCupon: any[] = usuarios.filter(usuario => !usuariosConCuponActivo.includes(usuario.id))
 
     if (usuariosSinCupon.length === 0) {
       const mensajeError: string = mayores ? "Todos los usuarios mayores de 50 ya poseen este cupón"
@@ -209,15 +191,52 @@ export class CuponService {
       return false
     }
 
-    const nuevosRegistros = usuariosSinCupon.map(usuario =>
-      ({ usuario_id: usuario.id, cupon_id: idCupon, utilizado: false }))
+    const idsUsuariosSinCupon: number[] = usuariosSinCupon.map(u => u.id)
+    const respuestaUsados = await this.supabaseService.cliente.from("cupones_usuarios")
+      .select("id, usuario_id").eq("cupon_id", idCupon).in("usuario_id", idsUsuariosSinCupon).eq("utilizado", true)
 
-    const respuestaInsert = await this.supabaseService.cliente.from("cupones_usuarios")
-      .insert(nuevosRegistros)
+    const usuariosReactivados: number[] = []
+    const idsFilasReactivar: number[] = []
+    const idsFilasBorrar: number[] = []
 
-    if (respuestaInsert.error) {
-      this.toastService.mostrarToast("Error al otorgar cupones: " + respuestaInsert.error.message, "error")
-      return false
+    if (respuestaUsados.data) {
+      for (const fila of respuestaUsados.data) {
+        if (!usuariosReactivados.includes(fila.usuario_id)) {
+          usuariosReactivados.push(fila.usuario_id)
+          idsFilasReactivar.push(fila.id)
+        } else {
+          idsFilasBorrar.push(fila.id)
+        }
+      }
+    }
+
+    if (idsFilasBorrar.length > 0) {
+      await this.supabaseService.cliente.from("cupones_usuarios").delete().in("id", idsFilasBorrar)
+    }
+
+    if (idsFilasReactivar.length > 0) {
+      const respuestaUpdate = await this.supabaseService.cliente.from("cupones_usuarios")
+        .update({ utilizado: false }).in("id", idsFilasReactivar)
+
+      if (respuestaUpdate.error) {
+        this.toastService.mostrarToast("Error al reactivar cupones: " + respuestaUpdate.error.message, "error")
+        return false
+      }
+    }
+
+    const usuariosNuevos = usuariosSinCupon.filter(u => !usuariosReactivados.includes(u.id))
+
+    if (usuariosNuevos.length > 0) {
+      const nuevosRegistros = usuariosNuevos.map(usuario =>
+        ({ usuario_id: usuario.id, cupon_id: idCupon, utilizado: false }))
+
+      const respuestaInsert = await this.supabaseService.cliente.from("cupones_usuarios")
+        .insert(nuevosRegistros)
+
+      if (respuestaInsert.error) {
+        this.toastService.mostrarToast("Error al otorgar cupones: " + respuestaInsert.error.message, "error")
+        return false
+      }
     }
 
     const mensajeExito: string = mayores ? `Cupón otorgado a ${ usuariosSinCupon.length } usuario(s) mayor(es) de 50`

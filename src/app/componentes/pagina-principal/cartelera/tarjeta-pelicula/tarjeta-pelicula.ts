@@ -4,6 +4,8 @@ import { PeliculaInterface } from "../../../../interfaces/pelicula-interface"
 import { PeliculaService } from "../../../../servicios/pelicula-service"
 import { Router } from "@angular/router"
 import { DuracionPipe } from "../../../../tuberias/duracion-pipe"
+import { NotificacionService } from "../../../../servicios/notificacion-service"
+import { SesionService } from "../../../../servicios/sesion-service"
 
 @Component({
   selector: "app-tarjeta-pelicula",
@@ -13,9 +15,14 @@ import { DuracionPipe } from "../../../../tuberias/duracion-pipe"
 })
 export class TarjetaPelicula {
   private peliculaService: PeliculaService = inject(PeliculaService)
+  private notificacionService: NotificacionService = inject(NotificacionService)
   private router: Router = inject(Router)
+  sesionService: SesionService = inject(SesionService)
 
-  pelicula: InputSignal<PeliculaInterface> = input.required<PeliculaInterface>()
+  peliculaSeleccionada: InputSignal<PeliculaInterface> = input.required<PeliculaInterface>()
+  estreno: InputSignal<boolean> = input<boolean>(false)
+
+  protected activarNotificacion(): void { this.notificacionService.activarNotificacion(this.peliculaSeleccionada()) }
 
   seleccionarPelicula(pelicula: PeliculaInterface): void {
     this.peliculaService.seleccionarPelicula(pelicula)

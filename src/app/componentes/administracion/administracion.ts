@@ -47,7 +47,7 @@ export class Administracion {
   protected funcionSeleccionada: WritableSignal<FuncionInterface | null> = signal<FuncionInterface | null>(null)
   protected productosDisponibles: WritableSignal<ProductoInterface[]> = this.candybarService.productosDisponibles
   protected productosSeleccionado: WritableSignal<ProductoInterface | null> = signal<ProductoInterface | null>(null)
-  protected cuponesDisponibles = this.cuponService.cuponesDisponibles
+  protected cuponesDisponibles: WritableSignal<CuponInterface[]> = this.cuponService.cuponesDisponibles
   protected cuponSeleccionado: WritableSignal<CuponInterface | null> = signal<CuponInterface | null>(null)
   protected facturacionDiaria: WritableSignal<number> = signal<number>(0)
   protected entradasVendidasDiarias: WritableSignal<number> = signal<number>(0)

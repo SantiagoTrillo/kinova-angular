@@ -1,3 +1,84 @@
+div.titulo-perfil
+  display: flex
+  align-items: center
+  justify-content: center
+  gap: 15px
+  margin-bottom: 20px
+  button
+    position: relative
+    background-color: var(--negro-jet)
+    border: 1px solid var(--azul-helado)
+    border-radius: 5px
+    padding: 8px 12px
+    font-size: 16px
+    cursor: pointer
+    display: flex
+    align-items: center
+    justify-content: center
+    i
+      &.con-notificaciones
+        color: red
+
+div.modal-notificaciones
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  backdrop-filter: blur(4px)
+  display: flex
+  align-items: center
+  justify-content: center
+  z-index: 1000
+  div.notificaciones
+    background-color: var(--gris-sombra)
+    border: 1px solid var(--azul-helado)
+    border-radius: 10px
+    width: 450px
+    max-width: 90%
+    padding: 20px
+    div.cabecera-modal
+      display: flex
+      justify-content: space-between
+      align-items: center
+      margin-bottom: 15px
+      h3
+        margin: 0
+      button
+        background: none
+        border: none
+        font-size: 18px
+        cursor: pointer
+    div.cuerpo-modal
+      max-height: 320px
+      overflow-y: auto
+      ul
+        list-style: none
+        padding: 0
+        margin: 0
+        display: flex
+        flex-direction: column
+        gap: 10px
+        li
+          display: flex
+          justify-content: space-between
+          align-items: center
+          background-color: var(--negro-jet)
+          border: 1px solid var(--azul-helado)
+          border-radius: 8px
+          padding: 10px 14px
+          span.mensaje-notificacion
+            font-size: 14px
+          span.fecha-notificacion
+            font-size: 12px
+            margin-left: 10px
+            white-space: nowrap
+            flex-shrink: 0
+      p
+        color: gray
+        text-align: center
+        margin: 15px 0
+
 div.perfil
   display: flex
   flex-direction: column
@@ -10,10 +91,11 @@ div.seccion-perfil
 div.boton
   display: flex
   justify-content: center
+  margin-top: 15px
+  margin-bottom: 15px
   button
     background-color: var(--negro-jet)
     border: 1px solid var(--azul-helado)
     border-radius: 5px
-    margin-bottom: 15px
-    padding: 10px
+    padding: 10px 20px
     cursor: pointer

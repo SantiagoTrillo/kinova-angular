@@ -1,10 +1,38 @@
 <main>
   @if (sesionService.usuarioActual(); as usuarioActual) {
-    <div class="titulo"><h1>Hola, {{ usuarioActual.nombre }}</h1></div>
+    <div class="titulo-perfil">
+      <h1>Hola, {{ usuarioActual.nombre }}</h1>
+      <button (click)="abrirNotificaciones()" title="Bandeja de notificaciones">
+        <i class="fa-solid fa-envelope" [class.con-notificaciones]="notificacionesNoLeidas()"></i>
+      </button>
+    </div>
+    @if (mostrarNotificaciones()) {
+      <div class="modal-notificaciones" (click)="abrirNotificaciones()">
+        <div class="notificaciones" (click)="$event.stopPropagation()">
+          <div class="cabecera-modal">
+            <h3>Bandeja de notificaciones</h3>
+            <button (click)="abrirNotificaciones()">✕</button>
+          </div>
+          <div class="cuerpo-modal">
+            @if (notificacionesDisponibles().length > 0) {
+              <ul>
+                @for (notif of notificacionesDisponibles(); track notif.id) {
+                  <li>
+                    <span class="mensaje-notificacion">{{ notif.mensaje }}</span>
+                    <span class="fecha-notificacion">{{ notif.fecha | date: "d MMM" }}</span>
+                  </li>
+                }
+              </ul>
+            } @else { <p>No tenés notificaciones guardadas.</p> }
+          </div>
+        </div>
+      </div>
+    }
     <div class="perfil">
       <div class="seccion-perfil"><app-detalles-personales [usuarioActual]="usuarioActual"/></div>
       <div class="seccion-perfil"><app-cupones/></div>
       <div class="seccion-puntos"><app-puntos/></div>
+      <div class="seccion-perfil"><app-historial-peliculas/></div>
     </div>
     <div class="boton"><button (click)="cerrarSesion()">Cerrar sesión</button></div>
   }

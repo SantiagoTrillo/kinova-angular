@@ -1,6 +1,6 @@
 <main>
   <h1 class="titulo">Date un gustito antes de entrar a la sala</h1>
-  @if (funcionService.funcionSeleccionada() || productoSeleccionado()) {
+  @if (entradasCompradas() || productoSeleccionado()) {
     <button class="compra" (click)="comprarProductos()">{{ productoSeleccionado() ? "Confirmar compra" : "Omitir" }}</button>
   }
   @for (categoria of categorias(); track categoria) {

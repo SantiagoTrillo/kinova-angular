@@ -39,7 +39,8 @@ export class PeliculaService {
       imagen: datosPelicula.imagen,
       generos: datosPelicula.generos,
       restriccion_edad: datosPelicula.restriccion_edad,
-      disponible: true
+      disponible: true,
+      fecha_estreno: datosPelicula.fecha_estreno
     }).select().single()
 
     if (respuesta.error) {
@@ -61,7 +62,8 @@ export class PeliculaService {
       imagen: datosPelicula.imagen,
       generos: datosPelicula.generos,
       restriccion_edad: datosPelicula.restriccion_edad,
-      disponible: datosPelicula.disponible
+      disponible: datosPelicula.disponible,
+      fecha_estreno: datosPelicula.fecha_estreno
     }).eq("id", idPelicula)
 
     if (respuesta.error) {
@@ -76,4 +78,29 @@ export class PeliculaService {
   }
 
   seleccionarPelicula(pelicula: PeliculaInterface): void { this.peliculaSeleccionada.set(pelicula) }
+
+  calcularDiasEstreno(pelicula: PeliculaInterface): number | null {
+    if (!pelicula.fecha_estreno) return null
+
+    const [anio, mes, dia] = pelicula.fecha_estreno.split("-").map(Number)
+    const fechaEstreno = new Date(anio, mes - 1, dia)
+    const hoy = new Date()
+
+    hoy.setHours(0, 0, 0, 0)
+
+    return Math.round((fechaEstreno.getTime() - hoy.getTime()) / (1000 * 3600 * 24))
+  }
+
+  verificarEstadoPelicula(pelicula: PeliculaInterface): string | null {
+    if (!pelicula.disponible) return null
+
+    const diferenciaDias: number | null = this.calcularDiasEstreno(pelicula)
+
+    if (diferenciaDias === null) return null
+    if (diferenciaDias > 7) return "proximamente"
+    if (diferenciaDias > 0) return "preventa"
+    if (diferenciaDias >= -90) return "cartelera"
+
+    return null
+  }
 }

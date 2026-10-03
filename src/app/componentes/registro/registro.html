@@ -7,7 +7,10 @@
       <label>Nombre: <input type="text" formControlName="nombre"></label>
       <label>Apellido: <input type="text" formControlName="apellido"></label>
       <label>
-        Fecha de nacimiento: <app-selector-fecha (fechaSeleccionada)="formularioRegistro.patchValue({ fecha_nacimiento: $event })"/>
+        Fecha de nacimiento: <app-selector-fecha
+          [fechaInicial]="formularioRegistro.get('fecha_nacimiento')?.value"
+          (fechaSeleccionada)="formularioRegistro.patchValue({ fecha_nacimiento: $event })"
+        />
       </label>
       <label>Tipo de sangre:
         <select formControlName="tipo_sangre">

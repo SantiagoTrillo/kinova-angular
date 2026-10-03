@@ -8,4 +8,5 @@ export interface PeliculaInterface {
   puntuacion_promedio?: number
   generos: string[]
   restriccion_edad: string
+  fecha_estreno: string
 }

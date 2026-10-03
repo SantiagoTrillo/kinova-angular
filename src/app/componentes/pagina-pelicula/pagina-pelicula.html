@@ -3,7 +3,9 @@
     <div>
       <div><h1>{{ peliculaActual.titulo }}</h1></div>
       <div class="detalle-pelicula">
-        <div class="poster"><img width="210" height="310" ngSrc="{{ peliculaActual.imagen }}" alt="Póster de una película"></div>
+        <div class="poster">
+          <img width="210" height="310" ngSrc="{{ peliculaActual.imagen }}" alt="Póster de {{ peliculaActual.titulo }}">
+        </div>
         <div>
           <div class="elemento-detalle-pelicula">
             <h3>Calificación promedio</h3>

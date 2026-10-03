@@ -1,5 +1,7 @@
 import { Component, inject, signal, WritableSignal } from "@angular/core"
 import { Cartelera } from "./cartelera/cartelera"
+import { Preventa } from "./preventa/preventa"
+import { Proximamente } from "./proximamente/proximamente"
 import { PeliculaInterface } from "../../interfaces/pelicula-interface"
 import { PeliculaService } from "../../servicios/pelicula-service"
 import { SupabaseService } from "../../servicios/supabase-service"
@@ -10,7 +12,7 @@ import { ToastService } from "../../servicios/toast-service"
   selector: "app-pagina-principal",
   templateUrl: "./pagina-principal.html",
   styleUrl: "./pagina-principal.sass",
-  imports: [Cartelera, TarjetaPelicula]
+  imports: [Cartelera, Preventa, Proximamente, TarjetaPelicula]
 })
 export class PaginaPrincipal {
   private peliculaService: PeliculaService = inject(PeliculaService)

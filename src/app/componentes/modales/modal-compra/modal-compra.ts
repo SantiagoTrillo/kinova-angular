@@ -28,7 +28,6 @@ export class ModalCompra implements OnInit {
   cuponesUsuario: WritableSignal<CuponInterface[]> = signal<CuponInterface[]>([])
   cuponSeleccionado: WritableSignal<CuponInterface | null> = signal<CuponInterface | null>(null)
   puntosUsuario: WritableSignal<number> = signal<number>(0)
-  primeraCompra: WritableSignal<boolean> = signal<boolean>(false)
   mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
 
   sesionService: SesionService = inject(SesionService)
@@ -39,7 +38,6 @@ export class ModalCompra implements OnInit {
     if (this.sesionService.usuarioActual()) {
       this.cuponesUsuario.set(await this.cuponService.obtenerCuponesUsuario())
       this.puntosUsuario.set(await this.puntoService.obtenerPuntos())
-      this.primeraCompra.set(await this.cuponService.verificarPrimeraCompra())
     }
   }
 
@@ -57,10 +55,6 @@ export class ModalCompra implements OnInit {
       cupon.id === Number(idCupon)) || null
 
     this.cuponSeleccionado.set(cupon)
-
-    if (this.tipoCompra() === "candybar" && this.primeraCompra() && this.tieneCuponRegistro() && cupon && cupon.id !== 1) {
-      this.toastService.mostrarToast("El cupón de registro solo es válido para la primera compra. Al finalizar esta compra el cupón quedará inválido.", "error")
-    }
   }
 
   calcularMontoDescontado(): number {
@@ -84,7 +78,7 @@ export class ModalCompra implements OnInit {
     if (canje && this.puntosUsuario() < total) return this.toastService.mostrarToast(
       "No disponés de suficientes puntos para realizar esta compra", "error"
     )
-    if (this.tipoCompra() === "candybar" && registrado && this.primeraCompra() && this.tieneCuponRegistro() && !this.cuponSeleccionado()) {
+    if (registrado && this.tieneCuponRegistro() && this.cuponSeleccionado()?.id !== 1) {
       this.mostrarModalConfirmacion.set(true)
       return
     }

@@ -4,7 +4,7 @@
     <div class="columnas-formulario">
       <div class="columna izquierda">
         <label>Título: <input type="text" formControlName="titulo"></label>
-        <label>Sinopsis: <textarea formControlName="sinopsis" rows="5"></textarea></label>
+        <label>Sinopsis: <textarea formControlName="sinopsis" rows="3"></textarea></label>
         <label>Géneros: <input type="text" formControlName="generos"></label>
       </div>
       <div class="columna derecha">
@@ -17,12 +17,19 @@
             <option value="+18">+18</option>
           </select>
         </label>
-        <label>URL del póster: <input type="text" formControlName="imagen"></label>
+        <label>
+          Fecha de estreno:
+          <app-selector-fecha
+            [fechaInicial]="formularioPelicula.get('fecha_estreno')?.value"
+            (fechaSeleccionada)="formularioPelicula.patchValue({ fecha_estreno: $event })"
+          />
+        </label>
         <label class="fila">
           <span>Disponible:</span>
           <input type="checkbox" formControlName="disponible">
         </label>
       </div>
+      <label class="ancho-completo">URL del póster: <input type="text" formControlName="imagen"></label>
     </div>
     <div class="botones">
       <button type="submit">Guardar cambios</button>

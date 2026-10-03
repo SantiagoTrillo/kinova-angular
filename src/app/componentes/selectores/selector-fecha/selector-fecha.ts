@@ -1,15 +1,4 @@
-import {
-  Component,
-  computed,
-  input,
-  InputSignal,
-  OnInit,
-  output,
-  OutputEmitterRef,
-  signal,
-  Signal,
-  WritableSignal
-} from "@angular/core"
+import { Component, computed, input, InputSignal, OnInit, output, OutputEmitterRef, signal, Signal, WritableSignal } from "@angular/core"
 
 @Component({
   selector: "app-selector-fecha",
@@ -37,23 +26,34 @@ export class SelectorFecha implements OnInit {
 
     return anios
   })
-  protected diaSeleccionado: WritableSignal<number> = signal<number>(1)
-  protected mesSeleccionado: WritableSignal<number>  = signal<number>(1)
-  protected anioSeleccionado: WritableSignal<number>  = signal<number>(2026)
+  protected diaSeleccionado: WritableSignal<number> = signal<number>(0)
+  protected mesSeleccionado: WritableSignal<number> = signal<number>(0)
+  protected anioSeleccionado: WritableSignal<number> = signal<number>(0)
 
   fechaInicial: InputSignal<string | undefined> = input<string | undefined>()
+
   fechaSeleccionada: OutputEmitterRef<string> = output<string>()
 
   ngOnInit(): void {
-    const valor = this.fechaInicial()
+    const valor: string | undefined = this.fechaInicial()
 
     if (valor) {
-      const fecha = new Date(valor)
+      if (valor.includes("-")) {
+        const partes: string[] = valor.split("T")[0].split("-")
 
-      if (!isNaN(fecha.getTime())) {
-        this.diaSeleccionado.set(fecha.getDate())
-        this.mesSeleccionado.set(fecha.getMonth() + 1)
-        this.anioSeleccionado.set(fecha.getFullYear())
+        if (partes.length === 3) {
+          this.anioSeleccionado.set(Number(partes[0]))
+          this.mesSeleccionado.set(Number(partes[1]))
+          this.diaSeleccionado.set(Number(partes[2]))
+        }
+      } else {
+        const fecha = new Date(valor)
+
+        if (!isNaN(fecha.getTime())) {
+          this.diaSeleccionado.set(fecha.getDate())
+          this.mesSeleccionado.set(fecha.getMonth() + 1)
+          this.anioSeleccionado.set(fecha.getFullYear())
+        }
       }
     }
     this.seleccionarFecha()

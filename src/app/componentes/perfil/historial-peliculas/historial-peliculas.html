@@ -1,0 +1,30 @@
+<section>
+  @if (historialPeliculas().length > 0) {
+    <h2>Mis películas</h2>
+    <ul>
+      @for (compra of historialPeliculas(); track compra.peliculaId) {
+        <li>
+          @if (compra.imagen) {
+            <img ngSrc="{{ compra.imagen }}" width="80" height="120" alt="Póster de {{ compra.titulo }}">
+          }
+          <div class="info-compra">
+            <span class="titulo-pelicula">{{ compra.titulo }}</span>
+            <span class="fecha-compra">Comprada el {{ compra.fechasCompra }}</span>
+            @if (compra.calificacion) {
+              <div>
+                <span class="calificacion">Calificación: </span>
+                <span class="estrellas">
+                  @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
+                    @if (estrella <= compra.calificacion) { <i class="fa-solid fa-star"></i> }
+                    @else { <i class="fa-regular fa-star"></i> }
+                  }
+                </span>
+                @if (compra.comentario) { <p>"{{ compra.comentario }}"</p> }
+              </div>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</section>

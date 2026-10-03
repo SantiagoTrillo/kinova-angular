@@ -16,12 +16,6 @@ div.contenedor-formulario
       display: grid
       grid-template-columns: 1fr 1fr
       gap: 14px
-    div.columna
-      display: flex
-      flex-direction: column
-      gap: 10px
-      &.izquierda
-        justify-content: space-between
     label
       display: flex
       flex-direction: column
@@ -37,6 +31,7 @@ div.contenedor-formulario
         align-items: center
         padding: 6px 10px
         pointer-events: none
+        height: 100%
       input, select
         background-color: var(--negro-jet)
         border: none
@@ -52,18 +47,3 @@ div.contenedor-formulario
         width: auto
         cursor: pointer
         pointer-events: auto
-    div.botones
-      display: flex
-      gap: 10px
-      justify-content: center
-      margin-top: 5px
-      button
-        background-color: var(--negro-jet)
-        border: 1px solid var(--azul-helado)
-        padding: 6px 14px
-        border-radius: 10px
-        cursor: pointer
-        color: white
-        font-size: 12px
-        &.cancelar
-          border-color: var(--azul-helado)

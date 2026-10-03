@@ -2,12 +2,13 @@ import { Component, inject, output, OutputEmitterRef } from "@angular/core"
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
 import { PeliculaService } from "../../../../servicios/pelicula-service"
 import { ToastService } from "../../../../servicios/toast-service"
+import { SelectorFecha } from "../../../selectores/selector-fecha/selector-fecha"
 
 @Component({
   selector: "app-crear-pelicula",
   templateUrl: "./crear-pelicula.html",
   styleUrl: "./crear-pelicula.sass",
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule, SelectorFecha]
 })
 export class CrearPelicula {
   private formBuilder: FormBuilder = inject(FormBuilder)
@@ -20,7 +21,8 @@ export class CrearPelicula {
     duracion: [null as number | null, [Validators.required, Validators.min(1)]],
     imagen: ["", Validators.required],
     generos: ["", Validators.required],
-    restriccion_edad: ["ATP", Validators.required]
+    restriccion_edad: ["ATP", Validators.required],
+    fecha_estreno: [new Date().toISOString().split("T")[0], Validators.required]
   })
 
   peliculaCreada: OutputEmitterRef<void> = output<void>()
@@ -38,7 +40,8 @@ export class CrearPelicula {
       duracion: datos.duracion,
       imagen: datos.imagen,
       generos: generos,
-      restriccion_edad: datos.restriccion_edad
+      restriccion_edad: datos.restriccion_edad,
+      fecha_estreno: datos.fecha_estreno
     })
 
     if (pelicula) this.peliculaCreada.emit()

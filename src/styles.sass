@@ -22,10 +22,29 @@ body
 main
   padding-top: 80px
 
+a
+  color: white
+
 .titulo
   display: flex
   justify-content: center
   user-select: none
+
+div.botones
+  display: flex
+  gap: 10px
+  justify-content: center
+  margin-top: 5px
+  button
+    background-color: var(--negro-jet)
+    border: 1px solid var(--azul-helado)
+    padding: 6px 14px
+    border-radius: 10px
+    cursor: pointer
+    color: white
+    font-size: 12px
+    &.cancelar
+      border-color: var(--azul-helado)
 
 div.cabecera-modal
   display: flex
@@ -39,7 +58,6 @@ div.cabecera-modal
   button
     background: transparent
     border: none
-    color: var(--blanco)
     cursor: pointer
     padding: 5px
     i

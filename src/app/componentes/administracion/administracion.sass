@@ -37,7 +37,6 @@ div.pelicula, div.producto
     justify-content: center
     i
       font-size: 32px
-      color: var(--blanco)
   &.no-disponible
     border: 1px solid var(--negro-jet)
     img
@@ -114,19 +113,20 @@ div.cabecera-horarios
     border-radius: 10px
 
 div.horarios-funcion
-  display: grid
-  grid-template-columns: repeat(2, 1fr)
+  display: flex
+  flex-direction: column
   gap: 10px
 
 div.detalles-funcion
   display: flex
-  gap: 7.9px
+  gap: 10px
   background-color: var(--gris-sombra)
   padding: 10px
   justify-content: space-between
   align-items: center
   border-radius: 10px
   border: 1px solid var(--azul-helado)
+  width: fit-content
   &.no-disponible
     border: 1px solid var(--negro-jet)
     span
@@ -134,7 +134,7 @@ div.detalles-funcion
       opacity: 0.5
   div.datos-funcion
     display: flex
-    gap: 7.9px
+    gap: 8px
     flex: 1
     cursor: pointer
     align-items: center
@@ -200,7 +200,6 @@ div.cupon
     margin: 8px 0
     i
       font-size: 20px
-      color: var(--blanco)
   label
     display: flex
     align-items: center

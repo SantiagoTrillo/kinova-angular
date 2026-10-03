@@ -46,6 +46,7 @@ export class FuncionService {
       precio: datosFormulario.precio,
       sala_id: idSala,
       precio_puntos: datosFormulario.precio_puntos,
+      precio_preventa: datosFormulario.precio_preventa,
       disponible: true
     })
 
@@ -70,6 +71,7 @@ export class FuncionService {
       precio: datosFormulario.precio,
       sala_id: idSala,
       precio_puntos: datosFormulario.precio_puntos,
+      precio_preventa: datosFormulario.precio_preventa,
       disponible: datosFormulario.disponible
     }).eq("id", idFuncion)
 

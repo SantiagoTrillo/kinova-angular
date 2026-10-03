@@ -31,7 +31,7 @@ export class Registro {
     contrasenia: ["", [Validators.required, Validators.minLength(4)]],
     nombre: ["", [Validators.required, Validators.minLength(2)]],
     apellido: ["", [Validators.required, Validators.minLength(2)]],
-    fecha_nacimiento: ["", Validators.required],
+    fecha_nacimiento: [new Date().toISOString().split("T")[0], Validators.required],
     tipo_sangre: ["", Validators.required],
     color_ojos: ["", Validators.required],
     dias_vacaciones_anuales: [null as number | null, [Validators.required, Validators.min(0)]]

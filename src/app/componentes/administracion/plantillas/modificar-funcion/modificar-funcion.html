@@ -2,40 +2,37 @@
   <h3>Modificar función para {{ peliculaSeleccionada()?.titulo }} (Sala {{ funcionSeleccionada()?.sala_id }})</h3>
   <form [formGroup]="formularioFuncion" (ngSubmit)="guardarCambios()">
     <div class="columnas-formulario">
-      <div class="columna izquierda">
-        <label>Fecha: <app-selector-fecha
-          [fechaInicial]="funcionSeleccionada()?.fecha_hora"
-          (fechaSeleccionada)="formularioFuncion.patchValue({ fecha: $event })"
-        /></label>
-        <label>
-          Formato:
-          <select formControlName="formato">
-            <option value="2D">2D</option>
-            <option value="3D">3D</option>
-            <option value="4D">4D</option>
-            <option value="5D">5D</option>
-          </select>
-        </label>
-        <label>Precio: <input type="number" formControlName="precio" placeholder="Precio en ARS"></label>
-      </div>
-      <div class="columna">
-        <label>Hora: <app-selector-hora
-          [horaInicial]="funcionSeleccionada()?.fecha_hora"
-          (momentoSeleccionado)="formularioFuncion.patchValue({ hora: $event })"
-        /></label>
-        <label>
-          Idioma:
-          <select formControlName="idioma">
-            <option value="Español">Español</option>
-            <option value="Subtitulada">Subtitulada</option>
-          </select>
-        </label>
-        <label>Precio en puntos: <input type="number" formControlName="precio_puntos" placeholder="Puntos requeridos"></label>
-        <label class="fila">
-          <span>Disponible:</span>
-          <input type="checkbox" formControlName="disponible">
-        </label>
-      </div>
+      <label>Fecha: <app-selector-fecha
+        [fechaInicial]="formularioFuncion.get('fecha')?.value"
+        (fechaSeleccionada)="formularioFuncion.patchValue({ fecha: $event })"
+      /></label>
+      <label>Hora: <app-selector-hora
+        [horaInicial]="formularioFuncion.get('hora')?.value"
+        (momentoSeleccionado)="formularioFuncion.patchValue({ hora: $event })"
+      /></label>
+      <label>
+        Formato:
+        <select formControlName="formato">
+          <option value="2D">2D</option>
+          <option value="3D">3D</option>
+          <option value="4D">4D</option>
+          <option value="5D">5D</option>
+        </select>
+      </label>
+      <label>
+        Idioma:
+        <select formControlName="idioma">
+          <option value="Español">Español</option>
+          <option value="Subtitulada">Subtitulada</option>
+        </select>
+      </label>
+      <label>Precio: <input type="number" formControlName="precio" placeholder="Precio en ARS"></label>
+      <label>Precio en puntos: <input type="number" formControlName="precio_puntos" placeholder="Puntos requeridos"></label>
+      <label>Precio de preventa: <input type="number" formControlName="precio_preventa" placeholder="Precio de preventa"></label>
+      <label class="fila">
+        <span>Disponible:</span>
+        <input type="checkbox" formControlName="disponible">
+      </label>
     </div>
     <div class="botones">
       <button type="submit">Guardar cambios</button>

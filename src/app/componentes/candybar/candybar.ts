@@ -4,12 +4,13 @@ import { ProductoInterface } from "../../interfaces/producto-interface"
 import { CandybarService } from "../../servicios/candybar-service"
 import { Router } from "@angular/router"
 import { PuntoService } from "../../servicios/punto-service"
-import { FuncionService } from "../../servicios/funcion-service"
 import { SesionService } from "../../servicios/sesion-service"
 import { CuponService } from "../../servicios/cupon-service"
+import { EntradaService } from "../../servicios/entrada-service"
 import { ModalCompra } from "../modales/modal-compra/modal-compra"
 import { ModalConfirmacion } from "../modales/modal-confirmacion/modal-confirmacion"
 import { CuponInterface } from "../../interfaces/cupon-interface"
+import {EntradaInterface} from "../../interfaces/entrada-interface";
 
 @Component({
   selector: "app-candybar",
@@ -21,6 +22,7 @@ export class Candybar {
   private puntoService: PuntoService = inject(PuntoService)
   private cuponService: CuponService = inject(CuponService)
   private sesionService: SesionService = inject(SesionService)
+  private entradaService: EntradaService = inject(EntradaService)
   private router: Router = inject(Router)
 
   categorias: Signal<string[]> = signal<string[]>(["Combos", "Pochoclos", "Bebidas", "Snacks Salados", "Snacks Dulces"])
@@ -28,13 +30,16 @@ export class Candybar {
     for (const producto of this.productosDisponibles()) { if (producto.cantidad > 0) return true }
     return false
   })
+  entradasCompradas: Signal<boolean> = computed((): boolean => {
+    const entradas: EntradaInterface[] | null = this.entradaService.entradasCompradas()
+    return !!(entradas && entradas.length > 0)
+  })
 
   productosDisponibles: WritableSignal<ProductoInterface[]> = signal<ProductoInterface[]>([])
   mostrarModalCompra: WritableSignal<boolean> = signal<boolean>(false)
   mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
 
   candybarService: CandybarService = inject(CandybarService)
-  funcionService: FuncionService = inject(FuncionService)
 
   ngOnInit(): void { this.candybarService.obtenerProductos().then(productos => this.productosDisponibles.set(productos)) }
 

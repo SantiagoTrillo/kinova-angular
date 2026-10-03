@@ -7,7 +7,7 @@
           width="140"
           height="195"
           ngSrc="{{ pelicula.imagen }}"
-          alt="Póster de una película"
+          alt="Póster de {{ pelicula.titulo }}"
         >
         <span>Título: {{ pelicula.titulo }}</span>
         <span class="duracion">Duración: {{ pelicula.duracion | duracion }}</span>
@@ -43,7 +43,7 @@
       <div class="funcion">
         <div class="poster">
           <span>{{ pelicula.titulo }}</span>
-          <img width="140" height="195" ngSrc="{{ pelicula.imagen }}" alt="Póster de una película">
+          <img width="140" height="195" ngSrc="{{ pelicula.imagen }}" alt="Póster de {{ pelicula.titulo }}">
         </div>
         <div class="contenedor-horarios">
           <div class="cabecera-horarios">

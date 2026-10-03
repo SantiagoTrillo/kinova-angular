@@ -1,0 +1,10 @@
+@if (peliculasPreventa().length > 0) {
+  <section>
+    <h2>Preventa</h2>
+    <div>
+      @for (pelicula of peliculasPreventa(); track pelicula.id) {
+        @if (pelicula.disponible) { <app-tarjeta-pelicula [peliculaSeleccionada]="pelicula"/> }
+      }
+    </div>
+  </section>
+}

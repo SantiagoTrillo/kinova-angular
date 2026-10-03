@@ -1,4 +1,4 @@
-import { Component, computed, input, InputSignal, OnInit, output, OutputEmitterRef, signal, Signal } from "@angular/core"
+import { Component, computed, input, InputSignal, OnInit, output, OutputEmitterRef, signal, Signal, WritableSignal } from "@angular/core"
 
 @Component({
   selector: "app-selector-hora",
@@ -15,32 +15,42 @@ export class SelectorHora implements OnInit {
     return minutos
   })
   protected abreviaturas: Signal<string[]> = signal<string[]>(["a. m.", "p. m."])
-  protected horaSeleccionada = signal<number>(12)
-  protected minutoSeleccionado = signal<number>(0)
-  protected abreviaturaSeleccionada = signal<string>("a. m.")
+  protected horaSeleccionada: WritableSignal<number> = signal<number>(0)
+  protected minutoSeleccionado: WritableSignal<number> = signal<number>(0)
+  protected abreviaturaSeleccionada: WritableSignal<string> = signal<string>("")
 
   horaInicial: InputSignal<string | undefined> = input<string | undefined>()
+
   momentoSeleccionado: OutputEmitterRef<string> = output<string>()
 
   ngOnInit(): void {
-    const valor = this.horaInicial()
+    const valor: string | undefined = this.horaInicial()
 
     if (valor) {
-      const fecha = new Date(valor)
+      let horas: number = 0
+      let minutos: number = 0
 
-      if (!isNaN(fecha.getTime())) {
-        let horas: number = fecha.getHours()
+      if (valor.includes(":") && !valor.includes("-") && !valor.includes("T")) {
+        const [horasTexto, minutosTexto] = valor.split(":")
+        horas = Number(horasTexto)
+        minutos = Number(minutosTexto)
+      } else {
+        const fecha = new Date(valor)
 
-        const minutos: number = fecha.getMinutes()
-        const pm: boolean = horas >= 12
-
-        if (horas === 0) horas = 12
-        else if (horas > 12) horas -= 12
-
-        this.horaSeleccionada.set(horas)
-        this.minutoSeleccionado.set(minutos)
-        this.abreviaturaSeleccionada.set(pm ? "p. m." : "a. m.")
+        if (!isNaN(fecha.getTime())) {
+          horas = fecha.getHours()
+          minutos = fecha.getMinutes()
+        }
       }
+
+      const pm: boolean = horas >= 12
+
+      if (horas === 0) horas = 12
+      else if (horas > 12) horas -= 12
+
+      this.horaSeleccionada.set(horas)
+      this.minutoSeleccionado.set(minutos)
+      this.abreviaturaSeleccionada.set(pm ? "p. m." : "a. m.")
     }
     this.seleccionarMomento()
   }

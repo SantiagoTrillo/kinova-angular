@@ -3,12 +3,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
 import { PeliculaInterface } from "../../../../interfaces/pelicula-interface"
 import { PeliculaService } from "../../../../servicios/pelicula-service"
 import { ToastService } from "../../../../servicios/toast-service"
+import { SelectorFecha } from "../../../selectores/selector-fecha/selector-fecha"
 
 @Component({
   selector: "app-modificar-pelicula",
   templateUrl: "./modificar-pelicula.html",
   styleUrl: "./modificar-pelicula.sass",
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule, SelectorFecha]
 })
 export class ModificarPelicula implements OnInit {
   private formBuilder: FormBuilder = inject(FormBuilder)
@@ -22,7 +23,8 @@ export class ModificarPelicula implements OnInit {
     imagen: ["", Validators.required],
     generos: ["", Validators.required],
     restriccion_edad: ["ATP", Validators.required],
-    disponible: [true, Validators.required]
+    disponible: [true, Validators.required],
+    fecha_estreno: [new Date().toISOString().split("T")[0], Validators.required]
   })
 
   peliculaSeleccionada: InputSignal<PeliculaInterface | null> = input<PeliculaInterface | null>(null)
@@ -40,7 +42,8 @@ export class ModificarPelicula implements OnInit {
         imagen: pelicula.imagen,
         generos: pelicula.generos.join(", "),
         restriccion_edad: pelicula.restriccion_edad,
-        disponible: pelicula.disponible
+        disponible: pelicula.disponible,
+        fecha_estreno: pelicula.fecha_estreno ?? new Date().toISOString().split("T")[0]
       })
     }
   }
@@ -61,7 +64,8 @@ export class ModificarPelicula implements OnInit {
       imagen: datos.imagen,
       generos: generosArray,
       restriccion_edad: datos.restriccion_edad,
-      disponible: datos.disponible
+      disponible: datos.disponible,
+      fecha_estreno: datos.fecha_estreno
     })
 
     if (exito) this.peliculaModificada.emit()

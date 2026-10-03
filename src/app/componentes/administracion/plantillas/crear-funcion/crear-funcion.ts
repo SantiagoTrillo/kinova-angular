@@ -18,12 +18,13 @@ export class CrearFuncion {
   private funcionService: FuncionService = inject(FuncionService)
 
   protected formularioFuncion = this.formBuilder.nonNullable.group({
-    fecha: ["", Validators.required],
+    fecha: [new Date().toISOString().split("T")[0], Validators.required],
     formato: ["2D", Validators.required],
     idioma: ["Español", Validators.required],
-    hora: ["", Validators.required],
+    hora: [`${ new Date().getHours() }:${ new Date().getMinutes() < 10 ? "0" : "" }${ new Date().getMinutes() }`, Validators.required],
     precio: [null as number | null, [Validators.required, Validators.min(1)]],
-    precio_puntos: [null as number | null, [Validators.required, Validators.min(1)]]
+    precio_puntos: [null as number | null, [Validators.required, Validators.min(1)]],
+    precio_preventa: [null as number | null, [Validators.required, Validators.min(1)]]
   })
 
   peliculaSeleccionada: InputSignal<PeliculaInterface | null> = input<PeliculaInterface | null>(null)

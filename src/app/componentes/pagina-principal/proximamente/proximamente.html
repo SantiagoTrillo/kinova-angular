@@ -1,0 +1,10 @@
+@if (peliculasProximamente().length > 0) {
+  <section>
+    <h2>Próximamente</h2>
+    <div>
+      @for (pelicula of peliculasProximamente(); track pelicula.id) {
+        @if (pelicula.disponible) { <app-tarjeta-pelicula [peliculaSeleccionada]="pelicula" [estreno]="true"/> }
+      }
+    </div>
+  </section>
+}

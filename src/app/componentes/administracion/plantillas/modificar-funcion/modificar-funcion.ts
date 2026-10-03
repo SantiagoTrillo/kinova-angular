@@ -19,12 +19,13 @@ export class ModificarFuncion implements OnInit {
   private toastService: ToastService = inject(ToastService)
 
   protected formularioFuncion = this.formBuilder.nonNullable.group({
-    fecha: ["", Validators.required],
+    fecha: [new Date().toISOString().split("T")[0], Validators.required],
     formato: ["2D", Validators.required],
     idioma: ["Español", Validators.required],
-    hora: ["", Validators.required],
-    precio: [null as number | null, [Validators.required, Validators.min(0)]],
-    precio_puntos: [null as number | null, [Validators.required, Validators.min(0)]],
+    hora: [`${ new Date().getHours() }:${ new Date().getMinutes() < 10 ? "0" : "" }${ new Date().getMinutes() }`, Validators.required],
+    precio: [null as number | null, [Validators.required, Validators.min(1)]],
+    precio_puntos: [null as number | null, [Validators.required, Validators.min(1)]],
+    precio_preventa: [null as number | null, [Validators.required, Validators.min(1)]],
     disponible: [true, Validators.required]
   })
 
@@ -48,6 +49,7 @@ export class ModificarFuncion implements OnInit {
       idioma: funcion.idioma,
       precio: funcion.precio,
       precio_puntos: funcion.precio_puntos,
+      precio_preventa: funcion.precio_preventa ?? null,
       disponible: funcion.disponible
     })
   }
