@@ -2,6 +2,7 @@ import { Component, inject, input, InputSignal, OnInit, output, OutputEmitterRef
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
 import { PeliculaInterface } from "../../../../interfaces/pelicula-interface"
 import { PeliculaService } from "../../../../servicios/pelicula-service"
+import { AuditoriaService } from "../../../../servicios/auditoria-service"
 import { ToastService } from "../../../../servicios/toast-service"
 import { SelectorFecha } from "../../../selectores/selector-fecha/selector-fecha"
 
@@ -14,6 +15,7 @@ import { SelectorFecha } from "../../../selectores/selector-fecha/selector-fecha
 export class ModificarPelicula implements OnInit {
   private formBuilder: FormBuilder = inject(FormBuilder)
   private peliculaService: PeliculaService = inject(PeliculaService)
+  private auditoriaService: AuditoriaService = inject(AuditoriaService)
   private toastService: ToastService = inject(ToastService)
 
   protected formularioPelicula = this.formBuilder.nonNullable.group({
@@ -54,7 +56,7 @@ export class ModificarPelicula implements OnInit {
     if (!pelicula) return
     if (!this.formularioPelicula.valid) return this.toastService.mostrarToast("El formulario tiene campos inválidos", "error")
 
-    const datos = this.formularioPelicula.getRawValue()
+    const datos: any = this.formularioPelicula.getRawValue()
     const generosArray: string[] = datos.generos.split(",").map(genero => genero.trim()).filter(genero =>
       genero !== "")
     const exito: boolean = await this.peliculaService.modificarPelicula(pelicula.id, {
@@ -68,7 +70,39 @@ export class ModificarPelicula implements OnInit {
       fecha_estreno: datos.fecha_estreno
     })
 
-    if (exito) this.peliculaModificada.emit()
+    if (exito) {
+      if (pelicula.titulo !== datos.titulo) {
+        await this.auditoriaService.registrarAccion(`Modificación de película (ID: ${ pelicula.id }, Título): "${ pelicula.titulo }" -> "${ datos.titulo }"`)
+      }
+      if (pelicula.sinopsis !== datos.sinopsis) {
+        await this.auditoriaService.registrarAccion(`Modificación de película (ID: ${ pelicula.id }, Sinopsis): "${ pelicula.sinopsis }" -> "${ datos.sinopsis }"`)
+      }
+      if (pelicula.duracion !== datos.duracion) {
+        await this.auditoriaService.registrarAccion(`Modificación de película (ID: ${ pelicula.id }, Duración): ${ pelicula.duracion } min -> ${ datos.duracion } min`)
+      }
+      if (pelicula.imagen !== datos.imagen) {
+        await this.auditoriaService.registrarAccion(`Modificación de película (ID: ${ pelicula.id }, Imagen): "${ pelicula.imagen }" -> "${ datos.imagen }"`)
+      }
+
+      const generosPrevios: string = pelicula.generos.join(", ")
+      const generosNuevos: string = generosArray.join(", ")
+
+      if (generosPrevios !== generosNuevos) {
+        await this.auditoriaService.registrarAccion(`Modificación de película (ID: ${ pelicula.id }, Géneros): ${ generosPrevios } -> ${ generosNuevos }`)
+      }
+      if (pelicula.restriccion_edad !== datos.restriccion_edad) {
+        await this.auditoriaService.registrarAccion(`Modificación de película (ID: ${ pelicula.id }, Restricción de edad): ${ pelicula.restriccion_edad } -> ${ datos.restriccion_edad }`)
+      }
+      if (pelicula.fecha_estreno !== datos.fecha_estreno) {
+        await this.auditoriaService.registrarAccion(`Modificación de película (ID: ${ pelicula.id }, Fecha de estreno): ${ pelicula.fecha_estreno } -> ${ datos.fecha_estreno }`)
+      }
+      if (pelicula.disponible !== datos.disponible) {
+        const estadoAnterior: string = pelicula.disponible ? "Disponible" : "No disponible"
+        const estadoNuevo: string = datos.disponible ? "Disponible" : "No disponible"
+        await this.auditoriaService.registrarAccion(`Modificación de película (ID: ${ pelicula.id }, Estado): ${ estadoAnterior } -> ${ estadoNuevo }`)
+      }
+      this.peliculaModificada.emit()
+    }
   }
 
   protected cancelar(): void { this.cancelado.emit() }

@@ -1,6 +1,6 @@
 <ng-template #plantillaPeliculas>
   <div class="plantilla-peliculas">
-    @for (pelicula of peliculasDisponibles(); track pelicula.id) {
+    @for (pelicula of peliculaService.peliculasDisponibles(); track pelicula.id) {
       <div class="pelicula" [class.no-disponible]="!pelicula.disponible">
         <img
           (click)="seleccionarPelicula(pelicula); seleccionarPlantilla(plantillaModificarPelicula)"
@@ -14,7 +14,7 @@
         <button
           [class.desactivar]="pelicula.disponible"
           [class.activar]="!pelicula.disponible"
-          (click)="cambiarEstadoElemento('peliculas', pelicula.id, !pelicula.disponible)"
+          (click)="cambiarEstadoElemento('peliculas', pelicula, !pelicula.disponible)"
         >
           @if (pelicula.disponible) { Desactivar }
           @else { Activar }
@@ -39,7 +39,7 @@
 </ng-template>
 <ng-template #plantillaFunciones>
   <div class="plantilla-funciones">
-    @for (pelicula of peliculasDisponibles(); track pelicula.id) {
+    @for (pelicula of peliculaService.peliculasDisponibles(); track pelicula.id) {
       <div class="funcion">
         <div class="poster">
           <span>{{ pelicula.titulo }}</span>
@@ -69,7 +69,7 @@
                   [class.desactivar]="funcion.disponible"
                   [class.activar]="!funcion.disponible"
                   [title]="funcion.disponible ? 'Desactivar función' : 'Activar función'"
-                  (click)="cambiarEstadoElemento('funciones', funcion.id, !funcion.disponible)"
+                  (click)="cambiarEstadoElemento('funciones', funcion, !funcion.disponible)"
                 >
                   @if (funcion.disponible) { <i class="fa-solid fa-trash"></i> }
                   @else { <i class="fa-solid fa-check"></i> }
@@ -99,7 +99,7 @@
 </ng-template>
 <ng-template #plantillaCandybar>
   <div class="plantilla-candybar">
-    @for (producto of productosDisponibles(); track producto.id) {
+    @for (producto of candybarService.productosDisponibles(); track producto.id) {
       <div class="producto" [class.no-disponible]="!producto.disponible">
         <img
           (click)="seleccionarProducto(producto); seleccionarPlantilla(plantillaModificarProducto)"
@@ -113,7 +113,7 @@
         <button
           [class.desactivar]="producto.disponible"
           [class.activar]="!producto.disponible"
-          (click)="cambiarEstadoElemento('candybar', producto.id, !producto.disponible)"
+          (click)="cambiarEstadoElemento('candybar', producto, !producto.disponible)"
         >
           @if (producto.disponible) { Desactivar }
           @else { Activar }
@@ -140,7 +140,7 @@
 </ng-template>
 <ng-template #plantillaCupones>
   <div class="plantilla-cupones">
-    @for (cupon of cuponesDisponibles(); track cupon.id) {
+    @for (cupon of cuponService.cuponesDisponibles(); track cupon.id) {
       <div class="cupon" [class.no-disponible]="!cupon.disponible">
         <label>Nombre: <input #inputNombre type="text" class="input-nombre" [value]="cupon.nombre"></label>
         <label>Descuento: <input #inputDescuento type="number" class="input-descuento" [value]="cupon.descuento"></label>
@@ -151,7 +151,7 @@
           [class.desactivar]="cupon.disponible"
           [class.activar]="!cupon.disponible"
           [title]="cupon.disponible ? 'Desactivar cupón' : 'Activar cupón'"
-          (click)="cambiarEstadoElemento('cupones', cupon.id, !cupon.disponible)"
+          (click)="cambiarEstadoElemento('cupones', cupon, !cupon.disponible)"
         >
           @if (cupon.disponible) { <i class="fa-solid fa-trash"></i> }
           @else { <i class="fa-solid fa-check"></i> }
@@ -179,9 +179,54 @@
   <div class="plantilla-reportes">
     <h2>Reporte de Ventas Diario</h2>
     <div class="reporte">
-      <label>Facturación: <span>{{ facturacionDiaria() | currency: 'ARS': '$ ': '1.0-0'  }}</span></label>
-      <label>Entradas vendidas: <span class="entradas-vendidas">{{ entradasVendidasDiarias() }}</span></label>
+      <label>Facturación: <span>{{ facturacionDiaria() | currency: 'ARS': '$ ': '1.0-0' }}</span></label>
+      <label>Entradas vendidas: <span>{{ entradasVendidasDiarias() }}</span></label>
+      <div class="botones-exportacion">
+        <button class="boton-exportar" (click)="exportarPdf()"><i class="fa-solid fa-file-pdf"></i> Exportar a PDF</button>
+        <button class="boton-exportar" (click)="exportarExcel()"><i class="fa-solid fa-file-excel"></i> Exportar a Excel</button>
+      </div>
     </div>
+    <div class="seccion-graficos">
+      <div class="contenedor-grafico">
+        <h3>Películas más vistas por semana</h3>
+        <div class="canvas-wrapper"><canvas #canvasSemana></canvas></div>
+      </div>
+      <div class="contenedor-grafico">
+        <h3>Películas más vistas por mes</h3>
+        <div class="canvas-wrapper"><canvas #canvasMes></canvas></div>
+      </div>
+    </div>
+    @if (productoMasVendido(); as estrella) {
+      <div class="seccion-estrella">
+        <h3>Producto más vendido del candybar</h3>
+        <div class="tarjeta-estrella">
+          @if (estrella.imagen) { <img ngSrc="{{ estrella.imagen }}" width="110" height="110" alt="{{ estrella.nombre }}"> }
+          <div class="detalles-estrella">
+            <span class="nombre">{{ estrella.nombre }}</span>
+            <span class="precio">{{ estrella.precio | currency: 'ARS': '$ ': '1.0-0' }}</span>
+            <span class="ventas">Unidades vendidas: {{ estrella.ventas }}</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</ng-template>
+<ng-template #plantillaAuditoria>
+  <div class="plantilla-auditoria">
+    <h2>Registro de Auditoría</h2>
+    @if (auditoriaService.auditoriasDisponibles().length > 0) {
+      <div class="contenedor-auditorias">
+        @for (auditoria of auditoriaService.auditoriasDisponibles(); track auditoria.id) {
+          <div class="registro-auditoria">
+            <div class="cabecera-auditoria">
+              <span class="usuario-auditoria">{{ auditoria.usuario_email }}</span>
+              <span class="fecha-auditoria">{{ formatearFecha(auditoria.fecha) }}</span>
+            </div>
+            <div class="accion-auditoria">{{ auditoria.accion }}</div>
+          </div>
+        }
+      </div>
+    } @else { <p class="sin-datos">No hay registros de auditoría disponibles.</p> }
   </div>
 </ng-template>
 <main>
@@ -190,7 +235,8 @@
     <button (click)="seleccionarPlantilla(plantillaFunciones)">Funciones</button>
     <button (click)="seleccionarPlantilla(plantillaCandybar)">Candybar</button>
     <button (click)="seleccionarPlantilla(plantillaCupones)">Cupones</button>
-    <button (click)="seleccionarPlantilla(plantillaReportes)">Reportes</button>
+    <button (click)="seleccionarPlantilla(plantillaReportes); cargarEstadisticasReportes()">Reportes</button>
+    <button (click)="seleccionarPlantilla(plantillaAuditoria); auditoriaService.cargarAuditorias()">Auditoría</button>
   </div>
   <div class="panel"><ng-container [ngTemplateOutlet]="plantillaSeleccionada()"/></div>
 </main>

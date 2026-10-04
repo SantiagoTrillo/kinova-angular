@@ -13,8 +13,8 @@ export class SesionService {
   )
 
   async registrarUsuario(usuarioNuevo: UsuarioInterface): Promise<UsuarioInterface | null> {
-    const respuesta = await this.supabaseService.cliente.from("usuarios").insert(usuarioNuevo)
-      .select().single()
+    const respuesta = await this.supabaseService.cliente.from("usuarios")
+      .insert({ ...usuarioNuevo, puntos: 0, credito: 0 }).select().single()
 
     if (respuesta.error || !respuesta.data) {
       if (respuesta.error) this.toastService.mostrarToast("No se pudo registrar el usuario", "error")

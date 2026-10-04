@@ -4,9 +4,24 @@ section
   align-items: center
   margin-top: 10px
   margin-bottom: 15px
-  h2
-    font-size: 20px
+  div.cabecera-seccion
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: 20px
     margin-bottom: 15px
+    h2
+      font-size: 20px
+      margin: 0
+    button
+      background-color: var(--negro-jet)
+      border: 1px solid red
+      border-radius: 8px
+      padding: 6px 14px
+      cursor: pointer
+      font-size: 13px
+      &.volver
+        border-color: var(--azul-helado)
   ul
     display: flex
     flex-wrap: wrap
@@ -47,3 +62,25 @@ section
           p
             font-size: 12px
             margin: 2px 0 0 0
+      div.detalles-comprobante
+        display: flex
+        flex-direction: column
+        gap: 5px
+        width: 100%
+        span.titulo-pelicula
+          font-size: 16px
+          font-weight: bold
+        label
+          display: flex
+          justify-content: space-between
+          font-size: 13px
+          span
+            font-weight: 500
+        button
+          margin-top: 6px
+          background-color: var(--negro-jet)
+          border: 1px solid red
+          border-radius: 8px
+          padding: 8px
+          cursor: pointer
+          font-size: 13px

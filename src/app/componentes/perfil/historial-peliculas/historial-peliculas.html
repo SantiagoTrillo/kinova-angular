@@ -1,30 +1,63 @@
 <section>
-  @if (historialPeliculas().length > 0) {
-    <h2>Mis películas</h2>
-    <ul>
-      @for (compra of historialPeliculas(); track compra.peliculaId) {
-        <li>
-          @if (compra.imagen) {
+  <div class="cabecera-seccion">
+    <h2>{{ mostrarArrepentimiento() ? "Cancelación de compras" : "Mis películas" }}</h2>
+    @if (entradasCancelables().length > 0) {
+      <button [class.volver]="mostrarArrepentimiento()" (click)="alternarArrepentimiento()">
+        {{ mostrarArrepentimiento() ? "Volver a Mis Películas" : "Botón del arrepentimiento" }}
+      </button>
+    }
+  </div>
+  @if (mostrarArrepentimiento()) {
+    <ng-container>
+      <ul class="lista-arrepentimiento">
+        @for (entrada of entradasCancelables(); track entrada.id) {
+          <li class="tarjeta-comprobante">
+            <img ngSrc="{{ entrada.funciones.peliculas.imagen }}" width="80" height="120" alt="Póster">
+            <div class="detalles-comprobante">
+              <span class="titulo-pelicula">{{ entrada.funciones?.peliculas?.titulo }}</span>
+              <label>Sala: <span>{{ entrada.funciones?.sala_id }}</span></label>
+              <label>Fecha y hora: <span>{{ entrada.funciones?.fecha_hora | date: "d/M/yyyy HH:mm" }} hs</span></label>
+              <label>Butaca: <span>{{ entrada.butaca }}</span></label>
+              <label>Monto gastado: <span>{{ entrada.precio | currency: 'ARS': '$ ': '1.0-0' }}</span></label>
+              <button (click)="solicitarCancelacion(entrada)">Reembolsar compra</button>
+            </div>
+          </li>
+        }
+      </ul>
+    </ng-container>
+  } @else {
+    @if (historialPeliculas().length > 0) {
+      <ul>
+        @for (compra of historialPeliculas(); track compra.peliculaId) {
+          <li>
             <img ngSrc="{{ compra.imagen }}" width="80" height="120" alt="Póster de {{ compra.titulo }}">
-          }
-          <div class="info-compra">
-            <span class="titulo-pelicula">{{ compra.titulo }}</span>
-            <span class="fecha-compra">Comprada el {{ compra.fechasCompra }}</span>
-            @if (compra.calificacion) {
-              <div>
-                <span class="calificacion">Calificación: </span>
-                <span class="estrellas">
-                  @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
-                    @if (estrella <= compra.calificacion) { <i class="fa-solid fa-star"></i> }
-                    @else { <i class="fa-regular fa-star"></i> }
-                  }
-                </span>
-                @if (compra.comentario) { <p>"{{ compra.comentario }}"</p> }
-              </div>
-            }
-          </div>
-        </li>
-      }
-    </ul>
+            <div class="info-compra">
+              <span class="titulo-pelicula">{{ compra.titulo }}</span>
+              <span class="fecha-compra">Comprada el {{ compra.fechasCompra }}</span>
+              @if (compra.calificacion) {
+                <div>
+                  <span class="calificacion">Calificación: </span>
+                  <span class="estrellas">
+                    @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
+                      @if (estrella <= compra.calificacion) { <i class="fa-solid fa-star"></i> }
+                      @else { <i class="fa-regular fa-star"></i> }
+                    }
+                  </span>
+                  @if (compra.comentario) { <p>"{{ compra.comentario }}"</p> }
+                </div>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
   }
 </section>
+@if (mostrarModalConfirmacion()) {
+  <app-modal-confirmacion
+    titulo="Cancelación de compra"
+    mensaje="¿Estás seguro de que querés cancelar esta entrada? Se devolverá el monto gastado en crédito para tu cuenta."
+    (confirmar)="confirmarCancelacion()"
+    (cancelar)="mostrarModalConfirmacion.set(false)"
+  />
+}

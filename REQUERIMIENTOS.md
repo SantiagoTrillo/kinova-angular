@@ -37,6 +37,8 @@ Al concretar la compra, el sistema debe generar automáticamente un comprobante 
 
 Además, los clientes pueden comprar de forma anónima (sin registrarse) o iniciando sesión con su cuenta para aplicar sus beneficios.
 
+También debe existir la posibilidad de cancelar la compra hasta 2 horas antes de la función, devolviendo el monto gastado en crédito para la cuenta del cliente, que podrán usar junto con otros medios de pago para abonar.
+
 ### 1.5. Registro de Usuarios y Beneficios
 Los clientes deben poder registrarse en el sistema para obtener acceso a beneficios.
 
@@ -53,7 +55,7 @@ Cada usuario que se registre recibe un **cupón de descuento** para utilizar en 
 
 Además, cada usuario contará con un **rol**, que le permitirá hacer diferentes acciones dentro de la página.
 
-Por otro lado, cada vez que un usuario haga compras, podrá acumular puntos **(1 punto por peso gastado)** canjeables por entradas y productos del candybar. Dichos puntos deben poder verse en el perfil junto con el historial de canjes.
+Por otro lado, cada vez que un usuario haga compras, podrá acumular puntos **(1 punto por peso gastado)** canjeables por entradas y productos del candybar. Dichos puntos deben poder verse en el perfil junto con el historial de canjes. También deberá poder observarse en el perfil la cantidad de crédito disponible.
 
 También debe existir una sección "mis películas" donde el cliente pueda ver todas las películas cuyas entradas compró junto con su reseña, si es que redactó una.
 
@@ -82,10 +84,12 @@ El sistema debe permitir al administrador controlar y configurar:
 - **Idioma:** configurar si la función se proyecta en Castellano o Subtitulada.
 - **Distribución:** salas, funciones, butacas, productos.
   - **Importante:** la distribución de salas debe de ser automática, asegurándose de que dos funciones no se proyecten al mismo tiempo y en la misma sala.
-- **Reportes de ventas:** indican cuánto se facturó y cuántas entradas se vendieron por día.
+- **Reportes de ventas:** indican cuánto se facturó y cuántas entradas se vendieron por día. Deben poder exportarse a PDF y Excel.
 - **Costo de puntos de los canjes:** modificar los puntos necesarios para hacer canjes por entradas o productos del candybar.
 - **Precio de los combos del candybar:** modificar los precios de los combos del candybar.
 - **Precio de preventa:** modificar los precios de las películas que están a una semana de estrenarse.
+- **Estadísticas de ventas:** gráficos de las películas más vistas por semana y por mes y producto del candybar más vendido.
+- **Auditoría:** fecha y hora de todo tipo de actividad dentro del panel de administración y el escáner de códigos QR.
 
 ## 2. Requerimientos No Funcionales
 

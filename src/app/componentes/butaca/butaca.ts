@@ -13,6 +13,7 @@ import { CuponService } from "../../servicios/cupon-service"
 import { PuntoService } from "../../servicios/punto-service"
 import { ModalCompra } from "../modales/modal-compra/modal-compra"
 import { ToastService } from "../../servicios/toast-service"
+import { CreditoService } from "../../servicios/credito-service"
 
 @Component({
   selector: "app-butaca",
@@ -28,6 +29,7 @@ export class Butaca {
   private sesionService: SesionService = inject(SesionService)
   private cuponService: CuponService = inject(CuponService)
   private puntoService: PuntoService = inject(PuntoService)
+  private creditoService: CreditoService = inject(CreditoService)
   private router: Router = inject(Router)
 
   filas: Signal<string[]> = signal(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'])
@@ -76,6 +78,10 @@ export class Butaca {
     this.entradaService.montoDescontado.set(datosCompra.descuento ?? 0)
 
     if (registrado) {
+      if (datosCompra.creditoUsado && datosCompra.creditoUsado > 0) {
+        await this.creditoService.actualizarCredito(datosCompra.creditoUsado, true)
+      }
+
       await this.puntoService.actualizarPuntos(datosCompra.total, canje)
 
       if (datosCompra.cupon) await this.cuponService.canjearCupon(datosCompra.cupon.id)

@@ -3,6 +3,7 @@ import { CurrencyPipe } from "@angular/common"
 import { SesionService } from "../../../servicios/sesion-service"
 import { CuponService } from "../../../servicios/cupon-service"
 import { PuntoService } from "../../../servicios/punto-service"
+import { CreditoService } from "../../../servicios/credito-service"
 import { CuponInterface } from "../../../interfaces/cupon-interface"
 import { ToastService } from "../../../servicios/toast-service"
 import { ModalConfirmacion } from "../modal-confirmacion/modal-confirmacion"
@@ -16,6 +17,7 @@ import { ModalConfirmacion } from "../modal-confirmacion/modal-confirmacion"
 export class ModalCompra implements OnInit {
   private cuponService: CuponService = inject(CuponService)
   private puntoService: PuntoService = inject(PuntoService)
+  private creditoService: CreditoService = inject(CreditoService)
   private toastService: ToastService = inject(ToastService)
 
   tipoCompra: InputSignal<string> = input<string>("entrada")
@@ -28,6 +30,8 @@ export class ModalCompra implements OnInit {
   cuponesUsuario: WritableSignal<CuponInterface[]> = signal<CuponInterface[]>([])
   cuponSeleccionado: WritableSignal<CuponInterface | null> = signal<CuponInterface | null>(null)
   puntosUsuario: WritableSignal<number> = signal<number>(0)
+  creditoUsuario: WritableSignal<number> = signal<number>(0)
+  usarCredito: WritableSignal<boolean> = signal<boolean>(false)
   mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
 
   sesionService: SesionService = inject(SesionService)
@@ -38,10 +42,11 @@ export class ModalCompra implements OnInit {
     if (this.sesionService.usuarioActual()) {
       this.cuponesUsuario.set(await this.cuponService.obtenerCuponesUsuario())
       this.puntosUsuario.set(await this.puntoService.obtenerPuntos())
+      this.creditoUsuario.set(await this.creditoService.obtenerCredito())
     }
   }
 
-  tieneCuponRegistro(): boolean {
+  verificarCuponRegistro(): boolean {
     for (const cupon of this.cuponesUsuario()) { if (cupon.id === 1) return true }
     return false
   }
@@ -57,6 +62,8 @@ export class ModalCompra implements OnInit {
     this.cuponSeleccionado.set(cupon)
   }
 
+  alternarUsarCredito(): void { this.usarCredito.update(estado => !estado) }
+
   calcularMontoDescontado(): number {
     const cupon: CuponInterface | null = this.cuponSeleccionado()
 
@@ -65,9 +72,25 @@ export class ModalCompra implements OnInit {
     return this.totalPesos() * cupon.descuento
   }
 
+  calcularCreditoAplicado(): number {
+    if (!this.usarCredito() || this.creditoUsuario() <= 0) return 0
+
+    if (this.metodoPago() === "pesos") {
+      const basePesos: number = this.totalPesos() - this.calcularMontoDescontado()
+      return Math.min(this.creditoUsuario(), basePesos)
+    }
+
+    const basePuntos: number = this.totalPuntos()
+    return Math.min(this.creditoUsuario(), basePuntos)
+  }
+
   calcularTotal(): number {
-    if (this.metodoPago() === "puntos") return this.totalPuntos()
-    return this.totalPesos() - this.calcularMontoDescontado()
+    const creditoAplicado: number = this.calcularCreditoAplicado()
+
+    if (this.metodoPago() === "puntos") return Math.max(0, this.totalPuntos() - creditoAplicado)
+
+    const totalPesosConCupon: number = this.totalPesos() - this.calcularMontoDescontado()
+    return Math.max(0, totalPesosConCupon - creditoAplicado)
   }
 
   confirmarCompra(): void {
@@ -78,7 +101,7 @@ export class ModalCompra implements OnInit {
     if (canje && this.puntosUsuario() < total) return this.toastService.mostrarToast(
       "No disponés de suficientes puntos para realizar esta compra", "error"
     )
-    if (registrado && this.tieneCuponRegistro() && this.cuponSeleccionado()?.id !== 1) {
+    if (registrado && this.verificarCuponRegistro() && this.cuponSeleccionado()?.id !== 1) {
       this.mostrarModalConfirmacion.set(true)
       return
     }
@@ -92,6 +115,7 @@ export class ModalCompra implements OnInit {
       metodoPago: this.metodoPago(),
       cupon: this.cuponSeleccionado(),
       descuento: this.calcularMontoDescontado(),
+      creditoUsado: this.calcularCreditoAplicado(),
       total: this.calcularTotal()
     })
   }

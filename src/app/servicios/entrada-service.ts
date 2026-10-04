@@ -41,9 +41,20 @@ export class EntradaService {
     return respuesta.data
   }
 
+  private obtenerFechaHoy(): string {
+    const hoy: Date = new Date()
+    const dia: number = hoy.getDate()
+    const mes: number = hoy.getMonth() + 1
+    const anio: number = hoy.getFullYear()
+    const diaTexto: string = dia < 10 ? `0${ dia }` : `${ dia }`
+    const mesTexto: string = mes < 10 ? `0${ mes }` : `${ mes }`
+
+    return `${ anio }-${ mesTexto }-${ diaTexto }`
+  }
+
   async obtenerFacturacionDiaria(): Promise<number> {
     const respuesta = await this.supabaseService.cliente.from("entradas")
-      .select("precio").eq("fecha_compra", new Date().toISOString())
+      .select("precio").gte("fecha_compra", this.obtenerFechaHoy())
 
     if (respuesta.error) {
       this.toastService.mostrarToast("No se pudo obtener la facturación diaria", "error")
@@ -56,7 +67,7 @@ export class EntradaService {
 
   async obtenerEntradasVendidasDiarias(): Promise<number> {
     const respuesta = await this.supabaseService.cliente.from("entradas").select("id")
-      .eq("fecha_compra", new Date().toISOString())
+      .gte("fecha_compra", this.obtenerFechaHoy())
 
     if (respuesta.error) {
       this.toastService.mostrarToast("No se pudieron obtener las entradas vendidas", "error")
@@ -65,6 +76,17 @@ export class EntradaService {
     if (!respuesta.data) return 0
 
     return respuesta.data.reduce(total => total + 1, 0)
+  }
+
+  async obtenerVentasDiariasDetalladas(): Promise<any[]> {
+    const respuesta = await this.supabaseService.cliente.from("entradas")
+      .select("id, butaca, precio, fecha_compra, funciones(sala_id, fecha_hora, peliculas(titulo))")
+      .gte("fecha_compra", this.obtenerFechaHoy())
+      .order("id", { ascending: false })
+
+    if (respuesta.error || !respuesta.data) return []
+
+    return respuesta.data
   }
 
   calcularTotalEntradas(entradas: EntradaInterface[] | string[], canje: boolean): number {

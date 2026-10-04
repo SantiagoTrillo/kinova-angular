@@ -12,10 +12,21 @@
           <label
             class="descuento"
             [class.visible]="cuponSeleccionado() && metodoPago() === 'pesos'"
-          >Monto descontado:
+          >Cupón aplicado:
             <span>
             - {{ calcularMontoDescontado() | currency: 'ARS': '$ ': '1.0-0' }}
           </span></label>
+        }
+        @if (creditoUsuario() > 0) {
+          <label class="descuento" [class.visible]="usarCredito() && calcularCreditoAplicado() > 0">
+            Crédito aplicado:<span>
+            - {{ metodoPago() === 'pesos' ? (calcularCreditoAplicado() | currency: 'ARS': '$ ': '1.0-0') : (calcularCreditoAplicado().toLocaleString("es-AR") + " pts") }}
+          </span>
+          </label>
+          <div class="opcion-credito">
+            <span>Usar crédito disponible ({{ creditoUsuario() | currency: 'ARS': '$ ': '1.0-0' }})</span>
+            <input type="checkbox" [checked]="usarCredito()" (change)="alternarUsarCredito()">
+          </div>
         }
         <div>
           <select #selectorMetodo (change)="seleccionarMetodoPago(selectorMetodo.value)">

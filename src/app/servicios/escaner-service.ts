@@ -1,4 +1,5 @@
 import { inject, Service } from "@angular/core"
+import { AuditoriaService } from "./auditoria-service"
 import { SupabaseService } from "./supabase-service"
 import { ToastService } from "./toast-service"
 
@@ -6,6 +7,7 @@ import { ToastService } from "./toast-service"
 export class EscanerService {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private toastService: ToastService = inject(ToastService)
+  private auditoriaService: AuditoriaService = inject(AuditoriaService)
 
   async escanearCodigo(tipo: string, codigo: string): Promise<void> {
     const tabla: string = tipo === "Entrada" ? "entradas" : "compras_candybar"
@@ -16,6 +18,7 @@ export class EscanerService {
     if (respuesta.data.length === 0) return this.toastService.mostrarToast("El código ingresado no existe", "error")
     else if (respuesta.data[0].valida) {
       await this.invalidarCompra(tabla, codigo)
+      await this.auditoriaService.registrarAccion(`Código "${ codigo }" escaneado (${ tipo.toLowerCase() })`)
       return this.toastService.mostrarToast("Código escaneado con éxito", "exito")
     } else return this.toastService.mostrarToast("El código ingresado ya fue escaneado", "error")
   }

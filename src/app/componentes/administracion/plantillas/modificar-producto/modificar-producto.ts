@@ -2,6 +2,7 @@ import { Component, inject, input, InputSignal, OnInit, output, OutputEmitterRef
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
 import { ProductoInterface } from "../../../../interfaces/producto-interface"
 import { CandybarService } from "../../../../servicios/candybar-service"
+import { AuditoriaService } from "../../../../servicios/auditoria-service"
 import { ToastService } from "../../../../servicios/toast-service"
 
 @Component({
@@ -13,6 +14,7 @@ import { ToastService } from "../../../../servicios/toast-service"
 export class ModificarProducto implements OnInit {
   private formBuilder: FormBuilder = inject(FormBuilder)
   private candybarService: CandybarService = inject(CandybarService)
+  private auditoriaService: AuditoriaService = inject(AuditoriaService)
   private toastService: ToastService = inject(ToastService)
 
   protected formularioProducto = this.formBuilder.nonNullable.group({
@@ -49,10 +51,32 @@ export class ModificarProducto implements OnInit {
     if (!producto) return
     if (!this.formularioProducto.valid) return this.toastService.mostrarToast("El formulario tiene campos inválidos", "error")
 
-    const datosFormulario = this.formularioProducto.getRawValue()
+    const datosFormulario: any = this.formularioProducto.getRawValue()
     const exito: boolean = await this.candybarService.modificarProducto(producto.id, datosFormulario)
 
-    if (exito) this.productoModificado.emit()
+    if (exito) {
+      if (producto.nombre !== datosFormulario.nombre) {
+        await this.auditoriaService.registrarAccion(`Modificación de producto del candybar (ID: ${ producto.id }, Nombre): "${ producto.nombre }" -> "${ datosFormulario.nombre }"`)
+      }
+      if (producto.categoria !== datosFormulario.categoria) {
+        await this.auditoriaService.registrarAccion(`Modificación de producto del candybar (ID: ${ producto.id }, Categoría): "${ producto.categoria }" -> "${ datosFormulario.categoria }"`)
+      }
+      if (producto.precio !== datosFormulario.precio) {
+        await this.auditoriaService.registrarAccion(`Modificación de producto del candybar (ID: ${ producto.id }, Precio): $${ producto.precio } -> $${ datosFormulario.precio }`)
+      }
+      if (producto.precio_puntos !== datosFormulario.precio_puntos) {
+        await this.auditoriaService.registrarAccion(`Modificación de producto del candybar (ID: ${ producto.id }, Precio en puntos): ${ producto.precio_puntos } puntos -> ${ datosFormulario.precio_puntos } puntos`)
+      }
+      if (producto.imagen !== datosFormulario.imagen) {
+        await this.auditoriaService.registrarAccion(`Modificación de producto del candybar (ID: ${ producto.id }, Imagen): "${ producto.imagen }" -> "${ datosFormulario.imagen }"`)
+      }
+      if (producto.disponible !== datosFormulario.disponible) {
+        const estadoAnterior: string = producto.disponible ? "Disponible" : "No disponible"
+        const estadoNuevo: string = datosFormulario.disponible ? "Disponible" : "No disponible"
+        await this.auditoriaService.registrarAccion(`Modificación de producto del candybar (ID: ${ producto.id }, Estado): ${ estadoAnterior } -> ${ estadoNuevo }`)
+      }
+      this.productoModificado.emit()
+    }
   }
 
   protected cancelar(): void { this.cancelado.emit() }

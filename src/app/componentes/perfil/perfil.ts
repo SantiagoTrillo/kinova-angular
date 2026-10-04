@@ -7,32 +7,40 @@ import { Puntos } from "./puntos/puntos"
 import { HistorialPeliculas } from "./historial-peliculas/historial-peliculas"
 import { NotificacionService } from "../../servicios/notificacion-service"
 import { NotificacionInterface } from "../../interfaces/notificacion-interface"
-import { DatePipe } from "@angular/common"
+import { CurrencyPipe, DatePipe } from "@angular/common"
+import { CreditoService } from "../../servicios/credito-service"
 
 @Component({
   selector: "app-perfil",
   templateUrl: "./perfil.html",
   styleUrl: "./perfil.sass",
-  imports: [DetallesPersonales, Cupones, Puntos, HistorialPeliculas, DatePipe]
+  imports: [DetallesPersonales, Cupones, Puntos, HistorialPeliculas, DatePipe, CurrencyPipe]
 })
 export class Perfil implements OnInit {
   private notificacionService: NotificacionService = inject(NotificacionService)
+  private creditoService: CreditoService = inject(CreditoService)
   private router: Router = inject(Router)
 
   mostrarNotificaciones: WritableSignal<boolean> = signal<boolean>(false)
+  creditoDisponible: WritableSignal<number> = signal<number>(0)
   notificacionesDisponibles: Signal<NotificacionInterface[]> = computed((): NotificacionInterface[] =>
     this.notificacionService.notificaciones())
   notificacionesNoLeidas: Signal<boolean> = computed((): boolean => this.notificacionService.NotificacionesNoLeidas())
 
   sesionService: SesionService = inject(SesionService)
 
-  async ngOnInit(): Promise<void> { await this.notificacionService.obtenerNotificacionesUsuario() }
+  async ngOnInit(): Promise<void> {
+    await this.notificacionService.obtenerNotificacionesUsuario()
+    this.creditoDisponible.set(await this.creditoService.obtenerCredito())
+  }
 
   async abrirNotificaciones(): Promise<void> {
     if (!this.mostrarNotificaciones()) await this.notificacionService.leerNotificaciones()
 
     this.mostrarNotificaciones.update(visible => !visible)
   }
+
+  async actualizarCredito(): Promise<void> { this.creditoDisponible.set(await this.creditoService.obtenerCredito()) }
 
   cerrarSesion(): void {
     this.sesionService.cerrarSesion()

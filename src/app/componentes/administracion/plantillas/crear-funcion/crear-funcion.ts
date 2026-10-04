@@ -2,6 +2,7 @@ import { Component, inject, input, InputSignal, output, OutputEmitterRef } from 
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms"
 import { PeliculaInterface } from "../../../../interfaces/pelicula-interface"
 import { FuncionService } from "../../../../servicios/funcion-service"
+import { AuditoriaService } from "../../../../servicios/auditoria-service"
 import { ToastService } from "../../../../servicios/toast-service"
 import { SelectorFecha } from "../../../selectores/selector-fecha/selector-fecha"
 import { SelectorHora } from "../../../selectores/selector-hora/selector-hora"
@@ -16,6 +17,7 @@ export class CrearFuncion {
   private formBuilder: FormBuilder = inject(FormBuilder)
   private toastService: ToastService = inject(ToastService)
   private funcionService: FuncionService = inject(FuncionService)
+  private auditoriaService: AuditoriaService = inject(AuditoriaService)
 
   protected formularioFuncion = this.formBuilder.nonNullable.group({
     fecha: [new Date().toISOString().split("T")[0], Validators.required],
@@ -34,14 +36,15 @@ export class CrearFuncion {
   protected async guardarFuncion(): Promise<void> {
     if (!this.formularioFuncion.valid) return this.toastService.mostrarToast("El formulario tiene campos inválidos", "error")
 
-    const pelicula = this.peliculaSeleccionada()
+    const pelicula: PeliculaInterface | null = this.peliculaSeleccionada()
 
     if (!pelicula) return this.toastService.mostrarToast("No se seleccionó una película para la función", "error")
 
-    const datosFormulario = this.formularioFuncion.getRawValue()
+    const datosFormulario: any = this.formularioFuncion.getRawValue()
     const funcionCreada: boolean = await this.funcionService.crearFuncion(datosFormulario, pelicula)
 
     if (funcionCreada) {
+      await this.auditoriaService.registrarAccion(`Creación de función para "${ pelicula.titulo }" (ID: ${ pelicula.id })`)
       this.toastService.mostrarToast("Función creada con éxito", "exito")
       this.funcionCreada.emit()
     }

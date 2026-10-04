@@ -91,19 +91,20 @@ export class CuponService {
     return true
   }
 
-  async crearCupon(nombre: string, descuento: number): Promise<boolean> {
-    if (!this.validarDatosCupon(nombre, descuento)) return false
+  async crearCupon(nombre: string, descuento: number): Promise<CuponInterface | null> {
+    if (!this.validarDatosCupon(nombre, descuento)) return null
 
     const respuesta = await this.supabaseService.cliente.from("cupones")
-      .insert({ nombre: nombre.trim(), descuento: descuento, disponible: true })
+      .insert({ nombre: nombre.trim(), descuento: descuento, disponible: true }).select().single()
 
-    if (respuesta.error) {
-      this.toastService.mostrarToast("No se pudo crear el cupón: " + respuesta.error.message, "error")
-      return false
+    if (respuesta.error || !respuesta.data) {
+      this.toastService.mostrarToast("No se pudo crear el cupón", "error")
+      return null
     }
+
     await this.cargarCupones()
     this.toastService.mostrarToast("Cupón creado con éxito", "exito")
-    return true
+    return respuesta.data as CuponInterface
   }
 
   async actualizarCupon(idCupon: number, nombre: string, descuento: number): Promise<boolean> {

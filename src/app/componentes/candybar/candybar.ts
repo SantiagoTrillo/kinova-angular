@@ -10,7 +10,8 @@ import { EntradaService } from "../../servicios/entrada-service"
 import { ModalCompra } from "../modales/modal-compra/modal-compra"
 import { ModalConfirmacion } from "../modales/modal-confirmacion/modal-confirmacion"
 import { CuponInterface } from "../../interfaces/cupon-interface"
-import {EntradaInterface} from "../../interfaces/entrada-interface";
+import { EntradaInterface } from "../../interfaces/entrada-interface"
+import { CreditoService } from "../../servicios/credito-service"
 
 @Component({
   selector: "app-candybar",
@@ -23,6 +24,7 @@ export class Candybar {
   private cuponService: CuponService = inject(CuponService)
   private sesionService: SesionService = inject(SesionService)
   private entradaService: EntradaService = inject(EntradaService)
+  private creditoService: CreditoService = inject(CreditoService)
   private router: Router = inject(Router)
 
   categorias: Signal<string[]> = signal<string[]>(["Combos", "Pochoclos", "Bebidas", "Snacks Salados", "Snacks Dulces"])
@@ -83,8 +85,14 @@ export class Candybar {
     this.candybarService.montoDescontado.set(datosCompra.descuento ?? 0)
 
     if (registrado) {
+      if (datosCompra.creditoUsado && datosCompra.creditoUsado > 0) {
+        await this.creditoService.actualizarCredito(datosCompra.creditoUsado, true)
+      }
+
       await this.puntoService.actualizarPuntos(datosCompra.total, canje)
+
       if (datosCompra.cupon) await this.cuponService.canjearCupon(datosCompra.cupon.id)
+
       await this.cuponService.desactivarCuponRegistro()
     }
 

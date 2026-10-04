@@ -31,8 +31,13 @@
     <div class="perfil">
       <div class="seccion-perfil"><app-detalles-personales [usuarioActual]="usuarioActual"/></div>
       <div class="seccion-perfil"><app-cupones/></div>
+      <div class="seccion-perfil">
+        <div>
+          <h2>Crédito disponible: <span>{{ creditoDisponible() | currency: 'ARS': '$ ': '1.0-0' }}</span></h2>
+        </div>
+      </div>
       <div class="seccion-puntos"><app-puntos/></div>
-      <div class="seccion-perfil"><app-historial-peliculas/></div>
+      <div class="seccion-perfil"><app-historial-peliculas (creditoActualizado)="actualizarCredito()"/></div>
     </div>
     <div class="boton"><button (click)="cerrarSesion()">Cerrar sesión</button></div>
   }

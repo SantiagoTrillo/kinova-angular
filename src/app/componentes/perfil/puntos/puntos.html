@@ -13,7 +13,7 @@
               <li>
                 <label>Sala: <span>{{ entradaCanjeada.funciones.sala_id }}</span></label>
                 <label>Título: <span>{{ entradaCanjeada.funciones.peliculas.titulo }}</span></label>
-                <label>Fecha: <span>{{ entradaCanjeada.funciones.fecha_hora  | date: "dd/M/yyyy" }}</span></label>
+                <label>Fecha: <span>{{ entradaCanjeada.funciones.fecha_hora  | date: "d/M/yyyy" }}</span></label>
                 <label>Butacas: <span>Fila {{ entradaCanjeada.butaca.slice(0, 1) }}, butaca {{ entradaCanjeada.butaca.slice(1) }}</span></label>
                 <label>Estado: <span
                   [class.disponible]="entradaCanjeada.valida"

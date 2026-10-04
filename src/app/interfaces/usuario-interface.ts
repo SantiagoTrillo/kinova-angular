@@ -10,4 +10,5 @@ export interface UsuarioInterface {
   contrasenia: string
   rol: string
   puntos: number
+  credito: number
 }

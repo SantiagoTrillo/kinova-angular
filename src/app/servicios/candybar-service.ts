@@ -79,7 +79,7 @@ export class CandybarService {
     this.compraCandybar.set(respuesta.data)
   }
 
-  async crearProducto(datosFormulario: any): Promise<boolean> {
+  async crearProducto(datosFormulario: any): Promise<ProductoInterface | null> {
     const respuesta = await this.supabaseService.cliente.from("candybar").insert({
       nombre: datosFormulario.nombre,
       categoria: datosFormulario.categoria,
@@ -87,17 +87,17 @@ export class CandybarService {
       precio_puntos: datosFormulario.precio_puntos,
       imagen: datosFormulario.imagen,
       disponible: true
-    })
+    }).select().single()
 
-    if (respuesta.error) {
+    if (respuesta.error || !respuesta.data) {
       this.toastService.mostrarToast("No se pudo crear el producto", "error")
-      return false
+      return null
     }
 
     await this.cargarProductos()
     this.toastService.mostrarToast("Producto creado con éxito", "exito")
 
-    return true
+    return respuesta.data as ProductoInterface
   }
 
   async modificarProducto(idProducto: number, datosFormulario: any): Promise<boolean> {
