@@ -17,14 +17,14 @@ export class TarjetaPelicula {
   private peliculaService: PeliculaService = inject(PeliculaService)
   private notificacionService: NotificacionService = inject(NotificacionService)
   private router: Router = inject(Router)
-  sesionService: SesionService = inject(SesionService)
+  protected sesionService: SesionService = inject(SesionService)
 
   peliculaSeleccionada: InputSignal<PeliculaInterface> = input.required<PeliculaInterface>()
   estreno: InputSignal<boolean> = input<boolean>(false)
 
   protected activarNotificacion(): void { this.notificacionService.activarNotificacion(this.peliculaSeleccionada()) }
 
-  seleccionarPelicula(pelicula: PeliculaInterface): void {
+  protected seleccionarPelicula(pelicula: PeliculaInterface): void {
     this.peliculaService.seleccionarPelicula(pelicula)
     this.router.navigate(["/película"])
   }

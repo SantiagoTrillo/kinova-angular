@@ -31,28 +31,26 @@ export class Butaca {
   private puntoService: PuntoService = inject(PuntoService)
   private creditoService: CreditoService = inject(CreditoService)
   private router: Router = inject(Router)
+  private intervaloButacas: any
 
-  filas: Signal<string[]> = signal(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'])
-  columnasRegulares: Signal<number[][]> = signal([
+  protected filas: Signal<string[]> = signal(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'])
+  protected columnasRegulares: Signal<number[][]> = signal([
     [1, 2, 3, 4], [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], [25, 26, 27, 28]
   ])
-  columnasAccesibles: Signal<number[][]> = signal([[1, 2], [3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [13, 14]])
-
-  butacasOcupadas: WritableSignal<string[]> = signal<string[]>([])
-  butacasSeleccionadas: WritableSignal<string[]> = signal<string[]>([])
-  mostrarModalCompra: WritableSignal<boolean> = signal<boolean>(false)
-
-  entradaService: EntradaService = inject(EntradaService)
-  intervaloButacas: any
+  protected columnasAccesibles: Signal<number[][]> = signal([[1, 2], [3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [13, 14]])
+  protected butacasOcupadas: WritableSignal<string[]> = signal<string[]>([])
+  protected butacasSeleccionadas: WritableSignal<string[]> = signal<string[]>([])
+  protected mostrarModalCompra: WritableSignal<boolean> = signal<boolean>(false)
+  protected entradaService: EntradaService = inject(EntradaService)
 
   ngOnInit(): void {
-    this.obtenerButacasOcupadas().then(_ => this.intervaloButacas = setInterval(() =>
+    this.obtenerButacasOcupadas().then(_ => this.intervaloButacas = setInterval((): Promise<void> =>
       this.obtenerButacasOcupadas(), 1000))
   }
 
   ngOnDestroy(): void { clearInterval(this.intervaloButacas) }
 
-  async obtenerButacasOcupadas(): Promise<void> {
+  protected async obtenerButacasOcupadas(): Promise<void> {
     const funcionActual: FuncionInterface | null = this.funcionService.funcionSeleccionada()
 
     if (!funcionActual) return
@@ -64,7 +62,7 @@ export class Butaca {
     if (respuesta.data) { this.butacasOcupadas.set(respuesta.data.map(entrada => entrada.butaca)) }
   }
 
-  async finalizarCompra(datosCompra: any): Promise<void> {
+  protected async finalizarCompra(datosCompra: any): Promise<void> {
     const registrado: boolean = !!this.sesionService.usuarioActual()
     const canje: boolean = registrado && datosCompra.metodoPago === "puntos"
     const descuento: number = datosCompra.cupon ? datosCompra.cupon.descuento : 0
@@ -91,7 +89,7 @@ export class Butaca {
     this.router.navigate(["/candybar"])
   }
 
-  armarEntradas(descuento: number = 0, canje: boolean = false): EntradaInterface[] {
+  private armarEntradas(descuento: number = 0, canje: boolean = false): EntradaInterface[] {
     const funcionComprada: FuncionInterface | null = this.funcionService.funcionSeleccionada()
     const peliculaComprada: PeliculaInterface | null = this.peliculaService.peliculaSeleccionada()
     const comprador: UsuarioInterface | null = this.sesionService.usuarioActual()
@@ -120,7 +118,7 @@ export class Butaca {
     }))
   }
 
-  seleccionarButaca(butacaSeleccionada: string): void {
+  protected seleccionarButaca(butacaSeleccionada: string): void {
     if (this.butacasOcupadas().includes(butacaSeleccionada)) return
     if (this.butacasSeleccionadas().includes(butacaSeleccionada)) this.butacasSeleccionadas.update(butacas =>
       butacas.filter(butaca => butaca !== butacaSeleccionada))
@@ -137,7 +135,7 @@ export class Butaca {
     }
   }
 
-  abrirModalCompra(): void { this.mostrarModalCompra.set(true) }
+  protected abrirModalCompra(): void { this.mostrarModalCompra.set(true) }
 
-  cerrarModalCompra(): void { this.mostrarModalCompra.set(false) }
+  protected cerrarModalCompra(): void { this.mostrarModalCompra.set(false) }
 }

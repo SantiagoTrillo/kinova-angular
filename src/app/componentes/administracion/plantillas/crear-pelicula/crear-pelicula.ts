@@ -35,8 +35,8 @@ export class CrearPelicula {
     if (!this.formularioPelicula.valid) return this.toastService.mostrarToast("El formulario tiene campos inválidos", "error")
 
     const datos: any = this.formularioPelicula.getRawValue()
-    const generos: string[] = datos.generos.split(",").map(genero =>
-      genero.trim()).filter(genero => genero !== "")
+    const generos: string[] = datos.generos.split(",").map((genero: string) =>
+      genero.trim()).filter((genero: string) => genero !== "")
     const pelicula: PeliculaInterface | null = await this.peliculaService.crearPelicula({
       titulo: datos.titulo,
       sinopsis: datos.sinopsis,

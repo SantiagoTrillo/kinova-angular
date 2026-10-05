@@ -19,8 +19,8 @@ export class PaginaPrincipal {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private toastService: ToastService = inject(ToastService)
 
-  peliculas: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
-  exitosTaquilleros: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
+  protected peliculas: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
+  protected exitosTaquilleros: WritableSignal<PeliculaInterface[]> = signal<PeliculaInterface[]>([])
 
   ngOnInit(): void {
     this.peliculaService.obtenerPeliculas().then(peliculas => {

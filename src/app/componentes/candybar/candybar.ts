@@ -27,34 +27,32 @@ export class Candybar {
   private creditoService: CreditoService = inject(CreditoService)
   private router: Router = inject(Router)
 
-  categorias: Signal<string[]> = signal<string[]>(["Combos", "Pochoclos", "Bebidas", "Snacks Salados", "Snacks Dulces"])
-  productoSeleccionado: Signal<boolean> = computed((): boolean => {
+  protected categorias: Signal<string[]> = signal<string[]>(["Combos", "Pochoclos", "Bebidas", "Snacks Salados", "Snacks Dulces"])
+  protected productoSeleccionado: Signal<boolean> = computed((): boolean => {
     for (const producto of this.productosDisponibles()) { if (producto.cantidad > 0) return true }
     return false
   })
-  entradasCompradas: Signal<boolean> = computed((): boolean => {
+  protected entradasCompradas: Signal<boolean> = computed((): boolean => {
     const entradas: EntradaInterface[] | null = this.entradaService.entradasCompradas()
     return !!(entradas && entradas.length > 0)
   })
-
-  productosDisponibles: WritableSignal<ProductoInterface[]> = signal<ProductoInterface[]>([])
-  mostrarModalCompra: WritableSignal<boolean> = signal<boolean>(false)
-  mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
-
-  candybarService: CandybarService = inject(CandybarService)
+  protected productosDisponibles: WritableSignal<ProductoInterface[]> = signal<ProductoInterface[]>([])
+  protected mostrarModalCompra: WritableSignal<boolean> = signal<boolean>(false)
+  protected mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
+  protected candybarService: CandybarService = inject(CandybarService)
 
   ngOnInit(): void { this.candybarService.obtenerProductos().then(productos => this.productosDisponibles.set(productos)) }
 
-  obtenerProductosSeleccionados(): ProductoInterface[] {
+  protected obtenerProductosSeleccionados(): ProductoInterface[] {
     return this.productosDisponibles().filter(producto => producto.cantidad > 0)
   }
 
-  obtenerDescripcionProductos(): string {
+  protected obtenerDescripcionProductos(): string {
     return this.obtenerProductosSeleccionados().map(producto =>
       producto.cantidad > 1 ? `${ producto.nombre } X${ producto.cantidad }` : producto.nombre).join(", ")
   }
 
-  async comprarProductos(): Promise<void> {
+  protected async comprarProductos(): Promise<void> {
     if (!this.productoSeleccionado()) {
       if (this.sesionService.usuarioActual()) {
         const cupones: CuponInterface[] = await this.cuponService.obtenerCuponesUsuario()
@@ -69,13 +67,13 @@ export class Candybar {
     } else this.abrirModalCompra()
   }
 
-  async confirmarNavegacionComprobante(): Promise<void> {
+  protected async confirmarNavegacionComprobante(): Promise<void> {
     this.mostrarModalConfirmacion.set(false)
     await this.cuponService.desactivarCuponRegistro()
     this.router.navigate(["/comprobante"])
   }
 
-  async finalizarCompra(datosCompra: any): Promise<void> {
+  protected async finalizarCompra(datosCompra: any): Promise<void> {
     const registrado: boolean = !!this.sesionService.usuarioActual()
     const canje: boolean = registrado && datosCompra.metodoPago === "puntos"
     const productosComprados: ProductoInterface[] = this.obtenerProductosSeleccionados()
@@ -100,17 +98,17 @@ export class Candybar {
     this.router.navigate(["/comprobante"])
   }
 
-  aumentarProducto(productoSeleccionado: ProductoInterface): void {
+  protected aumentarProducto(productoSeleccionado: ProductoInterface): void {
     productoSeleccionado.cantidad++
     this.productosDisponibles.set([...this.productosDisponibles()])
   }
 
-  decrementarProducto(productoSeleccionado: ProductoInterface): void {
+  protected decrementarProducto(productoSeleccionado: ProductoInterface): void {
     if (productoSeleccionado.cantidad > 0) productoSeleccionado.cantidad--
     this.productosDisponibles.set([...this.productosDisponibles()])
   }
 
-  abrirModalCompra(): void { this.mostrarModalCompra.set(true) }
+  protected abrirModalCompra(): void { this.mostrarModalCompra.set(true) }
 
-  cerrarModalCompra(): void { this.mostrarModalCompra.set(false) }
+  protected cerrarModalCompra(): void { this.mostrarModalCompra.set(false) }
 }

@@ -1,19 +1,26 @@
-import { inject, Service, signal, WritableSignal } from "@angular/core"
+import { DestroyRef, inject, Service, signal, WritableSignal } from "@angular/core"
 import { AuditoriaInterface } from "../interfaces/auditoria-interface"
 import { SesionService } from "./sesion-service"
 import { SupabaseService } from "./supabase-service"
 import { ToastService } from "./toast-service"
-import {UsuarioInterface} from "../interfaces/usuario-interface";
+import { UsuarioInterface } from "../interfaces/usuario-interface"
 
 @Service()
 export class AuditoriaService {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private sesionService: SesionService = inject(SesionService)
   private toastService: ToastService = inject(ToastService)
+  private destroyRef: DestroyRef = inject(DestroyRef)
+  private intervaloAuditorias: any
 
   auditoriasDisponibles: WritableSignal<AuditoriaInterface[]> = signal<AuditoriaInterface[]>([])
 
-  constructor() { this.cargarAuditorias() }
+  constructor() {
+    this.cargarAuditorias().then(_ => this.intervaloAuditorias = setInterval((): Promise<void> =>
+      this.cargarAuditorias(), 1000))
+
+    this.destroyRef.onDestroy((): void => clearInterval(this.intervaloAuditorias))
+  }
 
   async cargarAuditorias(): Promise<void> { this.auditoriasDisponibles.set(await this.obtenerAuditorias()) }
 

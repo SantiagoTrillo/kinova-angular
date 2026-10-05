@@ -12,9 +12,9 @@ import { TarjetaPelicula } from "../cartelera/tarjeta-pelicula/tarjeta-pelicula"
 export class Preventa {
   private peliculaService: PeliculaService = inject(PeliculaService)
 
-  peliculasTotales: InputSignal<PeliculaInterface[]> = input.required<PeliculaInterface[]>()
-
-  peliculasPreventa: Signal<PeliculaInterface[]> = computed((): PeliculaInterface[] => {
+  protected peliculasPreventa: Signal<PeliculaInterface[]> = computed((): PeliculaInterface[] => {
     return this.peliculasTotales().filter(pelicula => this.peliculaService.verificarEstadoPelicula(pelicula) === "preventa")
   })
+
+  peliculasTotales: InputSignal<PeliculaInterface[]> = input.required<PeliculaInterface[]>()
 }

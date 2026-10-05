@@ -17,17 +17,16 @@ export class Resenia {
   private supabaseService: SupabaseService = inject(SupabaseService)
   private toastService: ToastService = inject(ToastService)
 
-  resenias: WritableSignal<ReseniaInterface[]> = signal<ReseniaInterface[]>([])
-  calificacionSeleccionada: WritableSignal<number> = signal<number>(0)
-
-  peliculaService: PeliculaService = inject(PeliculaService)
-  reseniaService: ReseniaService = inject(ReseniaService)
+  protected peliculaService: PeliculaService = inject(PeliculaService)
+  protected reseniaService: ReseniaService = inject(ReseniaService)
+  protected resenias: WritableSignal<ReseniaInterface[]> = signal<ReseniaInterface[]>([])
+  protected calificacionSeleccionada: WritableSignal<number> = signal<number>(0)
 
   ngOnInit(): void { this.obtenerResenias() }
 
-  obtenerResenias(): void { this.reseniaService.obtenerResenias().then(resenias => this.resenias.set(resenias)) }
+  protected obtenerResenias(): void { this.reseniaService.obtenerResenias().then(resenias => this.resenias.set(resenias)) }
 
-  async publicarResenia(cajaComentarios: HTMLTextAreaElement): Promise<void> {
+  protected async publicarResenia(cajaComentarios: HTMLTextAreaElement): Promise<void> {
     const peliculaActual: PeliculaInterface | null = this.peliculaService.peliculaSeleccionada()
 
     if (!peliculaActual) return
@@ -47,7 +46,7 @@ export class Resenia {
     this.obtenerResenias()
   }
 
-  async actualizarPuntuacionPromedio(): Promise<void> {
+  protected async actualizarPuntuacionPromedio(): Promise<void> {
     const peliculaActual: PeliculaInterface | null = this.peliculaService.peliculaSeleccionada()
 
     if (!peliculaActual) return
@@ -65,5 +64,5 @@ export class Resenia {
     this.peliculaService.peliculaSeleccionada.set({ ...peliculaActual })
   }
 
-  seleccionarEstrella(numero: number): void { this.calificacionSeleccionada.set(numero) }
+  protected seleccionarEstrella(numero: number): void { this.calificacionSeleccionada.set(numero) }
 }

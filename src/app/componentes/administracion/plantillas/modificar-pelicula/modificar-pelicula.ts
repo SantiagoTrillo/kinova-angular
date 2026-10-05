@@ -57,7 +57,7 @@ export class ModificarPelicula implements OnInit {
     if (!this.formularioPelicula.valid) return this.toastService.mostrarToast("El formulario tiene campos inválidos", "error")
 
     const datos: any = this.formularioPelicula.getRawValue()
-    const generosArray: string[] = datos.generos.split(",").map(genero => genero.trim()).filter(genero =>
+    const generosArray: string[] = datos.generos.split(",").map((genero: string) => genero.trim()).filter((genero: string) =>
       genero !== "")
     const exito: boolean = await this.peliculaService.modificarPelicula(pelicula.id, {
       titulo: datos.titulo,

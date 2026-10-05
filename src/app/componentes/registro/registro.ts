@@ -21,10 +21,11 @@ export class Registro {
   private toastService: ToastService = inject(ToastService)
   private router: Router = inject(Router)
 
+  protected mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
+  protected rutaDestino: WritableSignal<string> = signal<string>("")
+
   registroExitoso: WritableSignal<boolean> = signal<boolean>(false)
   confirmacionAceptada: WritableSignal<boolean> = signal<boolean>(false)
-  mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
-  rutaDestino: WritableSignal<string> = signal<string>("")
 
   formularioRegistro = this.formBuilder.nonNullable.group({
     correo_electronico: ["", [Validators.required, Validators.email]],

@@ -19,16 +19,17 @@ export class Funciones {
   private toastService: ToastService = inject(ToastService)
   private router: Router = inject(Router)
 
+  protected funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
+  protected fechasDisponibles: WritableSignal<string[]> = signal<string[]>([])
+  protected formatosDisponibles: WritableSignal<string[]> = signal<string[]>([])
+  protected idiomasDisponibles: WritableSignal<string[]> = signal<string[]>([])
+  protected horariosDisponibles: WritableSignal<string[]> = signal<string[]>([])
+  protected fechaSeleccionada: WritableSignal<string> = signal<string>("")
+  protected formatoSeleccionado: WritableSignal<string> = signal<string>("")
+  protected idiomaSeleccionado: WritableSignal<string> = signal<string>("")
+  protected horarioSeleccionado: WritableSignal<string> = signal<string>("")
+
   peliculaActual: InputSignal<PeliculaInterface> = input.required<PeliculaInterface>()
-  funcionesDisponibles: WritableSignal<FuncionInterface[]> = signal<FuncionInterface[]>([])
-  fechasDisponibles: WritableSignal<string[]> = signal<string[]>([])
-  formatosDisponibles: WritableSignal<string[]> = signal<string[]>([])
-  idiomasDisponibles: WritableSignal<string[]> = signal<string[]>([])
-  horariosDisponibles: WritableSignal<string[]> = signal<string[]>([])
-  fechaSeleccionada: WritableSignal<string> = signal<string>("")
-  formatoSeleccionado: WritableSignal<string> = signal<string>("")
-  idiomaSeleccionado: WritableSignal<string> = signal<string>("")
-  horarioSeleccionado: WritableSignal<string> = signal<string>("")
 
   async ngOnInit(): Promise<void> {
     const funcionesDisponibles: FuncionInterface[] = await this.funcionService.obtenerFunciones()
@@ -42,7 +43,7 @@ export class Funciones {
     }
   }
 
-  obtenerDetallesFunciones(): void {
+  private obtenerDetallesFunciones(): void {
     const fechas: string[] = []
     const formatos: string[] = []
     const idiomas: string[] = []
@@ -63,7 +64,7 @@ export class Funciones {
     this.obtenerHorarios()
   }
 
-  obtenerHorarios(): void {
+  private obtenerHorarios(): void {
     const horarios: string[] = []
     const funciones: FuncionInterface[] = this.funcionesDisponibles().filter(funcion =>
       funcion.fecha_hora.startsWith(this.fechaSeleccionada()) && funcion.formato === this.formatoSeleccionado() &&
@@ -74,7 +75,7 @@ export class Funciones {
     this.horariosDisponibles.set(horarios)
   }
 
-  seleccionarFecha(fecha: string): void {
+  protected seleccionarFecha(fecha: string): void {
     if (this.fechaSeleccionada() === fecha) return
 
     this.fechaSeleccionada.set(fecha)
@@ -82,7 +83,7 @@ export class Funciones {
     this.obtenerDetallesFunciones()
   }
 
-  seleccionarFormato(formato: string): void {
+  protected seleccionarFormato(formato: string): void {
     if (this.formatoSeleccionado() === formato) return
 
     this.formatoSeleccionado.set(formato)
@@ -90,7 +91,7 @@ export class Funciones {
     this.obtenerHorarios()
   }
 
-  seleccionarIdioma(idioma: string): void {
+  protected seleccionarIdioma(idioma: string): void {
     if (this.idiomaSeleccionado() === idioma) return
 
     this.idiomaSeleccionado.set(idioma)
@@ -98,9 +99,9 @@ export class Funciones {
     this.obtenerHorarios()
   }
 
-  seleccionarHorario(horario: string): void { this.horarioSeleccionado.set(horario) }
+  protected seleccionarHorario(horario: string): void { this.horarioSeleccionado.set(horario) }
 
-  seleccionarFuncion(): void {
+  protected seleccionarFuncion(): void {
     if (!this.verificarRestriccionEdad()) return this.toastService.mostrarToast("No cumplís con el requisito de edad para ver esta película", "error")
 
     const funcionSeleccionada: FuncionInterface | undefined = this.funcionesDisponibles().find(funcion =>
@@ -113,7 +114,7 @@ export class Funciones {
     }
   }
 
-  verificarRestriccionEdad(): boolean {
+  private verificarRestriccionEdad(): boolean {
     const restriccionEdad: string = this.peliculaActual().restriccion_edad
     const edadUsuario: number = this.sesionService.calcularEdadUsuario()
 
@@ -123,11 +124,11 @@ export class Funciones {
     return true
   }
 
-  limpiarSelecciones(): void {
+  private limpiarSelecciones(): void {
     this.formatoSeleccionado.set("")
     this.idiomaSeleccionado.set("")
     this.horarioSeleccionado.set("")
   }
 
-  limpiarHorarios(): void { this.horarioSeleccionado.set("") }
+  private limpiarHorarios(): void { this.horarioSeleccionado.set("") }
 }

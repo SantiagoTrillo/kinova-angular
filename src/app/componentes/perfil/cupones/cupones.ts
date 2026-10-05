@@ -10,7 +10,7 @@ import { CuponInterface } from "../../../interfaces/cupon-interface"
 export class Cupones {
   private cuponService: CuponService = inject(CuponService)
 
-  cuponesDisponibles: WritableSignal<CuponInterface[]> = signal<CuponInterface[]>([])
+  protected cuponesDisponibles: WritableSignal<CuponInterface[]> = signal<CuponInterface[]>([])
 
   async ngOnInit() { this.cuponesDisponibles.set(await this.cuponService.obtenerCuponesUsuario()) }
 }

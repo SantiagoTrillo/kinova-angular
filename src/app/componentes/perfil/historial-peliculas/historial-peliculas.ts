@@ -19,13 +19,13 @@ export class HistorialPeliculas implements OnInit {
   private toastService: ToastService = inject(ToastService)
   private creditoService: CreditoService = inject(CreditoService)
 
-  creditoActualizado: OutputEmitterRef<void> = output<void>()
+  protected historialPeliculas: WritableSignal<any[]> = signal<any[]>([])
+  protected entradasCancelables: WritableSignal<any[]> = signal<any[]>([])
+  protected mostrarArrepentimiento: WritableSignal<boolean> = signal<boolean>(false)
+  protected entradaSeleccionadaParaCancelar: WritableSignal<any | null> = signal<any | null>(null)
+  protected mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
 
-  historialPeliculas: WritableSignal<any[]> = signal<any[]>([])
-  entradasCancelables: WritableSignal<any[]> = signal<any[]>([])
-  mostrarArrepentimiento: WritableSignal<boolean> = signal<boolean>(false)
-  entradaSeleccionadaParaCancelar: WritableSignal<any | null> = signal<any | null>(null)
-  mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
+  creditoActualizado: OutputEmitterRef<void> = output<void>()
 
   async ngOnInit(): Promise<void> { await this.cargarHistorial() }
 

@@ -20,21 +20,20 @@ export class ModalCompra implements OnInit {
   private creditoService: CreditoService = inject(CreditoService)
   private toastService: ToastService = inject(ToastService)
 
+  protected metodoPago: WritableSignal<string> = signal<string>("pesos")
+  protected cuponesUsuario: WritableSignal<CuponInterface[]> = signal<CuponInterface[]>([])
+  protected cuponSeleccionado: WritableSignal<CuponInterface | null> = signal<CuponInterface | null>(null)
+  protected puntosUsuario: WritableSignal<number> = signal<number>(0)
+  protected creditoUsuario: WritableSignal<number> = signal<number>(0)
+  protected usarCredito: WritableSignal<boolean> = signal<boolean>(false)
+  protected mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
+  protected sesionService: SesionService = inject(SesionService)
+
   tipoCompra: InputSignal<string> = input<string>("entrada")
   etiquetaElementos: InputSignal<string> = input<string>("Butacas seleccionadas")
   elementos: InputSignal<string> = input<string>("")
   totalPesos: InputSignal<number> = input<number>(0)
   totalPuntos: InputSignal<number> = input<number>(0)
-
-  metodoPago: WritableSignal<string> = signal<string>("pesos")
-  cuponesUsuario: WritableSignal<CuponInterface[]> = signal<CuponInterface[]>([])
-  cuponSeleccionado: WritableSignal<CuponInterface | null> = signal<CuponInterface | null>(null)
-  puntosUsuario: WritableSignal<number> = signal<number>(0)
-  creditoUsuario: WritableSignal<number> = signal<number>(0)
-  usarCredito: WritableSignal<boolean> = signal<boolean>(false)
-  mostrarModalConfirmacion: WritableSignal<boolean> = signal<boolean>(false)
-
-  sesionService: SesionService = inject(SesionService)
   cerrar: OutputEmitterRef<void> = output<void>()
   confirmar: OutputEmitterRef<any> = output<any>()
 
@@ -46,12 +45,12 @@ export class ModalCompra implements OnInit {
     }
   }
 
-  verificarCuponRegistro(): boolean {
+  protected verificarCuponRegistro(): boolean {
     for (const cupon of this.cuponesUsuario()) { if (cupon.id === 1) return true }
     return false
   }
 
-  cambiarCupon(idCupon: string): void {
+  protected cambiarCupon(idCupon: string): void {
     if (!idCupon) {
       this.cuponSeleccionado.set(null)
       return
@@ -62,9 +61,9 @@ export class ModalCompra implements OnInit {
     this.cuponSeleccionado.set(cupon)
   }
 
-  alternarUsarCredito(): void { this.usarCredito.update(estado => !estado) }
+  protected alternarUsarCredito(): void { this.usarCredito.update(estado => !estado) }
 
-  calcularMontoDescontado(): number {
+  protected calcularMontoDescontado(): number {
     const cupon: CuponInterface | null = this.cuponSeleccionado()
 
     if (!cupon || this.metodoPago() === "puntos") return 0
@@ -72,7 +71,7 @@ export class ModalCompra implements OnInit {
     return this.totalPesos() * cupon.descuento
   }
 
-  calcularCreditoAplicado(): number {
+  protected calcularCreditoAplicado(): number {
     if (!this.usarCredito() || this.creditoUsuario() <= 0) return 0
 
     if (this.metodoPago() === "pesos") {
@@ -84,7 +83,7 @@ export class ModalCompra implements OnInit {
     return Math.min(this.creditoUsuario(), basePuntos)
   }
 
-  calcularTotal(): number {
+  protected calcularTotal(): number {
     const creditoAplicado: number = this.calcularCreditoAplicado()
 
     if (this.metodoPago() === "puntos") return Math.max(0, this.totalPuntos() - creditoAplicado)
@@ -93,7 +92,7 @@ export class ModalCompra implements OnInit {
     return Math.max(0, totalPesosConCupon - creditoAplicado)
   }
 
-  confirmarCompra(): void {
+  protected confirmarCompra(): void {
     const registrado: boolean = !!this.sesionService.usuarioActual()
     const canje: boolean = registrado && this.metodoPago() === "puntos"
     const total: number = this.calcularTotal()
@@ -109,7 +108,7 @@ export class ModalCompra implements OnInit {
     this.ejecutarConfirmacion()
   }
 
-  ejecutarConfirmacion(): void {
+  protected ejecutarConfirmacion(): void {
     this.mostrarModalConfirmacion.set(false)
     this.confirmar.emit({
       metodoPago: this.metodoPago(),
@@ -120,11 +119,11 @@ export class ModalCompra implements OnInit {
     })
   }
 
-  seleccionarMetodoPago(metodoSeleccionado: string): void {
+  protected seleccionarMetodoPago(metodoSeleccionado: string): void {
     this.metodoPago.set(metodoSeleccionado)
 
     if (metodoSeleccionado === "puntos") this.cuponSeleccionado.set(null)
   }
 
-  cerrarModal(): void { this.cerrar.emit() }
+  protected cerrarModal(): void { this.cerrar.emit() }
 }

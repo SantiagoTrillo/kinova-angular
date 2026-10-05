@@ -31,7 +31,7 @@ export class Comprobante {
     this.candybarService.montoDescontado.set(0)
   }
 
-  calcularTotalPesos(): number {
+  protected calcularTotalPesos(): number {
     const entradas: EntradaInterface[] | null  = this.entradaService.entradasCompradas()
     const compraCandybar: CompraCandybar | null = this.candybarService.compraCandybar()
 
@@ -43,7 +43,7 @@ export class Comprobante {
     return total
   }
 
-  calcularTotalPuntos(): number {
+  protected calcularTotalPuntos(): number {
     const entradas: EntradaInterface[] | null = this.entradaService.entradasCompradas()
     const compraCandybar: CompraCandybar | null = this.candybarService.compraCandybar()
 
@@ -55,7 +55,7 @@ export class Comprobante {
     return totalPuntos
   }
 
-  obtenerTotalFinal(): string {
+  protected obtenerTotalFinal(): string {
     const pesos: number = this.calcularTotalPesos()
     const puntos: number = this.calcularTotalPuntos()
 
@@ -65,5 +65,5 @@ export class Comprobante {
     return `$ ${pesos.toLocaleString("es-AR")}`
   }
 
-  guardarPdf(): void { window.print() }
+  protected guardarPdf(): void { window.print() }
 }
