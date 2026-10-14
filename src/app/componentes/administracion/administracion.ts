@@ -103,21 +103,21 @@ export class Administracion {
     })
   }
 
-  private obtenerTopPeliculas(entradas: any[], desdeMs: number): any[] {
+  private obtenerTopPeliculas(entradas: any[], fechaLimite: number): any[] {
     const listaPeliculas: any[] = []
 
     for (const entrada of entradas) {
       const fechaEntrada: number = new Date(entrada.fecha_compra ?? entrada.funciones?.fecha_hora).getTime()
       const tituloPelicula: string = entrada.funciones?.peliculas?.titulo
 
-      if (tituloPelicula && fechaEntrada >= desdeMs) {
-        const peliculaExistente = listaPeliculas.find(pelicula => pelicula.titulo === tituloPelicula)
+      if (tituloPelicula && fechaEntrada >= fechaLimite) {
+        const peliculaExistente: any = listaPeliculas.find(pelicula => pelicula.titulo === tituloPelicula)
         if (peliculaExistente) peliculaExistente.cantidad++
         else listaPeliculas.push({ titulo: tituloPelicula, cantidad: 1 })
       }
     }
 
-    return listaPeliculas.sort((a, b): number => b.cantidad - a.cantidad).slice(0, 5)
+    return listaPeliculas.sort((a: any, b: any): number => b.cantidad - a.cantidad).slice(0, 5)
   }
 
   private async cargarProductoMasVendido(): Promise<void> {
